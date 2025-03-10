@@ -1,0 +1,51 @@
+.admin-site {
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+  }
+  
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    button {
+      background-color: #0056b3;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px;
+      font-size: 1em;
+      cursor: pointer;
+      width: 35%;
+      margin-right: 20px;
+    }
+  }
+
+  button {
+    background-color: #0056b3;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1em;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+  }
+  thead {
+    background-color: #f2f2f2;
+  }
+}

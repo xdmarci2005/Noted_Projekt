@@ -1,0 +1,50 @@
+
+.card {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    background-color: #ebebeb9a;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    width: 400px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+
+.input-field {
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #0056b3;
+  }
+
+  .password-field {
+    margin-top: 10px;
+    display: flex;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #0056b3;
+    background-color: #ffffff;
+
+    input {
+      width: 100%;
+      padding: 10px 0;
+      border: 0;
+      outline: 0;
+      margin: 1px 1px 1px 1px;
+      padding-left: 10px;
+    }
+
+    img {
+      width: 10%;
+      cursor: pointer;
+      align-self: center;
+      padding: 5px 5px 5px 5px;
+    }
+  }
