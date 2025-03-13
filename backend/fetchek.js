@@ -127,20 +127,38 @@ fetch('http://localhost:3000/sharedBy', {
   method:'GET',headers: new Headers(
       {"Content-Type": "application/json",
           "Accept": "application/json",
-          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjcsImlhdCI6MTczOTgwMzEyMywiZXhwIjoxNzM5ODEwMzIzfQ.1e00HE-CMRHrbI7mB1j8GDDraEAq-1Obxp0oxU8bnMk"}
+          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0MTgyMzY3MiwiZXhwIjoxNzQxODMwODcyfQ.QtDgfq6fSfpNtP-1Y6D2mtz9IqzocpfAh-XK-onjyLg"}
   )
 }).then(response => response.json()).then(data => console.log(data))
 
 
-//8-as eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTczOTgwMzA2MywiZXhwIjoxNzM5ODEwMjYzfQ.-B1-bw99Z9jZNZ5gX7x2ethUUxnJjoBmUu9svZoYlaY
-//2-es eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjIsImlhdCI6MTczOTYyNzkzOCwiZXhwIjoxNzM5NjM1MTM4fQ.NNHxKgqLbkyMyK1jqdtMO0H8PItua33tgGtEqilJqiU
-//7-es eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjcsImlhdCI6MTczOTgwMzEyMywiZXhwIjoxNzM5ODEwMzIzfQ.1e00HE-CMRHrbI7mB1j8GDDraEAq-1Obxp0oxU8bnMk
+//7-as 
+//2-es 
+//8-es eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0MTgyMzY3MiwiZXhwIjoxNzQxODMwODcyfQ.QtDgfq6fSfpNtP-1Y6D2mtz9IqzocpfAh-XK-onjyLg
 
 fetch('http://localhost:3000/shares', {
   method:'POST',headers: new Headers(
       {"Content-Type": "application/json",
           "Accept": "application/json",
-          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTczOTgwMzA2MywiZXhwIjoxNzM5ODEwMjYzfQ.-B1-bw99Z9jZNZ5gX7x2ethUUxnJjoBmUu9svZoYlaY"}
+          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0MTgyMzY3MiwiZXhwIjoxNzQxODMwODcyfQ.QtDgfq6fSfpNtP-1Y6D2mtz9IqzocpfAh-XK-onjyLg"}
   ),
   body:JSON.stringify({"JegyzetId":2,"MegosztottFelhId":7,"GroupSharedId":null,"Jogosultsag":"R"})
+}).then(response => response.json()).then(data => console.log(data))
+
+fetch('http://localhost:3000/shares', {
+  method:'PUT',headers: new Headers(
+      {"Content-Type": "application/json",
+          "Accept": "application/json",
+          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0MTgyMzY3MiwiZXhwIjoxNzQxODMwODcyfQ.QtDgfq6fSfpNtP-1Y6D2mtz9IqzocpfAh-XK-onjyLg"}
+  ),
+  body:JSON.stringify({"JegyzetId":2,"MegosztottFelhId":7,"GroupSharedId":null,"Jogosultsag":"RWS"})
+}).then(response => response.json()).then(data => console.log(data))
+
+fetch('http://localhost:3000/shares', {
+  method:'DELETE',headers: new Headers(
+      {"Content-Type": "application/json",
+          "Accept": "application/json",
+          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0MTgyMzY3MiwiZXhwIjoxNzQxODMwODcyfQ.QtDgfq6fSfpNtP-1Y6D2mtz9IqzocpfAh-XK-onjyLg"}
+  ),
+  body:JSON.stringify({"JegyzetId":4,"MegosztottFelhId":7,"GroupSharedId":null})
 }).then(response => response.json()).then(data => console.log(data))

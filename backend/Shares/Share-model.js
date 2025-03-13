@@ -10,7 +10,7 @@ export async function getSharedWithUserNotesFromToken(req, res) {
     }
     const conn = await mysqlP.createConnection(dbConfig);
     try {
-        const [rows] = await conn.execute('Select `Jegyzetek`.`JegyzetId`,`JegyzetNeve`,`JegyzetTartalma` from `Jegyzetek`' +
+        const [rows] = await conn.execute('Select `Jegyzetek`.`JegyzetId`,`JegyzetNeve`,`JegyzetTartalma`,`MegosztottFelhId`,`MegosztottCsopId`,`Jogosultsag` from `Jegyzetek`' +
             ' INNER JOIN `Megosztas` ON `Jegyzetek`.`JegyzetId` = `Megosztas`.`JegyzetId` WHERE `Megosztas`.`MegosztottFelhId` = ?', [res.decodedToken.UserId]);
         if (rows.length === 0) {
             res.status(404).send({ error: "Nincsenek jegyzetek" });
@@ -38,7 +38,7 @@ export async function getSharedByUserNotesFromToken(req, res) {
     }
     const conn = await mysqlP.createConnection(dbConfig);
     try {
-        const [rows] = await conn.execute('Select `Jegyzetek`.`JegyzetId`,`JegyzetNeve`,`JegyzetTartalma` from `Jegyzetek`' +
+        const [rows] = await conn.execute('Select `Jegyzetek`.`JegyzetId`,`JegyzetNeve`,`JegyzetTartalma`,`MegosztottFelhId`,`MegosztottCsopId`,`Jogosultsag` from `Jegyzetek`' +
             ' INNER JOIN `Megosztas` ON `Jegyzetek`.`JegyzetId` = `Megosztas`.`JegyzetId` WHERE Jegyzetek.Feltolto = ?', [res.decodedToken.UserId]);
         if (rows.length === 0) {
             res.status(404).send({ error: "Nincsenek jegyzetek" });
@@ -101,4 +101,91 @@ export async function ShareNewNoteWithToken(req, res) {
     } finally {
         conn.end();
     }
+}
+export async function DeleteShare(req, res) {
+    const conn = await mysqlP.createConnection(dbConfig);
+    if (!res.decodedToken.UserId && !req.body.JegyzetId && (!req.body.MegosztottFelhId || !req.body.GroupSharedId)) {   
+        res.status(401).send({ error: "Hiányzó paraméter" });
+        return;
+    }
+    try
+    {
+        let sharedNote = await Notes.loadDataFromDB(req.body.JegyzetId);
+        if (!sharedNote) {
+            res.status(404).send({ error: "Nem létezik ilyen jegyzet." });
+            return;
+        }
+        if (sharedNote.Feltolto !== res.decodedToken.UserId) {
+            res.status(403).send({ error: "Nem törölheti más megosztásait." });
+            return;
+        }
+        const [rows] = await conn.execute('DELETE FROM `Megosztas` WHERE `JegyzetId` = ? AND `MegosztottFelhId` = ?', [req.body.JegyzetId, req.body.MegosztottFelhId]);
+        if (rows.length === 0)
+        {
+            res.status(404).send({ error: "Nem található a megosztás" });
+            return;
+        }
+        res.status(200).send({ success: "Sikeres törlés", data: rows
+
+        });
+    }
+    catch
+    {
+        switch (err.errno){
+            case 1045:
+                res.status(500).send({ error: "Hiba a csatlakozáskor nem megfelelő adatbázis jelszó" });
+                break;
+            default:
+                res.status(500).send({ error: "Hiba a törléskor: " + err });
+                break;
+        }
+    }
+    finally
+    {
+        conn.end();
+    }
+}
+export async function UpdateSharePermissions(req,res){
+    const conn = await mysqlP.createConnection(dbConfig);
+    if (!res.decodedToken.UserId && !req.body.JegyzetId && (!req.body.MegosztottFelhId || !req.body.GroupSharedId) || !req.body.Jogosultsag) {   
+        res.status(401).send({ error: "Hiányzó paraméter" });
+        return;
+    }
+    try
+    {
+        let sharedNote = await Notes.loadDataFromDB(req.body.JegyzetId);
+        if (!sharedNote) {
+            res.status(404).send({ error: "Nem létezik ilyen jegyzet." });
+            return;
+        }
+        if (sharedNote.Feltolto !== res.decodedToken.UserId) {
+            res.status(403).send({ error: "Nem módosíthajta más megosztásait." });
+            return;
+        }
+        const [rows] = await conn.execute('UPDATE `Megosztas` SET `Jogosultsag` = ? WHERE `JegyzetId` = ? AND `MegosztottFelhId` = ?', [req.body.Jogosultsag, req.body.JegyzetId, req.body.MegosztottFelhId]);
+        if (rows.length === 0)
+        {
+            res.status(404).send({ error: "Nem található a megosztás" });
+            return;
+        }
+        res.status(200).send({ success: "Sikeres frissítés", data: rows
+
+        });
+    }
+    catch
+    {
+        switch (err.errno){
+            case 1045:
+                res.status(500).send({ error: "Hiba a csatlakozáskor nem megfelelő adatbázis jelszó" });
+                break;
+            default:
+                res.status(500).send({ error: "Hiba a frissítéskor: " + err });
+                break;
+        }
+    }
+    finally
+    {
+        conn.end();
+    }
+
 }
