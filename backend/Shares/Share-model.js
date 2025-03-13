@@ -13,7 +13,7 @@ export async function getSharedWithUserNotesFromToken(req, res) {
         const [rows] = await conn.execute('Select `Jegyzetek`.`JegyzetId`,`JegyzetNeve`,`JegyzetTartalma`,`MegosztottFelhId`,`MegosztottCsopId`,`Jogosultsag` from `Jegyzetek`' +
             ' INNER JOIN `Megosztas` ON `Jegyzetek`.`JegyzetId` = `Megosztas`.`JegyzetId` WHERE `Megosztas`.`MegosztottFelhId` = ?', [res.decodedToken.UserId]);
         if (rows.length === 0) {
-            res.status(404).send({ error: "Nincsenek jegyzetek" });
+            res.status(400).send({ error: "Nincsenek jegyzetek" });
             return;
         }
         res.status(200).send({ success: "Sikeres lekérdezés", data: rows });
@@ -92,7 +92,7 @@ export async function ShareNewNoteWithToken(req, res) {
                 res.status(500).send({ error: "Hiba a csatlakozáskor nem megfelelő adatbázis jelszó" });
                 break;
             case 1062: 
-                res.status(500).send({ error: "Már meg van osztva ez a jegyzet az adott felhasználóvl" }); 
+                res.status(500).send({ error: "Már meg van osztva ez a jegyzet az adott felhasználóval" }); 
                 break;
             default:
                 res.status(500).send({ error: "Hiba a megosztáskor: " + err });

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { User } from '../user/user.js'
-import { checkInput } from '../app/functions.js'
+import { Functions } from '../app/functions.js'
 dotenv.config()
 
 export default async function logIn(req, res) {
@@ -10,11 +10,16 @@ export default async function logIn(req, res) {
         Object.assign(user, req.body)
 
         if (!user.Email || !user.Jelszo) {
-            res.status(400).send({ error: 'Hiányzó felhasználónév vagy jelszó' })
+            let missingdata = 
+            {
+                Email: !user.Email,
+                Jelszo: !user.Jelszo
+            }
+            res.status(400).send({ error: 'Hiányzó felhasználónév vagy jelszó!', MissingData: missingdata })
             return
         }
-        if (!checkInput(user.Email) || !checkInput(user.Jelszo)) {
-            res.status(404).send({ error: "Nem megengedett karakterek használata." })
+        if (!Functions.checkInput(user.Email) || !Functions.checkInput(user.Jelszo)) {
+            res.status(400).send({ error: "Nem megengedett karakterek használata." })
             return
         }
 

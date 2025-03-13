@@ -1,39 +1,39 @@
 import mysqlP from 'mysql2/promise'
 import dbConfig from '../app/config.js'
-import checkInput from '../app/functions.js'
 import {User} from './user.js'
+import {Functions} from '../app/functions.js'
 
 export async function Register(req, res) {
     const user = req.body
     if (!user.Email || !user.FelhasznaloNev || !user.Jelszo) {
-        res.status(400).send({ error: "Hiányzó adatok" })
+        let missingdata = 
+        {
+            Email: !user.Email,
+            FelhasznaloNev: !user.FelhasznaloNev,
+            Jelszo: !user.Jelszo
+        }
+        res.status(400).send({ error: "Hiányzó adatok", MissingData: missingdata})
         return
     }
     const conn = await mysqlP.createConnection(dbConfig)
     try {
-        if (!checkInput(user.Email) || !checkInput(user.FelhasznaloNev) || !checkInput(user.Jelszo)) {
-            res.status(404).send({ error: "Nem megengedett karakterek használata." })
+        if (!Functions.checkInput(user.Email) || !Functions.checkInput(user.FelhasznaloNev) || !Functions.checkInput(user.Jelszo)) {
+            res.status(400).send({ error: "Nem megengedett karakterek használata." })
             return
         }
-
-        if (user.Jelszo.length < 8) {
-            res.status(404).send({ error: "túl rövid a jelszó minimum hossz: 8!" })
+        let IsPasswordValid = Functions.IsPasswordValid(user.Jelszo)
+        if (IsPasswordValid != "") {
+            res.status(400).send({ error: IsPasswordValid })
             return
         }
-        if (user.FelhasznaloNev.length < 5) {
-            res.status(404).send({ error: "túl rövid a felhasználó név minimum hossz: 5!" })
+        let IsUsernameValid = Functions.IsUsernameValid(user.FelhasznaloNev);
+        if (IsUsernameValid != "") {
+            res.status(400).send({ error: IsUsernameValid })
             return
         }
-        if (!(/\d/.test(user.Jelszo))) {
-            res.status(404).send({ error: "A jelszónak tartalmaznia kell számokat!" })
-            return
-        }
-        if (!(/[A-Z]/.test(user.Jelszo))) {
-            res.status(404).send({ error: "A jelszónak tartalmaznia kell nagy betűt!" })
-            return
-        }
-        if (!(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g).test(user.Email)) {
-            res.status(404).send({ error: "Nem megfelelő a email formátuma." })
+        let IsEmailValid = Functions.checkEmail(user.Email);
+        if (IsEmailValid != "") {
+            res.status(400).send({ error: IsEmailValid })
             return
         }
         const [rows] = await conn.execute('insert into Felhasznalok values(null,?,?,?,?,?)', [user.FelhasznaloNev, user.Jelszo, user.Email, user.Statusz, user.JogosultsagId])
@@ -41,7 +41,7 @@ export async function Register(req, res) {
             res.status(201).send({ success: "Sikeres regisztráció", data: user })
             return
         }
-        res.status(404).send({ error: "Hiba a regisztrációkor!" })
+        res.status(400).send({ error: "Hiba a regisztrációkor!" })
     }
     catch (err) {
         console.log();
