@@ -60,7 +60,7 @@ export async function getSharedByUserNotesFromToken(req, res) {
 }
 
 export async function ShareNewNoteWithToken(req, res) {
-    if (!res.decodedToken.UserId && !req.body.JegyzetId && (!req.body.MegosztottFelhId || !req.body.GroupSharedId)) {   
+    if (!res.decodedToken.UserId || !req.body.JegyzetId || (!req.body.MegosztottFelhId && !req.body.GroupSharedId) || !req.body.Jogosultsag) {   
         res.status(401).send({ error: "Hiányzó paraméter" });
         return;
     }
@@ -104,7 +104,7 @@ export async function ShareNewNoteWithToken(req, res) {
 }
 export async function DeleteShare(req, res) {
     const conn = await mysqlP.createConnection(dbConfig);
-    if (!res.decodedToken.UserId && !req.body.JegyzetId && (!req.body.MegosztottFelhId || !req.body.GroupSharedId)) {   
+    if (!res.decodedToken.UserId || !req.body.JegyzetId || (!req.body.MegosztottFelhId && !req.body.GroupSharedId)) {   
         res.status(401).send({ error: "Hiányzó paraméter" });
         return;
     }
@@ -147,7 +147,7 @@ export async function DeleteShare(req, res) {
 }
 export async function UpdateSharePermissions(req,res){
     const conn = await mysqlP.createConnection(dbConfig);
-    if (!res.decodedToken.UserId && !req.body.JegyzetId && (!req.body.MegosztottFelhId || !req.body.GroupSharedId) || !req.body.Jogosultsag) {   
+    if (!res.decodedToken.UserId || !req.body.JegyzetId || (!req.body.MegosztottFelhId && !req.body.GroupSharedId) || !req.body.Jogosultsag) {   
         res.status(401).send({ error: "Hiányzó paraméter" });
         return;
     }
