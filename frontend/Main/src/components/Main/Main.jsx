@@ -1,4 +1,4 @@
-import logoImg from "../../assets/logo_main.png";
+import logoImg from "../../public/logo_main.png";
 import "./Main.scss";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";

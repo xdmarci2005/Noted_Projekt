@@ -17,7 +17,7 @@ const Home = () => {
         <div className="main-container">
           <input type="text" className="search-bar" placeholder="Keresés" />
           <div className="top-bar">
-            <button >+ Új</button>
+            <button onClick={()=>navigate("/note")} >+ Új</button>
             <button onClick={checkProfile}>Profil</button>
             <button onClick={() => navigate("/admin")}>Admin</button>
           </div>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import logoImg from "../../assets/logo_main.png";
+import logoImg from "../../public/logo_main.png";
 import { useNavigate } from "react-router-dom";
 import "./login.scss";
 import Modal from "../Modal/Modal";
