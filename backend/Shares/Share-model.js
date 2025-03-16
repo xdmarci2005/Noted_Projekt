@@ -41,7 +41,7 @@ export async function getSharedByUserNotesFromToken(req, res) {
         const [rows] = await conn.execute('Select `Jegyzetek`.`JegyzetId`,`JegyzetNeve`,`JegyzetTartalma`,`MegosztottFelhId`,`MegosztottCsopId`,`Jogosultsag` from `Jegyzetek`' +
             ' INNER JOIN `Megosztas` ON `Jegyzetek`.`JegyzetId` = `Megosztas`.`JegyzetId` WHERE Jegyzetek.Feltolto = ?', [res.decodedToken.UserId]);
         if (rows.length === 0) {
-            res.status(404).send({ error: "Nincsenek jegyzetek" });
+            res.status(404).send({ error: "Nincsenek jegyzeteid." });
             return;
         }
         res.status(200).send({ success: "Sikeres lekérdezés", data: rows });
@@ -77,7 +77,7 @@ export async function ShareNewNoteWithToken(req, res) {
             return;
         }
         if (Share.MegosztottFelhId == res.decodedToken.UserId) {
-            res.status(403).send({ error: "Nem oszthatja meg a jegyzetét saját magával." });
+            res.status(400).send({ error: "Nem oszthatja meg a jegyzetét saját magával." });
             return;
         }
         const [rows] = await conn.execute('INSERT INTO `Megosztas` (`JegyzetId`,`MegosztottFelhId`,`MegosztottCsopId`,`Jogosultsag`) VALUES(?,?,?,?)', [Share.JegyzetId, Share.MegosztottFelhId, Share.GroupSharedId, Share.Jogosultsag]);

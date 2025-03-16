@@ -25,7 +25,7 @@ export default async function logIn(req, res) {
 
         const UserId = await User.validUser(user.Email, user.Jelszo)
         if (UserId == 0) {
-            res.status(401).send({ error: "Hibás email és jelszó!" })
+            res.status(401).send({ error: "Hibás email vagy jelszó!" })
             return
         }
 

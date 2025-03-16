@@ -30,8 +30,10 @@ CREATE TABLE Jegyzetek (
 -- 3. Csoportok tábla (Groups table)
 CREATE TABLE Csoportok (
     CsoportId INT AUTO_INCREMENT PRIMARY KEY,
-    Tulajdonos VARCHAR(255) NOT NULL,
-    CsoportNev VARCHAR(255) NOT NULL 
+    Tulajdonos INT(11) NOT NULL,
+    CsoportNev VARCHAR(255) NOT NULL ,
+    UNIQUE(CsoportNev,Tulajdonos),
+    Foreign KEY (Tulajdonos) REFERENCES Felhasznalok(FelhasznaloId)
 );
 
 -- 4. Megosztás tábla (Shares table for Notes)

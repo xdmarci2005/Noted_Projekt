@@ -5,6 +5,7 @@ import userRouter from "../user/router.js"
 import loginRouter from "../login/router.js"
 import notesRouter from "../Notes/Router.js"
 import sharesRouter from "../Shares/router.js"
+import groupRoter from "../Groups/Router.js"
 const app = express()
 
 app.use(cors({ origin: '*' }))
@@ -16,5 +17,6 @@ app.use('/', userRouter)
 app.use('/', loginRouter)
 app.use('/', notesRouter)
 app.use('/', sharesRouter)
+app.use('/', groupRoter);
 
 export default app;  

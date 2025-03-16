@@ -1,3 +1,4 @@
+//User
 fetch('http://localhost:3000/updateuser', {
     method:'PUT',headers: new Headers(
         {"Content-Type": "application/json",
@@ -113,8 +114,6 @@ fetch('http://localhost:3000/updateNote/4', {
   body:JSON.stringify({"JegyzetNeve":"UjJegyzetNev","Lathatosag":0,"JegyzetTartalma":"UjTartalom"})
 }).then(response => response.json()).then(data => console.log(data))
 
-
-
 fetch('http://localhost:3000/sharedWith', {
   method:'GET',headers: new Headers(
       {"Content-Type": "application/json",
@@ -130,11 +129,6 @@ fetch('http://localhost:3000/sharedBy', {
           "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0MTgyMzY3MiwiZXhwIjoxNzQxODMwODcyfQ.QtDgfq6fSfpNtP-1Y6D2mtz9IqzocpfAh-XK-onjyLg"}
   )
 }).then(response => response.json()).then(data => console.log(data))
-
-
-//7-as 
-//2-es 
-//8-es eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0MTgyMzY3MiwiZXhwIjoxNzQxODMwODcyfQ.QtDgfq6fSfpNtP-1Y6D2mtz9IqzocpfAh-XK-onjyLg
 
 fetch('http://localhost:3000/shares', {
   method:'POST',headers: new Headers(
@@ -161,4 +155,56 @@ fetch('http://localhost:3000/shares', {
           "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0MTgyMzY3MiwiZXhwIjoxNzQxODMwODcyfQ.QtDgfq6fSfpNtP-1Y6D2mtz9IqzocpfAh-XK-onjyLg"}
   ),
   body:JSON.stringify({"JegyzetId":4,"MegosztottFelhId":7,"GroupSharedId":null})
+}).then(response => response.json()).then(data => console.log(data))
+
+//Groups
+
+fetch('http://localhost:3000/admGetGroups',{
+  method:'GET',headers: new Headers(
+      {"Content-Type": "application/json",
+          "Accept": "application/json",
+          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0MjEzMDg0NCwiZXhwIjoxNzQyMTM4MDQ0fQ.4gPs7T1bF9NadjuW18E5jlC5PM2N2ZDJ29TZUG2xDwo"}
+  )
+}).then(response => response.json()).then(data => console.log(data))
+
+fetch('http://localhost:3000/GetOwnedGroups',{
+  method:'GET',headers: new Headers(
+      {"Content-Type": "application/json",
+          "Accept": "application/json",
+          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0MjEzMDg0NCwiZXhwIjoxNzQyMTM4MDQ0fQ.4gPs7T1bF9NadjuW18E5jlC5PM2N2ZDJ29TZUG2xDwo"}
+  )
+}).then(response => response.json()).then(data => console.log(data))
+
+fetch('http://localhost:3000/admGetGroup/1',{
+  method:'GET',headers: new Headers(
+      {"Content-Type": "application/json",
+          "Accept": "application/json",
+          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0MjEzMDg0NCwiZXhwIjoxNzQyMTM4MDQ0fQ.4gPs7T1bF9NadjuW18E5jlC5PM2N2ZDJ29TZUG2xDwo"}
+  )
+}).then(response => response.json()).then(data => console.log(data))
+
+fetch('http://localhost:3000/newGroup',{
+  method:'POST',headers: new Headers(
+      {"Content-Type": "application/json",
+          "Accept": "application/json",
+          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0MjEzMDg0NCwiZXhwIjoxNzQyMTM4MDQ0fQ.4gPs7T1bF9NadjuW18E5jlC5PM2N2ZDJ29TZUG2xDwo"}
+  ),
+  body:JSON.stringify({"Name":"JhonACsoportja"})
+}).then(response => response.json()).then(data => console.log(data))  
+
+fetch('http://localhost:3000/UpdateGroup/4',{
+  method:'PUT',headers: new Headers(
+      {"Content-Type": "application/json",
+          "Accept": "application/json",
+          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0MjEzMDg0NCwiZXhwIjoxNzQyMTM4MDQ0fQ.4gPs7T1bF9NadjuW18E5jlC5PM2N2ZDJ29TZUG2xDwo"}
+  ),
+  body:JSON.stringify({"Name":"FrissitettJozsiCsoportja"})
+}).then(response => response.json()).then(data => console.log(data))
+
+fetch('http://localhost:3000/DeleteGroup/1',{
+  method:'DELETE',headers: new Headers(
+      {"Content-Type": "application/json",
+          "Accept": "application/json",
+          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0MjEzMDg0NCwiZXhwIjoxNzQyMTM4MDQ0fQ.4gPs7T1bF9NadjuW18E5jlC5PM2N2ZDJ29TZUG2xDwo"}
+        )
 }).then(response => response.json()).then(data => console.log(data))
