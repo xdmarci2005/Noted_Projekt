@@ -1,90 +1,108 @@
-/* Navbar container */
+/* Navbar alapstílus */
 .navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   background: white;
-  padding: 10px 16px;
-  margin-bottom: 10px;
+  padding: 8px 16px;
+  margin-bottom: 5px;
 }
 
-/* Left section */
+/* Bal oldali rész */
 .navbar-left {
   display: flex;
   align-items: center;
-  
-  gap: 8px;
+  gap: 10px;
+
+  input {
+    border: 1px;
+  }
 }
 
-.app-title {
+.menu-icon {
   font-size: 18px;
-  font-weight: bold;
-  color: #333;
-}
-
-/* Center section - Document title */
-.navbar-center {
-  flex: 1;
-  text-align: center;
+  cursor: pointer;
 }
 
 .doc-title {
   font-size: 16px;
   font-weight: 500;
-  border: none;
-  outline: none;
-  background: transparent;
-  text-align: center;
-  width: 220px;
 }
 
-/* Right section */
+/* Középső menü */
+.navbar-center {
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+  align-items: center;
+  position: absolute;
+  left: 50%;
+    transform: translateX(-50%);
+
+}
+
+.navbar-center span {
+  cursor: pointer;
+  padding: 5px;
+}
+
+.navbar-center span:hover {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+/* Jobb oldali rész */
 .navbar-right {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
-/* Buttons */
-.btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border: none;
-  border-radius: 4px;
+.icon {
+  font-size: 16px;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: 0.2s;
+
+  img {
+    width: 50px;
+  }
 }
 
-/* Share button */
 .share-btn {
   background: #1a73e8;
   color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-.share-btn:hover {
-  background: #1663c7;
+.profile-img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
 }
 
-/* Profile button */
-.profile-btn {
-  background: none;
-  color: #333;
+/* Dropdown menü */
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  min-width: 120px;
+  padding: 8px 0;
+  z-index: 10;
 }
 
-.profile-btn:hover {
-  background: rgba(0, 0, 0, 0.05);
+.dropdown p {
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 0;
 }
 
-/* Icons */
-.icon {
-  font-size: 16px;
-
-  img {
-    width: 40px;
-    height: auto;
-  }
+.dropdown p:hover {
+  background: rgba(0, 0, 0, 0.1);
 }

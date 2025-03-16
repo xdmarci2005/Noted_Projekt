@@ -2,4 +2,19 @@
     width: 95%;
     margin: auto;
     margin-top: 20px;
+
+    .editor {
+      z-index: 1;
+    }
+}
+
+ p.is-editor-empty:first-child::before {
+    color: var(--gray-4);
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+  }
+.input-disabled {
+  pointer-events: none;
 }
