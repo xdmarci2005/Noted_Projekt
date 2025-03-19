@@ -1,17 +1,108 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Navbar.scss"; // Import the CSS file
 import { FaUser, FaShareAlt } from "react-icons/fa";
 import logoImg from "../logo_main.png";
 import { useNavigate } from "react-router-dom";
+import { Undo } from "lucide-react";
+import { Redo } from "lucide-react";
+import { Copy } from "lucide-react";
+import { ClipboardPaste } from "lucide-react";
+import { Scissors } from "lucide-react";
+import { FileDown } from "lucide-react";
+import { FileUp } from "lucide-react";
+import Mammoth from "mammoth";
+import { saveAs } from "file-saver";
+import ConvertApi from "convertapi-js";
 
-interface NavbarProps {
-  setIsDropdownOpen: (isOpen: boolean) => void;
-}
 
-export default function Navbar({ setIsDropdownOpen }: NavbarProps) {
+
+
+
+
+
+
+
+export default function Navbar({ editor }) {
+  if (!editor) {
+    return null;
+  }
+
   const [docTitle, setDocTitle] = useState("Névtelen Dokumentum");
 
-  const [dropdownOpen, setDropdownOpen] = useState(null);
+  const saveJSON = (filename) => {
+    const jsonContent = editor.getJSON();
+
+    // JSON fájlba mentés
+    const blob = new Blob([JSON.stringify(jsonContent, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${filename}.json`;
+    a.click();
+
+    URL.revokeObjectURL(url);
+  };
+
+  const saveDocx = async (filename) => {
+     
+     let convertApi = ConvertApi.auth("ITT LENNE A SAJÁT TOKENUNK HA ELŐFIZETNÉNK"); //csak itt van a problem
+     let params = convertApi.createParams();
+     params.add("File", editor.getHTML());
+     let result = await convertApi.convert("html", "docx", params);
+  };
+
+  
+
+  const loadJSON = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        if (e.target && typeof e.target.result === "string") {
+          const jsonData = JSON.parse(e.target.result);
+          editor.commands.setContent(jsonData);
+        }
+      } catch (error) {
+        console.error("Hiba a JSON fájl betöltésekor:", error);
+      }
+    };
+
+    reader.readAsText(file);
+  };
+
+  const loadDocx = (file) => {
+    const reader = new FileReader();
+
+    reader.onload = async (event) => {
+      try {
+            
+            const arrayBuffer = event.target?.result; // Correctly get the arrayBuffer
+
+            if (arrayBuffer instanceof ArrayBuffer) {
+              // Convert the arrayBuffer to HTML using Mammoth
+              const result = await Mammoth.convertToHtml({ arrayBuffer });
+
+              const htmlContent = result.value; // This will contain the HTML content
+
+              // Now, set the HTML content into Tiptap
+              editor.commands.setContent(htmlContent);
+            }
+            
+      } catch (err) {
+        console.error("Error converting DOCX:", err);
+      }
+    };
+
+    reader.readAsArrayBuffer(file);
+  };
+
+  
+  
 
   const navigate = useNavigate();
 
@@ -20,18 +111,22 @@ export default function Navbar({ setIsDropdownOpen }: NavbarProps) {
   function handleProfile() {
     navigate("/profile");
   }
-  const toggleDropdown = (menu: string) => {
-    const isOpen = dropdownOpen === menu ? null : menu;
-    setDropdownOpen(isOpen);
-    setIsDropdownOpen(isOpen !== null);
-  };
+
+  
 
   return (
     <>
       <nav className="navbar">
         <div className="navbar-left">
           <span className="icon">
-            <img src={logoImg} alt="Noted Logo" className="logo" />
+            <img
+              src={logoImg}
+              alt="Noted Logo"
+              className="logo"
+              onClick={() => {
+                navigate("/home");
+              }}
+            />
           </span>
           <input
             type="text"
@@ -42,46 +137,73 @@ export default function Navbar({ setIsDropdownOpen }: NavbarProps) {
         </div>
 
         <div className="navbar-center">
-          <span
-            onClick={() => {
-              handleOpen();
+          <input
+            type="file"
+            accept="application/json"
+            onChange={loadJSON}
+            style={{ display: "none" }}
+            id="fileUploadJSON"
+          />
+          <input
+            type="file"
+            accept=".docx"
+            onChange={(e) => {
+              const file = e.target.files[0];
+              if (file) {
+                loadDocx(file);
+              }
             }}
-          >
-            Megnyitás
+            style={{ display: "none" }}
+            id="fileUploadDocx"
+          />
+          <div className="save-upload">
+            <FileUp />
+            <span
+              onClick={() => document.getElementById("fileUploadJSON")?.click()}
+            >
+              JSON
+            </span>
+            <div>/</div>
+            <span
+              onClick={() => document.getElementById("fileUploadDocx")?.click()}
+            >
+              docx
+            </span>
+          </div>
+          <div className="save-upload">
+            <FileDown />
+            <span
+              onClick={() => {
+                saveJSON(docTitle);
+              }}
+            >
+              JSON
+            </span>
+            <div>/</div>
+            <span
+              onClick={() => {
+                saveDocx(docTitle);
+              }}
+            >
+              docx
+            </span>
+          </div>
+          <span>
+            <Undo />
           </span>
-          <span
-            onClick={() => {
-              toggleDropdown("mentes");
-            }}
-          >
-            Mentés
+          <span>
+            <Redo />
           </span>
-
-          {dropdownOpen === "mentes" && (
-            <div className="dropdown">
-              <p>.docx formátumban</p>
-              <p>.md formátumban</p>
-              <p>.odt formátumban</p>
-            </div>
-          )}
-
-          <span
-            onClick={() => {
-              toggleDropdown("szerkeztes");
-            }}
-          >
-            Szerkeztés
+          <span>
+            <Copy />
           </span>
-
-          {dropdownOpen === "szerkeztes" && (
-            <div className="dropdown">
-              <p>Visszavonás</p>
-              <p>Újra</p>
-              <p>Másolás</p>
-              <p>Kivágás</p>
-              <p>Beillesztés</p>
-            </div>
-          )}
+          <span>
+            {" "}
+            <Scissors />
+          </span>
+          <span>
+            <ClipboardPaste />
+          </span>
         </div>
 
         <div className="navbar-right">

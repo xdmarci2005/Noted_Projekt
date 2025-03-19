@@ -1,6 +1,6 @@
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "./note.scss";
 import MenuBar from "./components/menuBar/MenuBar";
 import TextAlign from "@tiptap/extension-text-align";
@@ -10,8 +10,6 @@ import Highlight from "@tiptap/extension-highlight";
 import Navbar from "./components/navBar/NavBar";
 import Placeholder from "@tiptap/extension-placeholder";
 
-
-
 export default function Note() {
   const editor = useEditor({
     extensions: [
@@ -20,7 +18,7 @@ export default function Note() {
         types: ["heading", "paragraph"],
       }),
       Placeholder.configure({
-        placeholder: 'Írjon valamit...'
+        placeholder: "Írjon valamit...",
       }),
       Color,
       TextStyle,
@@ -37,7 +35,7 @@ export default function Note() {
 
   return (
     <div className="notePage">
-      <Navbar setIsDropdownOpen={setIsDropdownOpen} />
+      <Navbar editor={editor} />
       <MenuBar editor={editor} />
       <div className="editor">
         <EditorContent
