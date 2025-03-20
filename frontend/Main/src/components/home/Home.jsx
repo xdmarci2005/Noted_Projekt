@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
 import "./home.scss";
 import { useNavigate } from "react-router-dom";
+import { Plus } from "lucide-react";
+import { User } from "lucide-react";
+
 
 const Home = () => {
   const requestAdmin = () => {};
@@ -14,13 +17,18 @@ const Home = () => {
   const renderContent = () => {
     return (
       <div className="home-site">
-        <div className="main-container">
+        <div className="top-bar">
+          <button onClick={() => navigate("/note")}>
+            {" "}
+            <Plus />
+          </button>
           <input type="text" className="search-bar" placeholder="Keresés" />
-          <div className="top-bar">
-            <button onClick={()=>navigate("/note")} >+ Új</button>
-            <button onClick={checkProfile}>Profil</button>
-            <button onClick={() => navigate("/admin")}>Admin</button>
-          </div>
+          <button onClick={checkProfile}>
+            {" "}
+            <User />
+          </button>
+        </div>
+        <div className="main-container">
           <div className="content">
             <div className="notes-section">
               <h2>Jegyzetek.</h2>

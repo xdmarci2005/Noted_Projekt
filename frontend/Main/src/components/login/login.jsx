@@ -5,9 +5,14 @@ import "./login.scss";
 import Modal from "../Modal/Modal";
 import eyeClose from "../../assets/eye-close.png";
 import eyeOpen from "../../assets/eye-open.png";
+import { useAuth } from '../../AuthContext'
 
 
 const LoginScreen = () => {
+
+  const { login } = useAuth();
+
+
   const navigate = useNavigate();
 
   const [showModal, setShowModal] = useState(false);
@@ -26,6 +31,7 @@ const LoginScreen = () => {
   const handleModalClose = () => {
     setShowModal(false);
     if (isSucces) {
+      login();
       navigate("/home");
     }
   };

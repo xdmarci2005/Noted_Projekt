@@ -1,6 +1,6 @@
 //inputok alapból disabled, gombra enabled, benne autamikusan betöltve a korábbi adatokkal
 
-
+import { useAuth } from "../../AuthContext";
 import { useNavigate } from "react-router-dom";
 
 import "./profile.scss";
@@ -8,8 +8,11 @@ import "./profile.scss";
 const Profile = () => {
   const navigate = useNavigate();
 
+  const {logout} = useAuth();
+
   const handleLogout = () => {
     localStorage.removeItem("token");
+    logout();
     navigate("/");
   };
 

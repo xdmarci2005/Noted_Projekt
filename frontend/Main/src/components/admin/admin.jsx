@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import "./style.scss";
 import { useNavigate } from "react-router-dom";
+import Modal from "../Modal/Modal";
+
 
 const Admin = () => {
-  const handleEdit = () => {};
   const navigate = useNavigate();
 
   const onEdit = (id) => {
@@ -14,6 +15,13 @@ const Admin = () => {
   const handleDelete = () => {};
 
   const [users, setUsers] = useState([]);
+
+  const [showModal, setShowModal] = useState(false);
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    navigate('/');
+  }
 
   useEffect(() => {
     fetch("http://localhost:3000/Admgetusers", {
@@ -28,6 +36,7 @@ const Admin = () => {
       .then((data) => {
         if (data.error) {
           console.log(data);
+          setShowModal(true);
         } else {
           //console.log(users);
           setUsers(data.data);
@@ -39,6 +48,12 @@ const Admin = () => {
 
   return (
     <div className="admin-site">
+      <Modal
+        show={showModal}
+        title="Noted."
+        message={"Nincs hozzáférése ehhez az oldalhoz!"}
+        onClose={() => handleModalClose()}
+      />
       <div className="table-container">
         <table>
           <thead>
