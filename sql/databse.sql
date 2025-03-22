@@ -19,8 +19,7 @@ CREATE TABLE Jegyzetek (
     JegyzetId INT AUTO_INCREMENT PRIMARY KEY,          
     Feltolto INT NOT NULL,                                     
     JegyzetNeve VARCHAR(255) NOT NULL,                 
-    Lathatosag INT NOT NULL,            -- Láthatóság (0 = privát, 1 = nyílvános)
-    JegyzetTartalma TEXT,                     
+    Lathatosag INT NOT NULL,            -- Láthatóság (0 = privát, 1 = nyílvános)                 
     UtolsoFrissites TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UtolsoFrissito INT,                               
     FOREIGN KEY (Feltolto) REFERENCES Felhasznalok(FelhasznaloId),

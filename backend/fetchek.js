@@ -111,7 +111,7 @@ fetch('http://localhost:3000/updateNote/4', {
           "Accept": "application/json",
           "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTczOTM5Njg4NiwiZXhwIjoxNzM5NDA0MDg2fQ.5LHxx8eqPhh_eas-LX7Xb-vZFoSjv1_5TYI0TUzbVPM"}
   ),
-  body:JSON.stringify({"JegyzetNeve":"UjJegyzetNev","Lathatosag":0,"JegyzetTartalma":"UjTartalom"})
+  body:JSON.stringify({"JegyzetNeve":"UjJegyzetNev","Lathatosag":0})
 }).then(response => response.json()).then(data => console.log(data))
 
 fetch('http://localhost:3000/sharedWith', {

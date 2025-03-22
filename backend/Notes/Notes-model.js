@@ -1,6 +1,9 @@
 import mysqlP from 'mysql2/promise';
 import dbConfig from '../app/config.js';
 import {Notes} from './Notes.js';
+import dotenv from 'dotenv';
+import {uploadFile} from './upload.js';
+dotenv.config();
 
 export async function getNotesFromToken(req, res) {
     if (!res.decodedToken.UserId) {
@@ -30,9 +33,11 @@ export async function getNotesFromToken(req, res) {
 }
 
 export async function createNoteWithToken(req, res) {
-    const { JegyzetNeve, Lathatosag, JegyzetTartalma } = req.body;
+    await uploadFile(req, res); 
+    const { Lathatosag } = req.body;
+    const JegyzetNeve = req.file.filename;
 
-    if (!JegyzetNeve || !Lathatosag|| !res.decodedToken.UserId) {
+    if (!JegyzetNeve || !Lathatosag || !res.decodedToken.UserId || !req.file) {
         res.status(400).send({ error: "Hiányzó paraméterek" });
         return;
     }
@@ -40,8 +45,8 @@ export async function createNoteWithToken(req, res) {
     const conn = await mysqlP.createConnection(dbConfig);
     try {
         const [rows] = await conn.execute(
-            'INSERT INTO Jegyzetek (Feltolto, JegyzetNeve, Lathatosag, JegyzetTartalma, UtolsoFrissito) VALUES (?, ?, ?, ?, ?)',
-            [res.decodedToken.UserId, JegyzetNeve, Lathatosag, JegyzetTartalma, res.decodedToken.UserId]
+            'INSERT INTO Jegyzetek (Feltolto, Lathatosag, JegyzetNeve, UtolsoFrissito) VALUES (?, ?, ?, ?)',
+            [res.decodedToken.UserId, Lathatosag, JegyzetNeve, res.decodedToken.UserId]
         );
         res.status(201).send({ success: "Jegyzet létrehozva", id: rows.insertId });
     } catch (err) {
@@ -110,8 +115,8 @@ export async function updateNoteById(req, res) {
         let NewNote = OldNote;
         Object.assign(NewNote, req.body);
         const [result] = await conn.execute(
-            'UPDATE Jegyzetek SET JegyzetNeve = ?, Lathatosag = ?, JegyzetTartalma = ?, UtolsoFrissites = CURRENT_TIMESTAMP, UtolsoFrissito = ? WHERE JegyzetId = ?',
-            [NewNote.JegyzetNeve, NewNote.Lathatosag, NewNote.JegyzetTartalma, NewNote.UtolsoFrissito, JegyzetId]
+            'UPDATE Jegyzetek SET JegyzetNeve = ?, Lathatosag = ?, UtolsoFrissites = CURRENT_TIMESTAMP, UtolsoFrissito = ? WHERE JegyzetId = ?',
+            [NewNote.JegyzetNeve, NewNote.Lathatosag, NewNote.UtolsoFrissito, JegyzetId]
         );
         if (result.affectedRows === 0) {
             res.status(404).send({ error: "Hiba a jegyzet frissítésekor" });
