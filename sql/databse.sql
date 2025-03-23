@@ -82,7 +82,8 @@ CREATE FUNCTION `Login`(email VARCHAR(100), pwd VARCHAR(100)) RETURNS int
 Begin
     DECLARE ok INTEGER;
     set ok = 0;
-    SELECT  `FelhasznaloId` into ok from Felhasznalok WHERE (Felhasznalok.Email = email) and (Felhasznalok.Jelszo = Titkos(pwd));
+    SELECT  `FelhasznaloId` into ok from Felhasznalok
+    WHERE (Felhasznalok.Email = email) and (Felhasznalok.Jelszo = Titkos(pwd));
     RETURN ok;
     END
 
