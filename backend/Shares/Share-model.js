@@ -60,7 +60,7 @@ export async function getSharedByUserNotesFromToken(req, res) {
 }
 
 export async function ShareNewNoteWithToken(req, res) {
-    if (!res.decodedToken.UserId || !req.body.JegyzetId || (!req.body.MegosztottFelhId && !req.body.GroupSharedId) || !req.body.Jogosultsag) {   
+    if (!res.decodedToken.UserId || !req.body.JegyzetId || (!req.body.MegosztottFelhId && !req.body.MegosztottCsopId) || !req.body.Jogosultsag) {   
         res.status(401).send({ error: "Hiányzó paraméter" });
         return;
     }
@@ -80,7 +80,13 @@ export async function ShareNewNoteWithToken(req, res) {
             res.status(400).send({ error: "Nem oszthatja meg a jegyzetét saját magával." });
             return;
         }
-        const [rows] = await conn.execute('INSERT INTO `Megosztas` (`JegyzetId`,`MegosztottFelhId`,`MegosztottCsopId`,`Jogosultsag`) VALUES(?,?,?,?)', [Share.JegyzetId, Share.MegosztottFelhId, Share.GroupSharedId, Share.Jogosultsag]);
+        let rows = undefined;
+        if(!req.body.MegosztottCsopId){
+            [rows] = await conn.execute('INSERT INTO `Megosztas` (`JegyzetId`,`MegosztottFelhId`,`Jogosultsag`) VALUES(?,?,?)', [Share.JegyzetId, Share.MegosztottFelhId, Share.Jogosultsag]);   
+        }
+        else if(!req.body.MegosztottFelhId){
+            [rows] = await conn.execute('INSERT INTO `Megosztas` (`JegyzetId`,`MegosztottCsopId`,`Jogosultsag`) VALUES(?,?,?)', [Share.JegyzetId, Share.MegosztottCsopId, Share.Jogosultsag]);   
+        }
         if (rows.length === 0) {
             res.status(404).send({ error: "Nem létezik ilyen felhasználó vagy csoport" });
             return;
@@ -104,7 +110,7 @@ export async function ShareNewNoteWithToken(req, res) {
 }
 export async function DeleteShare(req, res) {
     const conn = await mysqlP.createConnection(dbConfig);
-    if (!res.decodedToken.UserId || !req.body.JegyzetId || (!req.body.MegosztottFelhId && !req.body.GroupSharedId)) {   
+    if (!res.decodedToken.UserId || !req.body.JegyzetId || (!req.body.MegosztottFelhId && !req.body.MegosztottCsopId)) {   
         res.status(401).send({ error: "Hiányzó paraméter" });
         return;
     }
@@ -119,7 +125,13 @@ export async function DeleteShare(req, res) {
             res.status(403).send({ error: "Nem törölheti más megosztásait." });
             return;
         }
-        const [rows] = await conn.execute('DELETE FROM `Megosztas` WHERE `JegyzetId` = ? AND `MegosztottFelhId` = ?', [req.body.JegyzetId, req.body.MegosztottFelhId]);
+        let rows = undefined;
+        if(!req.body.MegosztottFelhId){
+            [rows] = await conn.execute('DELETE FROM `Megosztas` WHERE `JegyzetId` = ? AND `MegosztottCsopId` = ?', [req.body.JegyzetId, req.body.MegosztottCsopId]);
+        }
+        else if(!req.body.MegosztottCsopId){
+            [rows] = await conn.execute('DELETE FROM `Megosztas` WHERE `JegyzetId` = ? AND `MegosztottFelhId` = ?', [req.body.JegyzetId, req.body.MegosztottFelhId]);
+        }
         if (rows.length === 0)
         {
             res.status(404).send({ error: "Nem található a megosztás" });
@@ -147,7 +159,7 @@ export async function DeleteShare(req, res) {
 }
 export async function UpdateSharePermissions(req,res){
     const conn = await mysqlP.createConnection(dbConfig);
-    if (!res.decodedToken.UserId || !req.body.JegyzetId || (!req.body.MegosztottFelhId && !req.body.GroupSharedId) || !req.body.Jogosultsag) {   
+    if (!res.decodedToken.UserId || !req.body.JegyzetId || (!req.body.MegosztottFelhId && !req.body.MegosztottCsopId) || !req.body.Jogosultsag) {   
         res.status(401).send({ error: "Hiányzó paraméter" });
         return;
     }
@@ -162,7 +174,13 @@ export async function UpdateSharePermissions(req,res){
             res.status(403).send({ error: "Nem módosíthajta más megosztásait." });
             return;
         }
-        const [rows] = await conn.execute('UPDATE `Megosztas` SET `Jogosultsag` = ? WHERE `JegyzetId` = ? AND `MegosztottFelhId` = ?', [req.body.Jogosultsag, req.body.JegyzetId, req.body.MegosztottFelhId]);
+        let rows = undefined;
+        if(!req.body.MegosztottFelhId){
+            [rows] = await conn.execute('UPDATE `Megosztas` SET `Jogosultsag` = ? WHERE `JegyzetId` = ? AND `MegosztottCsopId` = ?', [req.body.Jogosultsag, req.body.JegyzetId, req.body.MegosztottCsopId]);
+        }
+        else if(!req.body.MegosztottCsopId){
+            [rows] = await conn.execute('UPDATE `Megosztas` SET `Jogosultsag` = ? WHERE `JegyzetId` = ? AND `MegosztottFelhId` = ?', [req.body.Jogosultsag, req.body.JegyzetId, req.body.MegosztottFelhId]);
+        }
         if (rows.length === 0)
         {
             res.status(404).send({ error: "Nem található a megosztás" });
@@ -172,7 +190,7 @@ export async function UpdateSharePermissions(req,res){
 
         });
     }
-    catch
+    catch(err)
     {
         switch (err.errno){
             case 1045:

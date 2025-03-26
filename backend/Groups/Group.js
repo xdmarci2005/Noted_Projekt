@@ -8,8 +8,11 @@ export class Group{
     static async LoadDataFromDB(CsoportId){
         const conn = await mysqlP.createConnection(dbConfig)
         try {
-            const [rows] = await conn.execute('Select * from Csoportok where CsoportId = ?', [CsoportId])
-            return rows[0]
+            if(CsoportId !== undefined ){
+                const [rows] = await conn.execute('Select * from Csoportok where CsoportId = ?', [CsoportId])
+                return rows[0]
+            }
+            return undefined
         }
         catch (err){
             console.log(err)

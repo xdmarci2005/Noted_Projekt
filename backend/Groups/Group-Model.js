@@ -109,7 +109,8 @@ export async function createGroup(req,res) {
     try
     {
         let [rows] = await conn.execute('insert into Csoportok (CsoportNev, Tulajdonos) values (?,?)', [req.body.Name, res.decodedToken.UserId]);
-        if([rows].affectedRows === 0){
+        let [rows2] = await conn.execute('insert into CsoportTagok (CsoportId,TagId, JogosultsagId) values (?,?,?)', [rows.insertId,res.decodedToken.UserId,3]);
+        if(rows.affectedRows === 0 || rows2.affectedRows === 0){
             res.status(400).send({error: "Hiba a csoport létrehozásakor"});
             return;
         }
@@ -211,6 +212,48 @@ export async function DeleteGroup(req,res) {
                 break;
             default:
                 res.status(500).send({error: "Hiba az adatok törlésekor: " + err});
+                break;
+        }
+    }
+    finally{
+        conn.end();
+    }
+}
+export async function getGroupMembersByGroupId(req,res){
+    console.log(req.params.GroupId)
+    if(!res.decodedToken.UserId || !req.params.GroupId)
+    {
+        res.status(401).send({error: "Hiányzó paraméter"});
+        return;
+    }
+    const conn = await mysql.createConnection(dbConfig)
+    try
+    {
+        let group = await Group.LoadDataFromDB(req.params.GroupId);
+        if(group === undefined){
+            res.status(400).send({error: "Nincs ilyen csoport"});
+            return;
+        }
+        let user = await User.loadDataFromDB(res.decodedToken.UserId);
+        if((group.Tulajdonos != res.decodedToken.UserId && user.JogosultsagId < 2) || user.Statusz === 0){
+            res.status(400).send({error: "Nincs engedélye ehhez a művelethez."});
+            return;
+        }
+        const [rows] = await conn.execute("SELECT `FelhasznaloNev` from `Felhasznalok` INNER JOIN `CsoportTagok` ON `FelhasznaloId` = `TagId` WHERE `CsoportId` =  ?;",[req.params.GroupId]);
+        if(rows.length != 0){
+            res.status(200).send({success: "Sikeres lekérdezés",data: [rows][0]})
+            return;
+        }
+        res.status(400).send({error: "Hiba az adatok lekérdezésekor"})
+    }
+    catch(err)
+    {
+        switch(err.errno){
+            case 1045:
+                res.status(500).send({error: "Hiba a csatlakozáskor nem megfelelő adatbázis jelszó."});    
+                break;
+            default:
+                res.status(500).send({error: "Hiba az adatok lekérdezésekor: " + err});
                 break;
         }
     }
