@@ -2,6 +2,7 @@ import mysqlP from 'mysql2/promise'
 import dbConfig from '../app/config.js'
 import {User} from './user.js'
 import {Functions} from '../app/functions.js'
+import crypto from 'crypto'
 
 export async function Register(req, res) {
     const user = req.body
@@ -17,7 +18,7 @@ export async function Register(req, res) {
     }
     const conn = await mysqlP.createConnection(dbConfig)
     try {
-        if (!Functions.checkInput(user.Email) || !Functions.checkInput(user.FelhasznaloNev) || !Functions.checkInput(user.Jelszo)) {
+        if (Functions.checkInput(user.Email) || Functions.checkInput(user.FelhasznaloNev) || Functions.checkInput(user.Jelszo)) {
             res.status(400).send({ error: "Nem megengedett karakterek használata." })
             return
         }
@@ -104,32 +105,43 @@ export async function updateUserWithToken(req, res) {
     }
     const conn = await mysqlP.createConnection(dbConfig)
     try {
+        if (Functions.checkInput(req.body.Email) || Functions.checkInput(req.body.FelhasznaloNev) || Functions.checkInput(req.body.Jelszo)) {
+            res.status(400).send({ error: "Nem megengedett karakterek használata." })
+            return
+        }
         let olduser = await User.loadDataFromDB(res.decodedToken.UserId)
         let user = olduser
         if (user.statusz == 0) {
             res.status(401).send({ error: "Fiókja blokkolva van" })
             return
         }
+
+        if(req.body.Jelszo !== undefined){
+            let IsPasswordValid = Functions.IsPasswordValid(req.body.Jelszo)
+            if (IsPasswordValid != "") {
+                res.status(400).send({ error: IsPasswordValid })
+                return
+            }
+            req.body.Jelszo = crypto.createHash('sha256').update(req.body.Jelszo).digest('hex');
+        }
+
+        if(req.body.FelhasznaloNev !== undefined){
+            let IsUsernameValid = Functions.IsUsernameValid(req.body.FelhasznaloNev);
+            if (IsUsernameValid != "") {
+                res.status(400).send({ error: IsUsernameValid })
+                return
+            }
+        }
+
+        if(req.body.Email !== undefined){
+            let IsEmailValid = Functions.checkEmail(req.body.Email);
+            if (IsEmailValid != "") {
+                res.status(400).send({ error: IsEmailValid })
+                return
+            }
+        }
+
         Object.assign(user, req.body)
-        if (!Functions.checkInput(user.Email) || !Functions.checkInput(user.FelhasznaloNev) || !Functions.checkInput(user.Jelszo)) {
-            res.status(400).send({ error: "Nem megengedett karakterek használata." })
-            return
-        }
-        let IsPasswordValid = Functions.IsPasswordValid(user.Jelszo)
-        if (IsPasswordValid != "") {
-            res.status(400).send({ error: IsPasswordValid })
-            return
-        }
-        let IsUsernameValid = Functions.IsUsernameValid(user.FelhasznaloNev);
-        if (IsUsernameValid != "") {
-            res.status(400).send({ error: IsUsernameValid })
-            return
-        }
-        let IsEmailValid = Functions.checkEmail(user.Email);
-        if (IsEmailValid != "") {
-            res.status(400).send({ error: IsEmailValid })
-            return
-        }
         const [rows2] = await conn.execute('Update Felhasznalok set FelhasznaloNev =?,Email=?, Jelszo=? where FelhasznaloId =?', [user.FelhasznaloNev, user.Email, user.Jelszo, res.decodedToken.UserId])
         user.Jelszo = undefined
         if (rows2.affectedRows > 0) {
@@ -168,6 +180,12 @@ export async function updateUserByIdAdmin(req, res) {
     }
     const conn = await mysqlP.createConnection(dbConfig)
     try {
+        
+        if (Functions.checkInput(req.body.Email) || Functions.checkInput(req.body.FelhasznaloNev) || Functions.checkInput(req.body.Jelszo)) {
+            res.status(400).send({ error: "Nem megengedett karakterek használata." })
+            return
+        }
+
         let adminuser = await User.loadDataFromDB(res.decodedToken.UserId)
         if (adminuser.statusz == 0) {
             res.status(401).send({ error: "Fiókja blokkolva van" })
@@ -179,11 +197,39 @@ export async function updateUserByIdAdmin(req, res) {
         }
 
         let olduser = await User.loadDataFromDB(req.params.UserId)
+
         if (!olduser) {
             res.status(500).send({ error: 'A felhasználó nem létezik' })
             return
         }
+        
         let user = olduser
+        
+        if(req.body.Jelszo !== undefined){
+            let IsPasswordValid = Functions.IsPasswordValid(req.body.Jelszo)
+            if (IsPasswordValid != "") {
+                res.status(400).send({ error: IsPasswordValid })
+                return
+            }
+            req.body.Jelszo = crypto.createHash('sha256').update(req.body.Jelszo).digest('hex');
+        }
+        
+        if(req.body.FelhasznaloNev !== undefined){
+            let IsUsernameValid = Functions.IsUsernameValid(req.body.FelhasznaloNev);
+            if (IsUsernameValid != "") {
+                res.status(400).send({ error: IsUsernameValid })
+                return
+            }
+        }
+
+        if(req.body.Email !== undefined){
+            let IsEmailValid = Functions.checkEmail(req.body.Email);
+            if (IsEmailValid != "") {
+                res.status(400).send({ error: IsEmailValid })
+                return
+            }
+        }
+
         Object.assign(user, req.body)
         const [rows3] = await conn.execute('Update Felhasznalok set FelhasznaloNev =?,Email=?, Jelszo=?, Statusz=? where FelhasznaloId =?', [user.FelhasznaloNev, user.Email, user.Jelszo, user.statusz, req.params.UserId])
         user.Jelszo = undefined

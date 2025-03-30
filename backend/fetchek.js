@@ -116,7 +116,15 @@ fetch('http://localhost:3000/updateNote/4', {
 
 //Shares
 
-fetch('http://localhost:3000/sharedWith', {
+fetch('http://localhost:3000/sharedWithUser', {
+  method:'GET',headers: new Headers(
+      {"Content-Type": "application/json",
+          "Accept": "application/json",
+          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjcsImlhdCI6MTc0MzM1NjQzNywiZXhwIjoxNzQzMzYzNjM3fQ.eaWIihXLuoZ7qI6Y4dVZd2Vrc4W95oC1KThvyULXfec"}
+  )
+}).then(response => response.json()).then(data => console.log(data))
+
+fetch('http://localhost:3000/sharedWithGroup', {
   method:'GET',headers: new Headers(
       {"Content-Type": "application/json",
           "Accept": "application/json",
@@ -124,7 +132,7 @@ fetch('http://localhost:3000/sharedWith', {
   )
 }).then(response => response.json()).then(data => console.log(data))
 
-fetch('http://localhost:3000/sharedBy', {
+fetch('http://localhost:3000/sharesBy', {
   method:'GET',headers: new Headers(
       {"Content-Type": "application/json",
           "Accept": "application/json",

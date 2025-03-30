@@ -1,4 +1,4 @@
-import { Group } from "./Group.js";
+import { Group } from "../groups/Group.js";
 import { User } from "../user/user.js";
 import dotenv from "dotenv";
 import mysql from "mysql2/promise";

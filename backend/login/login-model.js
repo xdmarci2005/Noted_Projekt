@@ -18,7 +18,7 @@ export default async function logIn(req, res) {
             res.status(400).send({ error: 'Hiányzó felhasználónév vagy jelszó!', MissingData: missingdata })
             return
         }
-        if (!Functions.checkInput(user.Email) || !Functions.checkInput(user.Jelszo)) {
+        if (Functions.checkInput(user.Email) || Functions.checkInput(user.Jelszo)) {
             res.status(400).send({ error: "Nem megengedett karakterek használata." })
             return
         }
@@ -34,11 +34,12 @@ export default async function logIn(req, res) {
             res.status(401).send({ error: "A bejelentkezés nem sikerült" })
             return
         }
-        if (user.statusz == 0) {
+
+        if (user.Statusz == 0) {
             res.status(401).send({ error: "Fiókja blokkolva van" })
             return
         }
-        user.Jelszo == undefined
+
         const payload = { UserId: user.FelhasznaloId }
         const { JWT_STRING } = process.env
         user.Token = jwt.sign(payload, JWT_STRING, { expiresIn: "2h" });

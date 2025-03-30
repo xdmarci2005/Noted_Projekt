@@ -1,5 +1,6 @@
 import { Shared } from "./Share.js";
 import { Notes } from "../Notes/Notes.js";
+import { Group} from "../groups/Group.js"
 import mysqlP from 'mysql2/promise';
 import dbConfig from '../app/config.js';
 
@@ -10,8 +11,37 @@ export async function getSharedWithUserNotesFromToken(req, res) {
     }
     const conn = await mysqlP.createConnection(dbConfig);
     try {
-        const [rows] = await conn.execute('Select `Jegyzetek`.`JegyzetId`,`JegyzetNeve`,`JegyzetTartalma`,`MegosztottFelhId`,`MegosztottCsopId`,`Jogosultsag` from `Jegyzetek`' +
+        const [rows] = await conn.execute('Select `Jegyzetek`.`JegyzetId`,`JegyzetNeve`,`MegosztottFelhId`,`Jogosultsag` from `Jegyzetek`' +
             ' INNER JOIN `Megosztas` ON `Jegyzetek`.`JegyzetId` = `Megosztas`.`JegyzetId` WHERE `Megosztas`.`MegosztottFelhId` = ?', [res.decodedToken.UserId]);
+        if (rows.length === 0) {
+            res.status(400).send({ error: "Nincsenek jegyzetek" });
+            return;
+        }
+        res.status(200).send({ success: "Sikeres lekérdezés", data: rows });
+    } catch (err) {
+        switch (err.errno) {
+            case 1045:
+                res.status(500).send({ error: "Hiba a csatlakozáskor nem megfelelő adatbázis jelszó" });
+                break;
+            default:
+                res.status(500).send({ error: "Hiba az adatok lekérdezésekor: " + err });
+                break;
+        }
+    } finally {
+        conn.end();
+    }
+}
+
+export async function getSharedWithGroupNotesFromToken(req, res) {
+    if (!res.decodedToken.UserId || !req.params.MegosztottCsopId) {
+        res.status(401).send({ error: "Hiányzó paraméter" });
+        return;
+    }
+    const conn = await mysqlP.createConnection(dbConfig);
+    try {
+        const [rows] = await conn.execute('Select `Jegyzetek`.`JegyzetId`,`JegyzetNeve`,`MegosztottCsopId`,`Jogosultsag` from `Jegyzetek`' +
+            ' INNER JOIN `Megosztas` ON `Jegyzetek`.`JegyzetId` = `Megosztas`.`JegyzetId` WHERE `MegosztottCsopId` = ?', [req.params.MegosztottCsopId]);
+        console.log(rows[0]);
         if (rows.length === 0) {
             res.status(400).send({ error: "Nincsenek jegyzetek" });
             return;
@@ -38,8 +68,8 @@ export async function getSharedByUserNotesFromToken(req, res) {
     }
     const conn = await mysqlP.createConnection(dbConfig);
     try {
-        const [rows] = await conn.execute('Select `Jegyzetek`.`JegyzetId`,`JegyzetNeve`,`JegyzetTartalma`,`MegosztottFelhId`,`MegosztottCsopId`,`Jogosultsag` from `Jegyzetek`' +
-            ' INNER JOIN `Megosztas` ON `Jegyzetek`.`JegyzetId` = `Megosztas`.`JegyzetId` WHERE Jegyzetek.Feltolto = ?', [res.decodedToken.UserId]);
+        const [rows] = await conn.execute('Select `Jegyzetek`.`JegyzetId`,`JegyzetNeve`,`MegosztottFelhId`,`MegosztottCsopId`,`Jogosultsag` from `Jegyzetek`' +
+            ' INNER JOIN `Megosztas` ON `Jegyzetek`.`JegyzetId` = `Megosztas`.`JegyzetId` WHERE Feltolto = ?', [res.decodedToken.UserId]);
         if (rows.length === 0) {
             res.status(404).send({ error: "Nincsenek jegyzeteid." });
             return;

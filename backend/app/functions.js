@@ -15,10 +15,10 @@ export class Functions{
     const invalidCharaters = ['`', ';', ',', '(', ')', "'", '"', '=', '$'];
     for (let i = 0; i < invalidCharaters.length; i++) {
       if (input.includes(invalidCharaters[i])) {
-        return false;
+        return true;
       }
     }
-    return true;
+    return false;
   }
 
   static IsPasswordValid(Password){

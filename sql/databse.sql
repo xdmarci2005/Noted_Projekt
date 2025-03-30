@@ -74,15 +74,7 @@ VALUES ('Member'), ('Moderator'), ('Admin');
 
 Select * from Felhasznalok where FelhasznaloId = 8
 
-CREATE TRIGGER updateUser
-BEFORE UPDATE
-ON Felhasznalok
-FOR EACH ROW
-SET
-  NEW.Email = LOWER(NEW.Email),
-  NEW.Jelszo = `Titkos`(NEW.Jelszo);
-
-  CREATE Trigger insertUser
+CREATE Trigger insertUser
 BEFORE INSERT
 ON Felhasznalok
 for each row set
@@ -93,7 +85,7 @@ CREATE FUNCTION `Titkos`(pwd VARCHAR(100)) RETURNS blob
     DETERMINISTIC
 Begin
     DECLARE titkositot BLOB;
-    set titkositot = SHA2(concat(pwd,'sozas'),256);
+    set titkositot = SHA2(pwd,256);
     RETURN titkositot;
     END
 
