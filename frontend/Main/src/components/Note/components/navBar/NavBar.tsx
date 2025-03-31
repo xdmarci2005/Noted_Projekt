@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./Navbar.scss"; // Import the CSS file
-import { FaUser, FaShareAlt } from "react-icons/fa";
+import { User } from "lucide-react";
+import { Share2 } from "lucide-react";
 import logoImg from "../logo_main.png";
 import { useNavigate } from "react-router-dom";
 import { Undo } from "lucide-react";
@@ -11,16 +12,7 @@ import { Scissors } from "lucide-react";
 import { FileDown } from "lucide-react";
 import { FileUp } from "lucide-react";
 import Mammoth from "mammoth";
-import { saveAs } from "file-saver";
 import ConvertApi from "convertapi-js";
-
-
-
-
-
-
-
-
 
 export default function Navbar({ editor }) {
   if (!editor) {
@@ -47,14 +39,13 @@ export default function Navbar({ editor }) {
   };
 
   const saveDocx = async (filename) => {
-     
-     let convertApi = ConvertApi.auth("ITT LENNE A SAJÁT TOKENUNK HA ELŐFIZETNÉNK"); //csak itt van a problem
-     let params = convertApi.createParams();
-     params.add("File", editor.getHTML());
-     let result = await convertApi.convert("html", "docx", params);
+    let convertApi = ConvertApi.auth(
+      "ITT LENNE A SAJÁT TOKENUNK HA ELŐFIZETNÉNK"
+    ); //csak itt van a problem
+    let params = convertApi.createParams();
+    params.add("File", editor.getHTML());
+    let result = await convertApi.convert("html", "docx", params);
   };
-
-  
 
   const loadJSON = (event) => {
     const file = event.target.files[0];
@@ -80,19 +71,17 @@ export default function Navbar({ editor }) {
 
     reader.onload = async (event) => {
       try {
-            
-            const arrayBuffer = event.target?.result; // Correctly get the arrayBuffer
+        const arrayBuffer = event.target?.result; // Correctly get the arrayBuffer
 
-            if (arrayBuffer instanceof ArrayBuffer) {
-              // Convert the arrayBuffer to HTML using Mammoth
-              const result = await Mammoth.convertToHtml({ arrayBuffer });
+        if (arrayBuffer instanceof ArrayBuffer) {
+          // Convert the arrayBuffer to HTML using Mammoth
+          const result = await Mammoth.convertToHtml({ arrayBuffer });
 
-              const htmlContent = result.value; // This will contain the HTML content
+          const htmlContent = result.value; // This will contain the HTML content
 
-              // Now, set the HTML content into Tiptap
-              editor.commands.setContent(htmlContent);
-            }
-            
+          // Now, set the HTML content into Tiptap
+          editor.commands.setContent(htmlContent);
+        }
       } catch (err) {
         console.error("Error converting DOCX:", err);
       }
@@ -100,9 +89,6 @@ export default function Navbar({ editor }) {
 
     reader.readAsArrayBuffer(file);
   };
-
-  
-  
 
   const navigate = useNavigate();
 
@@ -112,11 +98,9 @@ export default function Navbar({ editor }) {
     navigate("/profile");
   }
 
-  
-
   return (
     <>
-      <nav className="navbar">
+      <nav className="navbar-top">
         <div className="navbar-left">
           <span className="icon">
             <img
@@ -128,6 +112,8 @@ export default function Navbar({ editor }) {
               }}
             />
           </span>
+        </div>
+        <div className="navbar-center">
           <input
             type="text"
             className="doc-title"
@@ -135,7 +121,15 @@ export default function Navbar({ editor }) {
             onChange={(e) => setDocTitle(e.target.value)}
           />
         </div>
-
+        <div className="navbar-right">
+          <div className="profile-btn">
+            <span  onClick={handleProfile}>
+              <User />
+            </span>
+          </div>
+        </div>
+      </nav>
+      <nav className="navbar-bottom">
         <div className="navbar-center">
           <input
             type="file"
@@ -204,20 +198,9 @@ export default function Navbar({ editor }) {
           <span>
             <ClipboardPaste />
           </span>
-        </div>
-
-        <div className="navbar-right">
-          <button className="btn share-btn">
-            <span className="icon">
-              <FaShareAlt />
-            </span>{" "}
-            Share
-          </button>
-          <button className="btn profile-btn" onClick={handleProfile}>
-            <span className="icon">
-              <FaUser />
-            </span>
-          </button>
+          <span className="icon">
+            <Share2 />
+          </span>
         </div>
       </nav>
     </>

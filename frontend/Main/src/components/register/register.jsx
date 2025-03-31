@@ -55,18 +55,25 @@ const RegisterScreen = () => {
                 placeholder="felhasználónév"
                 id="username"
                 className="input-field"
+                autoComplete="off"
+                readOnly
+                onFocus={(e) => e.target.removeAttribute("readonly")}
               />
               <input
-                type="text"
+                type="email"
                 placeholder="e-mail cím"
                 id="email"
                 className="input-field"
+                readOnly
+                onFocus={(e) => e.target.removeAttribute("readonly")}
               />
               <div className="password-field">
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="jelszó"
                   id="password"
+                  readOnly
+                  onFocus={(e) => e.target.removeAttribute("readonly")}
                 />
                 <img
                   src={showPassword ? eyeOpen : eyeClose}
