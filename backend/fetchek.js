@@ -149,22 +149,21 @@ fetch('http://localhost:3000/newShare', {
   body:JSON.stringify({"JegyzetId":1,"MegosztottFelhId":null,"MegosztottCsopId":9,"Jogosultsag":"R"})
 }).then(response => response.json()).then(data => console.log(data))
 
-fetch('http://localhost:3000/updateShare', {
+fetch('http://localhost:3000/updateShare/1', {
   method:'PUT',headers: new Headers(
       {"Content-Type": "application/json",
           "Accept": "application/json",
           "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0Mjk4Njg1NywiZXhwIjoxNzQyOTk0MDU3fQ.G-VvCcXdRW0YyJ7kEyiGEkkbdkkcsTW0S59L-U8teTU"}
   ),
-  body:JSON.stringify({"JegyzetId":2,"MegosztottFelhId":7,"MegosztottCsopId":null,"Jogosultsag":"RW"})
+  body:JSON.stringify({"Jogosultsag":"RW"})
 }).then(response => response.json()).then(data => console.log(data))
 
-fetch('http://localhost:3000/deleteShare', {
+fetch('http://localhost:3000/deleteShare/1', {
   method:'DELETE',headers: new Headers(
       {"Content-Type": "application/json",
           "Accept": "application/json",
-          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0Mjk4Njg1NywiZXhwIjoxNzQyOTk0MDU3fQ.G-VvCcXdRW0YyJ7kEyiGEkkbdkkcsTW0S59L-U8teTU"}
-  ),
-  body:JSON.stringify({"JegyzetId":4,"MegosztottFelhId":7,"MegosztottCsopId":null})
+          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0MzY3MTgzNywiZXhwIjoxNzQzNjc5MDM3fQ.umRczWpOiV8do8VXIbWoYGnQNtVvYkYWqSJDBkXcFHQ"}
+  )
 }).then(response => response.json()).then(data => console.log(data))
 
 //Groups

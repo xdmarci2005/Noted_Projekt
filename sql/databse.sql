@@ -54,6 +54,7 @@ CREATE TABLE CsoportTagok (
 -- 6. Megosztás tábla (Shares table for Notes)
 
 CREATE TABLE Megosztas (
+    MegosztasId INT AUTO_INCREMENT PRIMARY KEY,
     JegyzetId INT,
     MegosztottFelhId INT,                        
     MegosztottCsopId INT,                           

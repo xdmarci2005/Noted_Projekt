@@ -7,7 +7,7 @@ router.get("/sharedWithUser", auth,Shared.getSharedWithUserNotesFromToken);
 router.get("/sharedWithGroup/:MegosztottCsopId", auth,Shared.getSharedWithGroupNotesFromToken);
 router.get("/sharesBy", auth,Shared.getSharedByUserNotesFromToken);
 router.post("/newShare", auth,Shared.ShareNewNoteWithToken);
-router.put("/updateShare", auth,Shared.UpdateSharePermissions);
-router.delete("/deleteShare", auth,Shared.DeleteShare);
+router.put("/updateShare/:ShareId", auth,Shared.UpdateSharePermissions);
+router.delete("/deleteShare/:ShareId", auth,Shared.DeleteShare);
 
 export default router;
