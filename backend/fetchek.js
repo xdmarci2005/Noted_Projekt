@@ -70,6 +70,14 @@ fetch('http://localhost:3000/Admgetusers', {
 }).then(response => response.json())
   .then(data => console.log(data))
 
+fetch('http://localhost:3000/getUserByName/Alfred', {
+    method:'GET',headers: new Headers(
+        {"Content-Type": "application/json",
+            "Accept": "application/json",
+            "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0MzY3MTgzNywiZXhwIjoxNzQzNjc5MDM3fQ.umRczWpOiV8do8VXIbWoYGnQNtVvYkYWqSJDBkXcFHQ"}
+    )
+}).then(response => response.json())
+  .then(data => console.log(data))
 
 //Notes
 fetch('http://localhost:3000/getNotes', {
@@ -78,6 +86,14 @@ fetch('http://localhost:3000/getNotes', {
             "Accept": "application/json",
             "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTczOTM5Njg4NiwiZXhwIjoxNzM5NDA0MDg2fQ.5LHxx8eqPhh_eas-LX7Xb-vZFoSjv1_5TYI0TUzbVPM"}
     )
+}).then(response => response.json()).then(data => console.log(data))
+
+fetch('http://localhost:3000/getNoteByName/asd', {
+  method: 'GET', headers: new Headers(
+    {"Content-Type": "application/json",
+      "Accept": "application/json",
+      "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjExLCJpYXQiOjE3NDM2NzUzMDMsImV4cCI6MTc0MzY4MjUwM30.0oZUZqLNmLS-ENIEGt4UYyyr4vQQLmGhiCu4Z9tDWmU"}
+  )
 }).then(response => response.json()).then(data => console.log(data))
 
 fetch('http://localhost:3000/CreateNote', {

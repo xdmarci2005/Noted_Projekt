@@ -1,7 +1,9 @@
 import mysqlP from 'mysql2/promise';
+import { User } from '../user/user.js';
 import dbConfig from '../app/config.js';
 import {Notes} from './Notes.js';
 import dotenv from 'dotenv';
+import * as fs from "fs"
 import {uploadFile} from './upload.js';
 dotenv.config();
 
@@ -72,7 +74,7 @@ export async function getNoteById(req, res) {
     const conn = await mysqlP.createConnection(dbConfig);
     try {
         let Note = await Notes.loadDataFromDB(JegyzetId);
-        if (res.decodedToken.UserId != Note.Feltolto) {
+        if (res.decodedToken.UserId != Note.Feltolto && Note.Lathatosag != 1) {
             res.status(401).send({ error: "Nincs jogosultága megnézni ezt a jegyzetet." })
             return
         }
@@ -150,11 +152,19 @@ export async function deleteNoteById(req, res) {
             res.status(401).send({ error: "Nincs jogosultsága törölni ezt a jegyzetet." });
             return;
         }
+
         const [result] = await conn.execute('DELETE FROM Jegyzetek WHERE JegyzetId = ?', [JegyzetId]);
         if (result.affectedRows === 0) {
             res.status(404).send({ error: "Jegyzet nem található" });
             return;
         }
+        console.log(process.cwd() + process.env.UPLOAD_DIR_NAME + Note.JegyzetNeve);
+        fs.unlink(process.cwd() + process.env.UPLOAD_DIR_NAME + Note.JegyzetNeve, (err) => {
+            if (err) {
+              console.error(`Error removing file: ${err}`);
+              return;
+            }
+        })
         res.status(200).send({ success: "Jegyzet törölve" });
     } catch (err) {
         switch (err.errno) {
@@ -167,5 +177,48 @@ export async function deleteNoteById(req, res) {
         }
     } finally {
         conn.end();
+    }
+}
+
+export async function getPublicNotesByName(req, res) {
+    if (!req.params.Name) {
+        res.status(401).send({ error: "Hiányzó jegyzet név" })
+        return
+    }
+    if (!res.decodedToken.UserId) {
+        res.status(401).send({ error: "Hiányzó paraméter" })
+        return
+    }
+    const conn = await mysqlP.createConnection(dbConfig)
+    try {
+
+        let requestingUser = await User.loadDataFromDB(res.decodedToken.UserId)
+        if (requestingUser.statusz == 0) {
+            res.status(401).send({ error: "Fiókja blokkolva van" })
+            return
+        }
+        let jegyzetNev = '%' + req.params.Name + '%'
+        const [rows] = await conn.execute("SELECT `JegyzetId`, `JegyzetNeve`, Feltolto from `Jegyzetek` WHERE `JegyzetNeve` LIKE ? AND `Lathatosag` = 1 AND `Feltolto` != ?", [jegyzetNev, res.decodedToken.UserId]);
+
+        let notes = rows
+        if (!notes) {
+            res.status(500).send({ error: 'Sikertelen lekérdezés' })
+            return
+        }
+        res.status(200).send({ success: "Sikeres lekérdezés", data: notes })
+    }
+    catch (err) {
+        switch (err.errno) {
+            case 1045: 
+                res.status(500).send({ error: "Nem megfelelő az adatbázis jelszó." });
+                break;
+            default: 
+                res.status(500).send({ error: "Hiba az adatok lekérdezésekor: " + err }); 
+                break;
+        }
+        return
+    }
+    finally {
+        conn.end()
     }
 }

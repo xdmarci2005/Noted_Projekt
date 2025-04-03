@@ -6,6 +6,7 @@ const router = Router()
 
 router.get('/getNotes', auth, notes.getNotesFromToken)
 router.get('/getNote/:JegyzetId', auth, notes.getNoteById)
+router.get('/getNoteByName/:Name',auth,notes.getPublicNotesByName)
 router.post('/createNote', auth, notes.createNoteWithToken)
 router.put('/updateNote/:JegyzetId', auth, notes.updateNoteById)
 router.delete('/deleteNote/:JegyzetId', auth, notes.deleteNoteById)

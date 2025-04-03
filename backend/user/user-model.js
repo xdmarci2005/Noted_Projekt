@@ -53,7 +53,7 @@ export async function Register(req, res) {
                 res.status(500).send({ error: "Nem megfelelő az adatbázis jelszó." });
                 break;
             default: 
-                res.status(500).send({ error: "Hiba az adatok frissítésekor: " + err }); 
+                res.status(500).send({ error: "Hiba a regisztrációkor: " + err }); 
                 break;
         }
         return
@@ -84,7 +84,7 @@ export async function getUserFromToken(req, res) {
                 res.status(500).send({ error: "Nem megfelelő az adatbázis jelszó." });
                 break;
             default: 
-                res.status(500).send({ error: "Hiba az adatok frissítésekor: " + err }); 
+                res.status(500).send({ error: "Hiba az adatok lekérdezésekor: " + err }); 
                 break;
         }
         return
@@ -299,7 +299,7 @@ export async function deleteUserByIdAdmin(req, res) {
                 res.status(500).send({ error: "Nem megfelelő az adatbázis jelszó." });
                 break;
             default: 
-                res.status(500).send({ error: "Hiba az adatok frissítésekor: " + err }); 
+                res.status(500).send({ error: "Hiba az adatok törlésekor: " + err }); 
                 break;
         }
         return
@@ -342,7 +342,7 @@ export async function getUserByIdAdmin(req, res) {
                 res.status(500).send({ error: "Nem megfelelő az adatbázis jelszó." });
                 break;
             default: 
-                res.status(500).send({ error: "Hiba az adatok frissítésekor: " + err }); 
+                res.status(500).send({ error: "Hiba az adatok lekérdezésekor: " + err }); 
                 break;
         }
         return
@@ -383,7 +383,51 @@ export async function getUsersAdmin(req, res) {
                 res.status(500).send({ error: "Nem megfelelő az adatbázis jelszó." });
                 break;
             default: 
-                res.status(500).send({ error: "Hiba az adatok frissítésekor: " + err }); 
+                res.status(500).send({ error: "Hiba az adatok lekérdezésekor: " + err }); 
+                break;
+        }
+        return
+    }
+    finally {
+        conn.end()
+    }
+}
+
+
+export async function getUsersByName(req, res) {
+    if (!req.params.Name) {
+        res.status(401).send({ error: "Hiányzó felhasználó név" })
+        return
+    }
+    if (!res.decodedToken.UserId) {
+        res.status(401).send({ error: "Hiányzó paraméter" })
+        return
+    }
+    const conn = await mysqlP.createConnection(dbConfig)
+    try {
+
+        let requestingUser = await User.loadDataFromDB(res.decodedToken.UserId)
+        if (requestingUser.statusz == 0) {
+            res.status(401).send({ error: "Fiókja blokkolva van" })
+            return
+        }
+        let felhasznaloNev = '%' + req.params.Name + '%'
+        const [rows] = await conn.execute("SELECT `FelhasznaloId`, `FelhasznaloNev` from `Felhasznalok` WHERE `FelhasznaloNev` LIKE ? AND FelhasznaloId != ?", [felhasznaloNev, res.decodedToken.UserId]);
+
+        let users = rows
+        if (!users) {
+            res.status(500).send({ error: 'Sikertelen lekérdezés' })
+            return
+        }
+        res.status(200).send({ success: "Sikeres lekérdezés", data: users })
+    }
+    catch (err) {
+        switch (err.errno) {
+            case 1045: 
+                res.status(500).send({ error: "Nem megfelelő az adatbázis jelszó." });
+                break;
+            default: 
+                res.status(500).send({ error: "Hiba az adatok lekérdezésekor: " + err }); 
                 break;
         }
         return

@@ -6,7 +6,7 @@ const router = Router()
 
 router.post('/register', user.Register)
 router.get('/getUser', auth, user.getUserFromToken)
-//router.get('/getUser/:Name', auth,)
+router.get('/getUserByName/:Name', auth, user.getUsersByName)
 router.put('/updateuser', auth, user.updateUserWithToken)
 //Admin Műveletek
 router.get('/Admgetuserbyid/:UserId', auth, user.getUserByIdAdmin)
