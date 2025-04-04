@@ -1,6 +1,7 @@
 import { Shared } from "./Share.js";
 import { Notes } from "../Notes/Notes.js";
 import { Group} from "../groups/Group.js"
+import { GroupMembers } from "../GroupMembers/GroupMember.js";
 import mysqlP from 'mysql2/promise';
 import dbConfig from '../app/config.js';
 
@@ -119,6 +120,11 @@ export async function ShareNewNoteWithToken(req, res) {
             [rows] = await conn.execute('INSERT INTO `Megosztas` (`JegyzetId`,`MegosztottFelhId`,`Jogosultsag`) VALUES(?,?,?)', [Share.JegyzetId, Share.MegosztottFelhId, Share.Jogosultsag]);   
         }
         else if(!req.body.MegosztottFelhId){
+            const SharingUser = await GroupMembers.loadDataFromDB(res.decodedToken.UserId,Share.MegosztottCsopId);
+            if (!SharingUser) {
+                res.status(404).send({ error: "Nem vagy tagja a csoportnak." });
+                return;
+            }
             [rows] = await conn.execute('INSERT INTO `Megosztas` (`JegyzetId`,`MegosztottCsopId`,`Jogosultsag`) VALUES(?,?,?)', [Share.JegyzetId, Share.MegosztottCsopId, Share.Jogosultsag]);   
         }
         if (rows.length === 0) {

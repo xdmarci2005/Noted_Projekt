@@ -1,3 +1,5 @@
+import { response } from "express"
+
 //User
 fetch('http://localhost:3000/updateuser', {
     method:'PUT',headers: new Headers(
@@ -102,7 +104,7 @@ fetch('http://localhost:3000/CreateNote', {
           "Accept": "application/json",
           "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTczOTM5Njg4NiwiZXhwIjoxNzM5NDA0MDg2fQ.5LHxx8eqPhh_eas-LX7Xb-vZFoSjv1_5TYI0TUzbVPM"} 
   ),
-  body:JSON.stringify({"JegyzetNeve":"TesztJegyzet2","Lathatosag":1,"JegyzetTartalma":"qwertzuiopőúűáááélkjhgfdsaíyxcvbnm"})
+  body:JSON.stringify({"file": file,"Lathatosag":1})
 }).then(response => response.json()).then(data => console.log(data))
 
 fetch('http://localhost:3000/getNote/1', {
@@ -160,7 +162,7 @@ fetch('http://localhost:3000/newShare', {
   method:'POST',headers: new Headers(
       {"Content-Type": "application/json",
           "Accept": "application/json",
-          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0Mjk4Njg1NywiZXhwIjoxNzQyOTk0MDU3fQ.G-VvCcXdRW0YyJ7kEyiGEkkbdkkcsTW0S59L-U8teTU"}
+          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjksImlhdCI6MTc0Mzc5MTc1NiwiZXhwIjoxNzQzNzk4OTU2fQ.ceXbSbu-Nzd-RnG5TnK-WlrL4x0UShsJIP1AiTjee4s"}
   ),
   body:JSON.stringify({"JegyzetId":1,"MegosztottFelhId":null,"MegosztottCsopId":9,"Jogosultsag":"R"})
 }).then(response => response.json()).then(data => console.log(data))
@@ -242,6 +244,7 @@ fetch('http://localhost:3000/GroupMembers/1',{
   )
 }).then(response => response.json()).then(data => console.log(data))
 
+//login
 
 fetch('http://localhost:3000/login', {
   method:'POST',headers: new Headers(
@@ -251,3 +254,43 @@ fetch('http://localhost:3000/login', {
   body:JSON.stringify({"Email":"jozsi@example.com","Jelszo":"Titkos11"})
 }).then(response => response.json())
 .then(data => console.log(data))
+
+//GroupMembers
+
+fetch('http://localhost:3000/getGroupsByMember',{
+  method:'GET',headers: new Headers(
+      {"Content-Type": "application/json",
+          "Accept": "application/json",
+          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0Mzc3OTE2MSwiZXhwIjoxNzQzNzg2MzYxfQ.R6lsVocR8pakQNMwTcg2wN1_mrhmoKRSdxYu6wnjAjo"}
+  )
+}).then(response => response.json()).then(data => console.log(data))
+
+fetch('http://localhost:3000/addMember',{
+  method:'POST',headers: new Headers({
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0Mzc3OTE2MSwiZXhwIjoxNzQzNzg2MzYxfQ.R6lsVocR8pakQNMwTcg2wN1_mrhmoKRSdxYu6wnjAjo"
+  }),
+  body:JSON.stringify({"CsoportId":9,"TagId":9,"JogosultsagId":2})
+}).then(response => response.json())
+  .then(data => console.log(data))
+
+  fetch('http://localhost:3000/updateMember', {
+    method:'PUT',headers: new Headers(
+        {"Content-Type": "application/json",
+            "Accept": "application/json",
+            "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjksImlhdCI6MTc0Mzc5MDkxMSwiZXhwIjoxNzQzNzk4MTExfQ.qglBszauTID0I8viwCpqY0XWSkjm6eAxfoKANedbduQ"}
+    ),
+    body:JSON.stringify({"CsoportId":9,"TagId":2,"JogosultsagId":2})
+}).then(response => response.json())  
+  .then(data => console.log(data))
+
+fetch('http://localhost:3000/removeMember', {
+    method:'DELETE',headers: new Headers(
+        {"Content-Type": "application/json",
+            "Accept": "application/json",
+            "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0Mzc5MDcwMiwiZXhwIjoxNzQzNzk3OTAyfQ.SRXCsI8tzL8bbpBlu7g4UD1PnR5ZNmkAqN0g34ATt6E"}
+    ),
+    body:JSON.stringify({"CsoportId":9,"TagId":2})
+}).then(response => response.json())  
+  .then(data => console.log(data))

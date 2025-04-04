@@ -3,10 +3,10 @@ import { Router } from 'express'
 import * as GroupMembers from './GroupMember-model.js'
 
 const router = Router()
-/*
-    router.get("/getGroupsByMember,auth,GroupMembers.getGroupsByMember")
-    router.post("/addMember",auth,GroupMembers.AddNewMember)
-    router.put("/updateMember",auth,GroupMembers.UpdateMember)
-    router.delete("/deleteMember",auth,GroupMemebers.RemoveMember)
-*/
+
+    router.get("/getGroupsByMember",auth,GroupMembers.getGroupsByMemberFromToken)
+    router.post("/addMember",auth,GroupMembers.addMemberToGroup)
+    router.put("/updateMember",auth,GroupMembers.updateGroupMember)
+    router.delete("/removeMember",auth,GroupMembers.RemoveMember)
+
 export default router;

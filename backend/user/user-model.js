@@ -230,8 +230,18 @@ export async function updateUserByIdAdmin(req, res) {
             }
         }
 
+        if(user.FelhasznaloId == res.decodedToken.UserId){
+            res.status(401).send({ error: "Nem módosíthatja saját fiókját!" })
+            return  
+        }
+
+        if(adminuser.JogosultsagId <= req.body.JogosultsagId){
+            res.status(401).send({ error: "Nem adhat ilyen szintű jogosultságot!" })
+            return  
+        }
+
         Object.assign(user, req.body)
-        const [rows3] = await conn.execute('Update Felhasznalok set FelhasznaloNev =?,Email=?, Jelszo=?, Statusz=? where FelhasznaloId =?', [user.FelhasznaloNev, user.Email, user.Jelszo, user.statusz, req.params.UserId])
+        const [rows3] = await conn.execute('Update Felhasznalok set FelhasznaloNev =?,Email=?, Jelszo=?, JogosultsagId=?, Statusz=? where FelhasznaloId = ?', [user.FelhasznaloNev, user.Email, user.Jelszo, user.JogosultsagId, user.statusz, req.params.UserId])
         user.Jelszo = undefined
         if (rows3.affectedRows > 0) {
             res.status(201).send({ success: "Sikeres frissítés", data: user })
@@ -284,7 +294,10 @@ export async function deleteUserByIdAdmin(req, res) {
             res.status(500).send({ error: 'A felhasználó nem létezik' })
             return
         }
-
+        if(user.FelhasznaloId == res.decodedToken.UserId){
+            res.status(401).send({ error: "Nem törölheti saját fiókját!" })
+            return  
+        }
         const [rows] = await conn.execute('DELETE from Felhasznalok where FelhasznaloId =?', [req.params.UserId])
 
         if (rows.affectedRows > 0) {
@@ -369,7 +382,7 @@ export async function getUsersAdmin(req, res) {
             return
         }
 
-        const [rows2] = await conn.execute('Select FelhasznaloId,FelhasznaloNev,Email from Felhasznalok')
+        const [rows2] = await conn.execute('Select FelhasznaloId,FelhasznaloNev,Email from Felhasznalok WHERE FelhasznaloId != ?', [res.decodedToken.UserId])
         let users = rows2
         if (!users) {
             res.status(500).send({ error: 'Sikertelen lekérdezés' })
