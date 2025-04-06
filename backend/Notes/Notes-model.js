@@ -148,7 +148,13 @@ export async function deleteNoteById(req, res) {
     const conn = await mysqlP.createConnection(dbConfig);
     try {
         let Note = await Notes.loadDataFromDB(JegyzetId);
-        if(Note.Feltolto != res.decodedToken.UserId){
+        const deletingUser = await User.loadDataFromDB(res.decodedToken.UserId);
+        if (!Note) {
+            res.status(404).send({ error: "A jegyzet nem található" });
+            return;
+        }
+        
+        if(Note.Feltolto != res.decodedToken.UserId && deletingUser.JogosultsagId < 3) {
             res.status(401).send({ error: "Nincs jogosultsága törölni ezt a jegyzetet." });
             return;
         }

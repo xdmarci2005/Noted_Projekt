@@ -160,11 +160,13 @@ export async function DeleteShare(req, res) {
     try
     {
         const Share = await Shared.GetShareDataFromDB(req.params.ShareId);
-
+        if (!Share) {
+            res.status(404).send({ error: "Nem található a megosztás" });
+            return;
+        }
         const sharedNote = await Notes.loadDataFromDB(Share.JegyzetId);
 
         const deletingUser = await User.loadDataFromDB(res.decodedToken.UserId);
-        console.log(deletingUser.FelhasznaloId);
         if (sharedNote.Feltolto !== res.decodedToken.UserId && deletingUser.JogosultsagId < 3) {
             res.status(403).send({ error: "Nem törölheti más megosztásait." });
             return;
@@ -207,6 +209,10 @@ export async function UpdateSharePermissions(req,res){
     try
     {
         const Share = await Shared.GetShareDataFromDB(req.params.ShareId);
+        if (!Share) {
+            res.status(404).send({ error: "Nem található a megosztás" });
+            return;
+        }
 
         const sharedNote = await Notes.loadDataFromDB(Share.JegyzetId);
 

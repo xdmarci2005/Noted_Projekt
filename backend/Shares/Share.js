@@ -11,7 +11,7 @@ export class Shared{
     static async GetShareDataFromDB(ShareId){
         const conn = await mysqlP.createConnection(dbConfig)
         try {
-            const [rows] = await conn.execute('Select * from Megosztas where MegosztasId', [ShareId])
+            const [rows] = await conn.execute('Select * from Megosztas where MegosztasId = ?', [ShareId])
             return rows[0]
         }
         catch (err){

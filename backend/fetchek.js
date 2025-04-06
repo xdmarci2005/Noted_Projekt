@@ -119,7 +119,7 @@ fetch('http://localhost:3000/deleteNote/1', {
   method:'DELETE',headers: new Headers(
       {"Content-Type": "application/json",
           "Accept": "application/json",
-          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTczOTM5Njg4NiwiZXhwIjoxNzM5NDA0MDg2fQ.5LHxx8eqPhh_eas-LX7Xb-vZFoSjv1_5TYI0TUzbVPM"}
+          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0Mzk1NzAzMSwiZXhwIjoxNzQzOTY0MjMxfQ.yK0j0fK4XDhP_uYlECJiJMLBnnV3Ym8DsvBQwQB8R2Q"}
       )
 }).then(response => response.json()).then(data => console.log(data))
 
@@ -162,7 +162,7 @@ fetch('http://localhost:3000/newShare', {
   method:'POST',headers: new Headers(
       {"Content-Type": "application/json",
           "Accept": "application/json",
-          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0Mzk0MjAwNiwiZXhwIjoxNzQzOTQ5MjA2fQ.zcV8xvTP1lOtDiSATZZh0efF135SyphDhsFiksECeLM"}
+          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0Mzk1NzAzMSwiZXhwIjoxNzQzOTY0MjMxfQ.yK0j0fK4XDhP_uYlECJiJMLBnnV3Ym8DsvBQwQB8R2Q"}
   ),
   body:JSON.stringify({"JegyzetId":1,"MegosztottFelhId":null,"MegosztottCsopId":9,"Jogosultsag":"R"})
 }).then(response => response.json()).then(data => console.log(data))
@@ -180,7 +180,7 @@ fetch('http://localhost:3000/deleteShare/1', {
   method:'DELETE',headers: new Headers(
       {"Content-Type": "application/json",
           "Accept": "application/json",
-          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjEyMiwiaWF0IjoxNzQzOTQyMjcyLCJleHAiOjE3NDM5NDk0NzJ9.tj-ihkg8nOCrmNoMTHIsVPtHtv-Gn3kz3qUF7azfMVw"}
+          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0Mzk1NzAzMSwiZXhwIjoxNzQzOTY0MjMxfQ.yK0j0fK4XDhP_uYlECJiJMLBnnV3Ym8DsvBQwQB8R2Q"}
   )
 }).then(response => response.json()).then(data => console.log(data))
 

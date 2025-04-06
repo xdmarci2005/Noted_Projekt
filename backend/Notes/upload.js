@@ -1,7 +1,6 @@
 import util from 'util';
 import multer from 'multer';    
 import dotenv from 'dotenv';
-import { timeStamp } from 'console';
 
 dotenv.config();
 
@@ -11,7 +10,7 @@ const storage = multer.diskStorage({
         cb(null,process.cwd() + uploadDir);
     },
     filename: function (req, file, cb) {
-        cb(null,Date.now() +"_"+ file.originalname.toString('utf8'));
+        cb(null,Date.now() + "_" + file.originalname.toString('Latin-2'));
     }
 });
 
