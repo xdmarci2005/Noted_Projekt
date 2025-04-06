@@ -11,8 +11,11 @@ import { ClipboardPaste } from "lucide-react";
 import { Scissors } from "lucide-react";
 import { FileDown } from "lucide-react";
 import { FileUp } from "lucide-react";
+import { RefreshCcw } from "lucide-react";
+
 import Mammoth from "mammoth";
-import ConvertApi from "convertapi-js";
+
+import SearchOverlay from "./SearchOverlay/SearchOverlay";
 
 export default function Navbar({ editor }) {
   if (!editor) {
@@ -21,7 +24,11 @@ export default function Navbar({ editor }) {
 
   const [docTitle, setDocTitle] = useState("Névtelen Dokumentum");
 
-  const saveJSON = (filename) => {
+  const [loading, setLoading] = useState(false);
+
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
+
+  const saveJSON = (filename: string) => {
     const jsonContent = editor.getJSON();
 
     // JSON fájlba mentés
@@ -38,16 +45,9 @@ export default function Navbar({ editor }) {
     URL.revokeObjectURL(url);
   };
 
-  const saveDocx = async (filename) => {
-    let convertApi = ConvertApi.auth(
-      "ITT LENNE A SAJÁT TOKENUNK HA ELŐFIZETNÉNK"
-    ); //csak itt van a problem
-    let params = convertApi.createParams();
-    params.add("File", editor.getHTML());
-    let result = await convertApi.convert("html", "docx", params);
-  };
+  const saveDocx = async (filename: any) => {};
 
-  const loadJSON = (event) => {
+  const loadJSON = (event: any) => {
     const file = event.target.files[0];
     if (!file) return;
 
@@ -66,7 +66,7 @@ export default function Navbar({ editor }) {
     reader.readAsText(file);
   };
 
-  const loadDocx = (file) => {
+  const loadDocx = (file: any) => {
     const reader = new FileReader();
 
     reader.onload = async (event) => {
@@ -98,8 +98,46 @@ export default function Navbar({ editor }) {
     navigate("/profile");
   }
 
+  function handleSave() {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const token = localStorage.getItem("token");
+        const formData = new FormData();
+        formData.append("JegyzetNeve", docTitle);
+        formData.append("Lathatosag", "1");
+        const jsonContent = editor.getJSON();
+        const blob = new Blob([JSON.stringify(jsonContent, null, 2)], {
+          type: "application/json",
+        });
+        formData.append("JegyzetTartalma", blob);
+
+        await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulated fetch
+        if (token && token != null)
+          await fetch("http://localhost:3000/CreateNote", {
+            method: "POST",
+            headers: new Headers({
+              Accept: "application/json",
+              "x-access-token": token,
+            }),
+            body: formData,
+          })
+            .then((response) => response.json())
+            .then((data) => console.log(data));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }
+
   return (
     <>
+      <SearchOverlay
+        visible={isSearchVisible}
+        onClose={() => setIsSearchVisible(false)}
+      />
       <nav className="navbar-top">
         <div className="navbar-left">
           <span className="icon">
@@ -117,13 +155,14 @@ export default function Navbar({ editor }) {
           <input
             type="text"
             className="doc-title"
+            placeholder="Dokumentum Neve"
             value={docTitle}
             onChange={(e) => setDocTitle(e.target.value)}
           />
         </div>
         <div className="navbar-right">
           <div className="profile-btn">
-            <span  onClick={handleProfile}>
+            <span onClick={handleProfile}>
               <User />
             </span>
           </div>
@@ -142,14 +181,19 @@ export default function Navbar({ editor }) {
             type="file"
             accept=".docx"
             onChange={(e) => {
-              const file = e.target.files[0];
-              if (file) {
-                loadDocx(file);
+              if (e.target.files && e.target.files[0] != null) {
+                const file = e.target.files[0];
+                if (file) {
+                  loadDocx(file);
+                }
               }
             }}
             style={{ display: "none" }}
             id="fileUploadDocx"
           />
+          <span onClick={handleSave}>
+            <RefreshCcw className={loading ? "spinner" : ""} />
+          </span>
           <div className="save-upload">
             <FileUp />
             <span
@@ -198,7 +242,7 @@ export default function Navbar({ editor }) {
           <span>
             <ClipboardPaste />
           </span>
-          <span className="icon">
+          <span className="icon" onClick={() => setIsSearchVisible(true)}>
             <Share2 />
           </span>
         </div>

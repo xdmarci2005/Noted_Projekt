@@ -7,7 +7,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import { Color } from "@tiptap/extension-color";
 import TextStyle from "@tiptap/extension-text-style";
 import Highlight from "@tiptap/extension-highlight";
-import Navbar from "./components/navBar/NavBar";
+import Navbar from "./components/navBar/NavBar.tsx";
 import Placeholder from "@tiptap/extension-placeholder";
 
 export default function Note() {

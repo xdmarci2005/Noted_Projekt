@@ -1,0 +1,38 @@
+.search-site {
+  .search-card {
+    background-color: #ebebeb41;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    right: 5%;
+    bottom: 5%;
+
+    h1 {
+      width: 100%;
+      text-align: center;
+      color: rgb(32, 22, 90);
+    }
+
+    thead {
+      font-size: xx-large;      
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    tbody {
+      font-size: large;
+    }
+
+    th,
+    td {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+    }
+  }
+}
