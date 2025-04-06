@@ -74,7 +74,12 @@ export async function getNoteById(req, res) {
     const conn = await mysqlP.createConnection(dbConfig);
     try {
         let Note = await Notes.loadDataFromDB(JegyzetId);
-        if (res.decodedToken.UserId != Note.Feltolto && Note.Lathatosag != 1) {
+        let requestingUser = await User.loadDataFromDB(res.decodedToken.UserId)
+        if (requestingUser.statusz == 0) {
+            res.status(401).send({ error: "Fiókja blokkolva van" })
+            return
+        }
+        if (res.decodedToken.UserId != Note.Feltolto && Note.Lathatosag != 1 && requestingUser.JogosultsagId < 3) {
             res.status(401).send({ error: "Nincs jogosultága megnézni ezt a jegyzetet." })
             return
         }
