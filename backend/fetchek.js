@@ -162,7 +162,7 @@ fetch('http://localhost:3000/newShare', {
   method:'POST',headers: new Headers(
       {"Content-Type": "application/json",
           "Accept": "application/json",
-          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjksImlhdCI6MTc0Mzc5MTc1NiwiZXhwIjoxNzQzNzk4OTU2fQ.ceXbSbu-Nzd-RnG5TnK-WlrL4x0UShsJIP1AiTjee4s"}
+          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0Mzk0MjAwNiwiZXhwIjoxNzQzOTQ5MjA2fQ.zcV8xvTP1lOtDiSATZZh0efF135SyphDhsFiksECeLM"}
   ),
   body:JSON.stringify({"JegyzetId":1,"MegosztottFelhId":null,"MegosztottCsopId":9,"Jogosultsag":"R"})
 }).then(response => response.json()).then(data => console.log(data))
@@ -180,7 +180,7 @@ fetch('http://localhost:3000/deleteShare/1', {
   method:'DELETE',headers: new Headers(
       {"Content-Type": "application/json",
           "Accept": "application/json",
-          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0MzY3MTgzNywiZXhwIjoxNzQzNjc5MDM3fQ.umRczWpOiV8do8VXIbWoYGnQNtVvYkYWqSJDBkXcFHQ"}
+          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjEyMiwiaWF0IjoxNzQzOTQyMjcyLCJleHAiOjE3NDM5NDk0NzJ9.tj-ihkg8nOCrmNoMTHIsVPtHtv-Gn3kz3qUF7azfMVw"}
   )
 }).then(response => response.json()).then(data => console.log(data))
 

@@ -1,4 +1,5 @@
 import { Shared } from "./Share.js";
+import { User } from "../user/user.js";
 import { Notes } from "../Notes/Notes.js";
 import { Group} from "../groups/Group.js"
 import { GroupMembers } from "../GroupMembers/GroupMember.js";
@@ -120,7 +121,7 @@ export async function ShareNewNoteWithToken(req, res) {
             [rows] = await conn.execute('INSERT INTO `Megosztas` (`JegyzetId`,`MegosztottFelhId`,`Jogosultsag`) VALUES(?,?,?)', [Share.JegyzetId, Share.MegosztottFelhId, Share.Jogosultsag]);   
         }
         else if(!req.body.MegosztottFelhId){
-            const SharingUser = await GroupMembers.loadDataFromDB(res.decodedToken.UserId,Share.MegosztottCsopId);
+            const SharingUser = await GroupMembers.loadDataFromDB(Share.MegosztottCsopId,res.decodedToken.UserId);
             if (!SharingUser) {
                 res.status(404).send({ error: "Nem vagy tagja a csoportnak." });
                 return;
@@ -162,7 +163,9 @@ export async function DeleteShare(req, res) {
 
         const sharedNote = await Notes.loadDataFromDB(Share.JegyzetId);
 
-        if (sharedNote.Feltolto !== res.decodedToken.UserId) {
+        const deletingUser = await User.loadDataFromDB(res.decodedToken.UserId);
+        console.log(deletingUser.FelhasznaloId);
+        if (sharedNote.Feltolto !== res.decodedToken.UserId && deletingUser.JogosultsagId < 3) {
             res.status(403).send({ error: "Nem törölheti más megosztásait." });
             return;
         }
