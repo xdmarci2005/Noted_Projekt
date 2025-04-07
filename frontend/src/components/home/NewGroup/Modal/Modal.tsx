@@ -1,7 +1,7 @@
 import React from "react";
 import "./modal.scss"; // Import the CSS file
 
-const CustomModal = ({ show, title, message, onClose }) => {
+const CustomModal = ({ show, title, message, onClose }: {show:boolean, title:string, message:string, onClose: () => void}) => {
   if (!show) return null; // Don't render the modal if `show` is false
 
   return (

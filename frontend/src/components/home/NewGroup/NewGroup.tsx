@@ -4,58 +4,14 @@ import Modal from './Modal/Modal';
 import { X } from "lucide-react";
 
 
-export default function NewGroup({ visible }: { visible: boolean }) {
+export default function NewGroup({ visible, onCreate, onClose }: { visible: boolean, onClose: () => void, onCreate: () => void }) {
   if (!visible) return null;
 
-   const [showModal, setShowModal] = useState(false);
-
-   const [modalMessage, setModalMessage] = useState<string>("");
-
-  const onClose = () => {
-    const token = localStorage.getItem("token");
-    const value = (document.getElementById("group-field") as HTMLInputElement)
-    if (value)
-    if (!token) {
-      console.error("Token not found in localStorage");
-      return;
-    } else
-      fetch("http://localhost:3000/newGroup", {
-        method: "POST",
-        headers: new Headers({
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "x-access-token": token,
-        }),
-        body: JSON.stringify({ Name:  value.value}),
-      })
-        .then((response) => response.json())
-        .then((data) => {console.log(data);
-          if (data.error) {
-            setModalMessage(data.error);
-            setShowModal(true);
-          } else {
-            setModalMessage("Csoport létrehozva!");
-            setShowModal(true);
-          }
-        });
-  };
-
-  const close = ()  => {
     
-   }
-
-  const handleModalClose = () => {
-    setShowModal(false);
-  };
 
   return (
     <>
-      <Modal
-        show={showModal}
-        title="Noted."
-        message={modalMessage}
-        onClose={() => handleModalClose()}
-      />
+      
       <div className="new-group">
         <div className="overlay">
           <div className="search-box">
@@ -67,7 +23,7 @@ export default function NewGroup({ visible }: { visible: boolean }) {
               <input type="text" placeholder="Csoport Neve" id="group-field" />
             </div>
 
-            <button className="create-btn" onClick={onClose}>
+            <button className="create-btn" onClick={onCreate}>
               Létrehozás
             </button>
           </div>

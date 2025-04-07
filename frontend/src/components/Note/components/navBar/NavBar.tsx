@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Navbar.scss"; // Import the CSS file
 import { User } from "lucide-react";
 import { Share2 } from "lucide-react";
@@ -17,12 +17,55 @@ import Mammoth from "mammoth";
 
 import SearchOverlay from "./SearchOverlay/SearchOverlay";
 
-export default function Navbar({ editor }) {
+export default function Navbar({
+  editor,
+  docName,
+  noteId,
+}: {
+  editor: any;
+  docName: string;
+  noteId: string;
+}) {
   if (!editor) {
     return null;
   }
+  const token = localStorage.getItem("token");
+
+  const getNote = async () => {
+    if (!token) {
+      console.error("Token not found in localStorage");
+      return;
+    }
+    try {
+      const response = await fetch(`http://localhost:3000/getNote/${noteId}`, {
+        method: "GET",
+        headers: new Headers({
+          Accept: "application/json",
+          "x-access-token": token,
+        }),
+      });
+      const data = await response.json();
+      if (data.error) {
+        console.error(data.error);
+      } else {
+         // Set the content of the editor with the fetched note
+      }
+    } catch (error) {
+      console.error("Error fetching note:", error);
+    }
+  };
+
+  useEffect(() => {
+    getNote();
+  }, [noteId]);
 
   const [docTitle, setDocTitle] = useState("Névtelen Dokumentum");
+
+  useEffect(() => {
+    if (docName) {
+      setDocTitle(docName);
+    }
+  }, [docName]);
 
   const [loading, setLoading] = useState(false);
 
@@ -44,6 +87,42 @@ export default function Navbar({ editor }) {
 
     URL.revokeObjectURL(url);
   };
+
+  const loadFetchedJSONToEditor = (jsonData: any) => {
+    try {
+      editor.commands.setContent(jsonData);
+    } catch (error) {
+      console.error("Error loading JSON into editor:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchAndLoadNote = async () => {
+      if (!token) {
+        console.error("Token not found in localStorage");
+        return;
+      }
+      try {
+        const response = await fetch(`http://localhost:3000/getNote/${noteId}`, {
+          method: "GET",
+          headers: new Headers({
+            Accept: "application/json",
+            "x-access-token": token,
+          }),
+        });
+        const data = await response.json();
+        if (data.error) {
+          console.error(data.error);
+        } else {
+          loadFetchedJSONToEditor(data);
+        }
+      } catch (error) {
+        console.error("Error fetching note:", error);
+      }
+    };
+
+    fetchAndLoadNote();
+  }, [noteId, token]);
 
   const saveDocx = async (filename: any) => {};
 
@@ -104,13 +183,12 @@ export default function Navbar({ editor }) {
       try {
         const token = localStorage.getItem("token");
         const formData = new FormData();
-        formData.append("JegyzetNeve", docTitle);
         formData.append("Lathatosag", "1");
         const jsonContent = editor.getJSON();
         const blob = new Blob([JSON.stringify(jsonContent, null, 2)], {
           type: "application/json",
         });
-        formData.append("JegyzetTartalma", blob);
+        formData.append("file", blob, docTitle);
 
         await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulated fetch
         if (token && token != null)
