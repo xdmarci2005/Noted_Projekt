@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const uploadDir = process.env.UPLOAD_DIR_NAME || '/uploads';
+const uploadDir = process.env.UPLOAD_DIR_NAME || 'Notes/uploads';
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null,process.cwd() + uploadDir);

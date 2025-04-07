@@ -50,6 +50,10 @@ export async function createNoteWithToken(req, res) {
             'INSERT INTO Jegyzetek (Feltolto, Lathatosag, JegyzetNeve, UtolsoFrissito) VALUES (?, ?, ?, ?)',
             [res.decodedToken.UserId, Lathatosag, JegyzetNeve, res.decodedToken.UserId]
         );
+        if(rows.affectedRows === 0) {
+            res.status(500).send({ error: "Hiba a jegyzet létrehozásakor" });
+            return;
+        }        
         res.status(201).send({ success: "Jegyzet létrehozva", id: rows.insertId });
     } catch (err) {
         switch (err.errno) {
@@ -87,7 +91,15 @@ export async function getNoteById(req, res) {
             res.status(404).send({ error: "Jegyzet nem található." });
             return;
         }
-        res.status(200).send({ success: "Sikeres lekérdezés", data: Note });
+        const uploadDir = process.env.UPLOAD_DIR_NAME || 'Notes/uploads/';
+        const filePath = process.cwd() +  uploadDir + Note.JegyzetNeve;
+        res.sendFile(filePath, (err) => {
+            if (err) {
+                res.status(500).send({ error: "Hiba a fájl lekérdezésekor: " + err });
+            } else {
+                console.log("Sikeres lekérdezés: " + filePath);
+            }
+         })  
     } catch (err) {
         switch (err.errno) {
             case 1045:
@@ -123,7 +135,7 @@ export async function updateNoteById(req, res) {
         Object.assign(NewNote, req.body);
         const [result] = await conn.execute(
             'UPDATE Jegyzetek SET JegyzetNeve = ?, Lathatosag = ?, UtolsoFrissites = CURRENT_TIMESTAMP, UtolsoFrissito = ? WHERE JegyzetId = ?',
-            [NewNote.JegyzetNeve, NewNote.Lathatosag, NewNote.UtolsoFrissito, JegyzetId]
+            [NewNote.JegyzetNeve, NewNote.Lathatosag, res.decodedToken.UserId, JegyzetId]
         );
         if (result.affectedRows === 0) {
             res.status(404).send({ error: "Hiba a jegyzet frissítésekor" });
