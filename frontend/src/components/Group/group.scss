@@ -81,23 +81,73 @@
   }
 
   .top-bar {
-    
+    display: flex;
     margin-top: 10px;
+    justify-content: space-between;
+    align-items: center;
+
     span {
-      display: flex;
       cursor: pointer;
       padding: 5px 5px 5px 5px;
       background-color: whitesmoke;
       border-radius: 5px;
       margin: 10px 10px 10px 10px;
-      width: 50px;
+      width: 35px;
     }
 
     span:hover {
+      transition: all 0.3s;
       background: rgba(10, 101, 175, 0.726);
       color: whitesmoke;
     }
   }
+
+  .Addtooltip {
+    visibility: hidden;
+    background-color: rgba(180, 180, 180, 0.129);
+    color: #00477d;
+    text-align: center;   
+    border-radius: 5px;
+    padding: 5px;
+    right: 55px;
+    position: absolute;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.5s;
+    transition-delay: 0.5s;
+    top: 20px;
+    height: 35px;
+    font-weight: bold;
+  }
+
+  .Addtooltip.onHover {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .Backtooltip {
+    visibility: hidden;
+    background-color: rgba(180, 180, 180, 0.129);
+    color: #00477d;
+    text-align: center;   
+    border-radius: 5px;
+    padding: 5px;
+    left: 115px;
+    position: absolute;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.5s;
+    transition-delay: 0.5s;
+    top: 20px;
+    height: 35px;
+    font-weight: bold;
+  }
+
+  .Backtooltip.onHover {
+    visibility: visible;
+    opacity: 1;
+  }
+
 
   .empty-msg {
     font-size: 16px;

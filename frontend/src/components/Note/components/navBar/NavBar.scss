@@ -41,6 +41,7 @@
     }
 
     span:hover {
+      transition: all 0.3s;
       background: rgba(10, 101, 175, 0.726);
       color: whitesmoke;
     }
@@ -109,6 +110,7 @@
 }
 
 .navbar-center span:hover {
+  transition: all 0.3s;
   background: rgba(10, 101, 175, 0.726);
   border-radius: 4px;
   color: whitesmoke;

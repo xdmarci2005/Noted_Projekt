@@ -1,22 +1,24 @@
 import React from "react";
 import "./menuBar.scss";
-import { Heading1 } from "lucide-react";
-import { Heading2 } from "lucide-react";
-import { Heading3 } from "lucide-react";
-import { Pilcrow } from "lucide-react";
-import { Bold } from "lucide-react";
-import { Italic } from "lucide-react";
-import { Strikethrough } from "lucide-react";
-import { Highlighter } from "lucide-react";
-import { AlignLeft } from "lucide-react";
-import { AlignCenter } from "lucide-react";
-import { AlignRight } from "lucide-react";
-import { AlignJustify } from "lucide-react";
-import { List } from "lucide-react";
-import { ListOrdered } from "lucide-react";
+import { 
+  Heading1, 
+  Heading2, 
+  Heading3, 
+  Pilcrow, 
+  Bold, 
+  Italic, 
+  Strikethrough, 
+  Highlighter, 
+  AlignLeft, 
+  AlignCenter, 
+  AlignRight, 
+  AlignJustify, 
+  List, 
+  ListOrdered 
+} from "lucide-react";
 
 
-export default function MenuBar({ editor }) {
+export default function MenuBar({ editor }:any) {
   if (!editor) {
     return null;
   }

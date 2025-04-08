@@ -1,40 +1,43 @@
 .menuBar {
-    border: 1px black;
-    justify-items: center;
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-    margin-left: auto;
-    margin-right: auto;
-    
-    button {
-        background-color: whitesmoke;
-      color: black;
-      border: none;
-      border-radius: 5px;
-      padding: 1px;
-      width: 50%;
-      font-size: 15px;
-      cursor: pointer;
-      margin-left: 10px;
-      margin-right: 10px
-    }
+  border: 1px black;
+  justify-items: center;
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  margin-left: auto;
+  margin-right: auto;
 
-    .is-active {
-        background-color: rgb(215, 215, 215);
-    }
-    input {
-        background-color: whitesmoke;
-      color: black;
-      border: none;
-      border-radius: 5px;
-      padding: 1px;
-      width: 50%;
-      font-size: 15px;
-      cursor: pointer;
-      margin-left: 5px;
-      margin-right: 5px;
-    }
-    
+  button {
+    background-color: whitesmoke;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    padding: 1px;
+    width: 50%;
+    font-size: 15px;
+    cursor: pointer;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  button:hover {
+    transition: all 0.3s;
+    background-color: rgba(215, 215, 215, 0.514);
+  }
+
+  .is-active {
+    background-color: rgb(215, 215, 215);
+  }
+  input {
+    background-color: whitesmoke;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    padding: 1px;
+    width: 50%;
+    font-size: 15px;
+    cursor: pointer;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
 }
-

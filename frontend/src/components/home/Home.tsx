@@ -135,9 +135,9 @@ const Home = () => {
 
   useEffect(showGroups, []);
 
-  const clickGroupItem = (id:any) => {
+  const clickGroupItem = (id:any, name:any) => {
     console.log(id);
-    navigate("/group", { state: { id } });
+    navigate("/group", { state: { id: id, name: name } });
   };
 
   const navigate = useNavigate();
@@ -197,7 +197,7 @@ const Home = () => {
                     <div
                       key={group.CsoportId}
                       className="group-item"
-                      onClick={() => clickGroupItem(group.CsoportId)}
+                      onClick={() => clickGroupItem(group.CsoportId, group.CsoportNev)}
                     >
                       {group.CsoportNev}
                     </div>
