@@ -16,7 +16,8 @@ export class User {
             const [rows] = await conn.execute('Select * from Felhasznalok where FelhasznaloId = ?', [UserId])
             return rows[0]
         }
-        catch {
+        catch (err) {
+            console.error('Error a felhasználó betöltése közben:', err)
             return undefined
         }
         finally {

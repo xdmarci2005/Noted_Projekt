@@ -1,4 +1,5 @@
 import dbConfig from '../app/config.js'
+import mysqlP from 'mysql2/promise'
 
 export class Group{
     Tulajdonos;

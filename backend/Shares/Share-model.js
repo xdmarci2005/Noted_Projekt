@@ -183,7 +183,7 @@ export async function DeleteShare(req, res) {
         res.status(200).send({ success: "Sikeres törlés", data: rows});
 
     }
-    catch(err)
+    catch (err)
     {
         switch (err.errno){
             case 1045:
@@ -231,7 +231,7 @@ export async function UpdateSharePermissions(req,res){
         
         res.status(200).send({ success: "Sikeres frissítés", data: rows });
     }
-    catch(err)
+    catch (err)
     {
         switch (err.errno){
             case 1045:
