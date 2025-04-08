@@ -261,3 +261,47 @@ export async function getGroupMembersByGroupId(req,res){
         conn.end();
     }
 }
+
+export async function getGroupsByName(req, res) {
+    if (!req.params.Name) {
+        res.status(401).send({ error: "Hiányzó csoport név" })
+        return
+    }
+    if (!res.decodedToken.UserId) {
+        res.status(401).send({ error: "Hiányzó paraméter" })
+        return
+    }
+    const conn = await mysql.createConnection(dbConfig)
+    try {
+
+        let requestingUser = await User.loadDataFromDB(res.decodedToken.UserId)
+        if (requestingUser.statusz == 0) {
+            res.status(401).send({ error: "Fiókja blokkolva van" })
+            return
+        }
+
+        let CsoportNev = '%' + req.params.Name + '%'
+        const [rows] = await conn.execute("SELECT `CsoportId`, `CsoportNev` from `Csoportok` WHERE `Csoportnev` LIKE ? AND Tulajdonos = ?", [CsoportNev, res.decodedToken.UserId]);
+
+        let Groups = rows
+        if(Groups.length === 0) {
+            res.status(400).send({ error: "Nincsenek csoportjaid ilyen névvel." })
+            return
+        }
+        res.status(200).send({ success: "Sikeres lekérdezés", data: Groups })
+    }
+    catch (err) {
+        switch (err.errno) {
+            case 1045: 
+                res.status(500).send({ error: "Nem megfelelő az adatbázis jelszó." });
+                break;
+            default: 
+                res.status(500).send({ error: "Hiba az adatok lekérdezésekor: " + err }); 
+                break;
+        }
+        return
+    }
+    finally {
+        conn.end()
+    }
+}

@@ -244,6 +244,15 @@ fetch('http://localhost:3000/GroupMembers/1',{
   )
 }).then(response => response.json()).then(data => console.log(data))
 
+fetch('http://localhost:3000/GetGroupsByName/Jozsi', {
+  method:'GET',headers: new Headers(
+      {"Content-Type": "application/json",
+          "Accept": "application/json",
+          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0NDEwNjM0MiwiZXhwIjoxNzQ0MTEzNTQyfQ.23CKYevmYIzKceveT5YsHZ_wrQyMqmNAvCHY_Keg8ic"}
+  )
+}).then(response => response.json())
+.then(data => console.log(data))
+
 //login
 
 fetch('http://localhost:3000/login', {
@@ -293,4 +302,5 @@ fetch('http://localhost:3000/removeMember', {
     ),
     body:JSON.stringify({"CsoportId":9,"TagId":2})
 }).then(response => response.json())  
-  .then(data => console.log(data))
+  .then(data => console.log(data)) 
+
