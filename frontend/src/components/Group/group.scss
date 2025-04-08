@@ -1,0 +1,127 @@
+.group-site {
+  .note-item {
+    display: inline-block;
+    width: 20%;
+    box-sizing: border-box;
+    margin: 10px 1.5%;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    text-align: center;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #f1f1f1;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #d3d3d3;
+    /* Light gray background */
+    color: #333;
+    font-family: Arial, sans-serif;
+  }
+
+  .main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  button {
+    background-color: #0056b3;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 1em;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #004494;
+  }
+
+  /* Content sections */
+  .content {
+    padding: 10px 0;
+
+    button {
+      width: 50px;
+      height: 50px;
+    }
+  }
+
+  .notes-section,
+  .members-section {
+    margin-bottom: 20px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .notes-section h2,
+  .members-section h2 {
+    font-size: 20px;
+    color: #00477d;
+    margin-bottom: 10px;
+  }
+
+  .title-card {
+    font-size: 50px;
+    color: #00477d;
+    margin-bottom: 20px;
+    margin-left: 10px;
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .top-bar {
+    
+    margin-top: 10px;
+    span {
+      display: flex;
+      cursor: pointer;
+      padding: 5px 5px 5px 5px;
+      background-color: whitesmoke;
+      border-radius: 5px;
+      margin: 10px 10px 10px 10px;
+      width: 50px;
+    }
+
+    span:hover {
+      background: rgba(10, 101, 175, 0.726);
+      color: whitesmoke;
+    }
+  }
+
+  .empty-msg {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.5;
+    margin: 10px 0;
+    text-align: center;
+  }
+
+  .member-item {
+    display: inline-block;
+    width: 20%;
+    box-sizing: border-box;
+    margin: 10px 1.5%;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    text-align: center;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #f1f1f1;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+  }
+}

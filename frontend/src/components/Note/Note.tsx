@@ -14,8 +14,9 @@ import { useLocation } from "react-router-dom";
 export default function Note() {
   const location = useLocation();
   const noteId = location.state?.id;
+  const noteName = location.state?.name;
 
-  const [noteName, setNoteName] = useState("");
+  
 
   
 

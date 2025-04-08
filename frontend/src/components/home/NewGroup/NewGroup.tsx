@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
 import "./NewGroup.scss";
-import Modal from './Modal/Modal';
 import { X } from "lucide-react";
 
 

@@ -11,7 +11,7 @@ const Home = () => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [groups, setGroups] = useState([]);
-  const [content, setContent] = useState<string | any[]>();
+  const [content, setContent] = useState<any>();
   const [sharedContent, setSharedContent] = useState(
     "Úgy tűnik, itt még senki nem osztott meg semmit... Kezdjétek el közösen!"
   );
@@ -53,17 +53,18 @@ const Home = () => {
             <span
               className="note-item"
               key={n.JegyzetId}
-              onClick={() => navigate("/note/", { state: { id: n.JegyzetId } })}
+              onClick={() => navigate("/note/", { state: { id: n.JegyzetId, name: jegyzetnev } })}
             >
               {jegyzetnev}
             </span>
           );
         })
+        
       );
     }
     else {
       setContent(
-        "Üres, mint egy új kezdet. Jegyzetelj valamit!"
+        <p className="empty-msg">{"Üres, mint egy új kezdet. Jegyzetelj valamit!"}</p>
       );
     }
   }, [notes]);
@@ -134,7 +135,10 @@ const Home = () => {
 
   useEffect(showGroups, []);
 
-  const clickGroupItem = () => {};
+  const clickGroupItem = (id:any) => {
+    console.log(id);
+    navigate("/group", { state: { id } });
+  };
 
   const navigate = useNavigate();
 
@@ -178,7 +182,7 @@ const Home = () => {
           <div className="content">
             <div className="notes-section">
               <h2>Jegyzetek.</h2>
-              <p className="empty-msg">{content}</p>
+              <div className="notes">{content}</div>
             </div>
             <div className="shared-notes-section">
               <h2>Megosztott jegyzetek.</h2>
@@ -189,11 +193,11 @@ const Home = () => {
               <p className="empty-msg">{groupContent}</p>
               <div className="groups">
                 {groups &&
-                  groups.map((group, index) => (
+                  groups.map((group) => (
                     <div
-                      key={index}
+                      key={group.CsoportId}
                       className="group-item"
-                      onClick={() => clickGroupItem()}
+                      onClick={() => clickGroupItem(group.CsoportId)}
                     >
                       {group.CsoportNev}
                     </div>

@@ -1,4 +1,4 @@
-/* Navbar alapstílus */
+
 .navbar {
   display: flex;
 }
@@ -13,7 +13,7 @@
 }
 
 .spinner {
-  animation: spin 2s linear infinite; /* Adjust duration as needed */
+  animation: spin 2s linear infinite; 
 }
 
 .navbar-top {
@@ -57,7 +57,7 @@
   width: 100%;
 }
 
-/* Bal oldali rész */
+
 .navbar-left {
   display: flex;
   align-items: center;

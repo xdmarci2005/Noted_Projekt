@@ -10,6 +10,7 @@ import Admin from "./components/admin/admin";
 import EditUser from "./components/admin/components/editUser/editUser";
 import Note from "./components/Note/Note";
 import Search from "./components/Search/Search";
+import  Group  from "./components/Group/Group";
 
 import { AuthProvider } from "./AuthContext";
 import ProtectedRoute from "./ProtectedRoute";
@@ -29,6 +30,7 @@ const App = () => {
             <Route path="/editUser" element={<EditUser />} />
             <Route path="/note" element={<Note />} />
             <Route path="/search" element={<Search />} />
+            <Route path="/group" element={<Group />} />
           </Route>
         </Routes>
       </Router>
