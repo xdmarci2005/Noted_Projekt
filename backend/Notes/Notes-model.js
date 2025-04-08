@@ -71,13 +71,17 @@ export async function createNoteWithToken(req, res) {
 
 export async function getNoteById(req, res) {
     const { JegyzetId } = req.params;
-    if (!res.decodedToken.UserId) {
+    if (!res.decodedToken.UserId || !JegyzetId) {
         res.status(400).send({ error: "Hiányzó paraméterek" });
         return;
     }
     const conn = await mysqlP.createConnection(dbConfig);
     try {
         let Note = await Notes.loadDataFromDB(JegyzetId);
+        if (!Note) {
+            res.status(404).send({ error: "Jegyzet nem található." });
+            return;
+        }
         let requestingUser = await User.loadDataFromDB(res.decodedToken.UserId)
         if (requestingUser.statusz == 0) {
             res.status(401).send({ error: "Fiókja blokkolva van" })
@@ -181,7 +185,6 @@ export async function deleteNoteById(req, res) {
             res.status(404).send({ error: "Jegyzet nem található" });
             return;
         }
-        console.log(process.cwd() + process.env.UPLOAD_DIR_NAME + Note.JegyzetNeve);
         fs.unlink(process.cwd() + process.env.UPLOAD_DIR_NAME + Note.JegyzetNeve, (err) => {
             if (err) {
               console.error(`Error removing file: ${err}`);
@@ -224,8 +227,8 @@ export async function getPublicNotesByName(req, res) {
         const [rows] = await conn.execute("SELECT `JegyzetId`, `JegyzetNeve`, Feltolto from `Jegyzetek` WHERE `JegyzetNeve` LIKE ? AND `Lathatosag` = 1 AND `Feltolto` != ?", [jegyzetNev, res.decodedToken.UserId]);
 
         let notes = rows
-        if (!notes) {
-            res.status(500).send({ error: 'Sikertelen lekérdezés' })
+        if (notes.length === 0) {
+            res.status(404).send({ error: "Nincs ilyen nevű jegyzet" })
             return
         }
         res.status(200).send({ success: "Sikeres lekérdezés", data: notes })

@@ -102,3 +102,34 @@ Begin
 -- Alap jogosultságok felétele
 INSERT INTO Jogosultsagok (Jogosultsag) 
 VALUES ('Admin'), ('Moderator'), ('Member');
+
+
+Select `Jegyzetek`.`JegyzetId`,`JegyzetNeve`,`JegyzetTartalma` from `Jegyzetek` INNER JOIN `Megosztas` ON `Jegyzetek`.`JegyzetId` = `Megosztas`.`JegyzetId` WHERE `Megosztas`.`MegosztottFelhId` = 7
+
+INSERT INTO `Megosztas` (`JegyzetId`,`MegosztottFelhId`,`GroupSharedId`,`Jogosultsag`) VALUES(4,7,NULL,"R")
+
+Select `Jegyzetek`.`JegyzetId`,`JegyzetNeve`,`JegyzetTartalma` from `Jegyzetek` INNER JOIN `Megosztas` ON `Jegyzetek`.`JegyzetId` = `Megosztas`.`JegyzetId` WHERE Jegyzetek.Feltolto = 7
+
+INSERT INTO `CsoportTagok` (`CsoportId`,`TagId`,`JogosultsagId`) VALUES (1,2,1)
+
+SELECT * from `CsoportTagok` WHERE `CsoportId` = 1;
+
+DELETE from `Csoportok` WHERE `CsoportId` = 1;
+
+Delete from `Megosztas` WHERE `MegosztottFelhId` = 12 AND `JegyzetId` = 5
+
+
+SELECT `FelhasznaloNev` from `Felhasznalok` INNER JOIN `CsoportTagok` ON `FelhasznaloId` = `TagId` WHERE `CsoportId` = 9;
+
+
+
+Select `Jegyzetek`.`JegyzetId`,`JegyzetNeve`,`MegosztottCsopId`,`Jogosultsag` from `Jegyzetek` INNER JOIN `Megosztas` ON `Jegyzetek`.`JegyzetId` = `Megosztas`.`JegyzetId` WHERE `MegosztottCsopId` = 9
+
+
+SELECT `FelhasznaloId`, `FelhasznaloNev` from `Felhasznalok` WHERE `FelhasznaloNev` LIKE '%A%'
+
+SELECT `JegyzetId`, `JegyzetNeve` from `Jegyzetek` WHERE `JegyzetNeve` LIKE '%le%' AND `Lathatosag` = 1 AND `Feltolto` != 1
+
+SELECT * FROM Csoportok WHERE CsoportId IN (SELECT CsoportId FROM `CsoportTagok` WHERE TagId = 7) AND `Tulajdonos` != 7
+
+SELECT * FROM Csoportok WHERE `CsoportNev` LIKE '%Jozsi%' AND `Tulajdonos` = 8

@@ -428,8 +428,8 @@ export async function getUsersByName(req, res) {
         const [rows] = await conn.execute("SELECT `FelhasznaloId`, `FelhasznaloNev` from `Felhasznalok` WHERE `FelhasznaloNev` LIKE ? AND FelhasznaloId != ?", [felhasznaloNev, res.decodedToken.UserId]);
 
         let users = rows
-        if (!users) {
-            res.status(500).send({ error: 'Sikertelen lekérdezés' })
+        if (users.length === 0) {
+            res.status(404).send({ error: "Nincsenek ilyen nevű felhasználók." })
             return
         }
         res.status(200).send({ success: "Sikeres lekérdezés", data: users })
