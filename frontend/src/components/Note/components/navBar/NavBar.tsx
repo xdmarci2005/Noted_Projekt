@@ -192,7 +192,7 @@ export default function Navbar({
 
         await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulated fetch
         if (token && token != null)
-          await fetch("http://localhost:3000/CreateNote", {
+          await fetch(`http://localhost:3000/saveNote/${noteId}`, {
             method: "POST",
             headers: new Headers({
               Accept: "application/json",

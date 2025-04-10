@@ -10,7 +10,8 @@ const storage = multer.diskStorage({
         cb(null,process.cwd() + uploadDir);
     },
     filename: function (req, file, cb) {
-        cb(null,Date.now() + "_" + file.originalname.toString('Latin-2'));
+        const safeName = Buffer.from(file.originalname, 'utf8').toString('utf8')
+        cb(null,Date.now() + "_" + safeName);
     }
 });
 

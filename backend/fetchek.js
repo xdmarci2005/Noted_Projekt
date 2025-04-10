@@ -98,7 +98,7 @@ fetch('http://localhost:3000/getNoteByName/asd', {
   )
 }).then(response => response.json()).then(data => console.log(data))
 
-fetch('http://localhost:3000/CreateNote', {
+fetch('http://localhost:3000/saveNote', {
   method:'POST',headers: new Headers(
       {"Content-Type": "application/json",
           "Accept": "application/json",
@@ -142,7 +142,7 @@ fetch('http://localhost:3000/sharedWithUser', {
   )
 }).then(response => response.json()).then(data => console.log(data))
 
-fetch('http://localhost:3000/sharedWithGroup', {
+fetch('http://localhost:3000/sharedWithGroup/9', {
   method:'GET',headers: new Headers(
       {"Content-Type": "application/json",
           "Accept": "application/json",

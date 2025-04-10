@@ -34,7 +34,7 @@ export async function getNotesFromToken(req, res) {
     }
 }
 
-export async function createNoteWithToken(req, res) {
+export async function saveNoteWithToken(req, res) {
     await uploadFile(req, res); 
     const { Lathatosag } = req.body;
     const JegyzetNeve = req.file.filename;
@@ -46,22 +46,45 @@ export async function createNoteWithToken(req, res) {
 
     const conn = await mysqlP.createConnection(dbConfig);
     try {
-        const [rows] = await conn.execute(
-            'INSERT INTO Jegyzetek (Feltolto, Lathatosag, JegyzetNeve, UtolsoFrissito) VALUES (?, ?, ?, ?)',
-            [res.decodedToken.UserId, Lathatosag, JegyzetNeve, res.decodedToken.UserId]
-        );
+        let rows = undefined;
+        if(req.params.JegyzetId !== undefined) {
+            let OldNote = await Notes.loadDataFromDB(req.params.JegyzetId);
+            if (!OldNote) {
+                res.status(404).send({ error: "A jegyzet nem található" });
+                return;
+            }
+            fs.unlink(process.cwd() + process.env.UPLOAD_DIR_NAME + OldNote.JegyzetNeve, (err) => {
+                if (err) {
+                  console.error(`Hiba a fájl cseréjekor: ${err}`);
+                  return;
+                }
+            })
+            let NewNote = OldNote;
+            Object.assign(NewNote, req.body);
+            [rows] = await conn.execute(
+                'UPDATE Jegyzetek SET JegyzetNeve = ?, Lathatosag = ?, UtolsoFrissites = CURRENT_TIMESTAMP, UtolsoFrissito = ? WHERE JegyzetId = ?',
+                [JegyzetNeve, NewNote.Lathatosag, res.decodedToken.UserId, req.params.JegyzetId]
+            );
+        }
+        else{
+            [rows] = await conn.execute(
+                'INSERT INTO Jegyzetek (Feltolto, Lathatosag, JegyzetNeve, UtolsoFrissito) VALUES (?, ?, ?, ?)',
+                [res.decodedToken.UserId, Lathatosag, JegyzetNeve, res.decodedToken.UserId]
+            );
+        }
         if(rows.affectedRows === 0) {
-            res.status(500).send({ error: "Hiba a jegyzet létrehozásakor" });
+            res.status(500).send({ error: "Hiba a jegyzet mentésekor" });
             return;
         }        
-        res.status(201).send({ success: "Jegyzet létrehozva", id: rows.insertId });
+        res.status(201).send({ success: "Jegyzet sikeresn mentve", id: req.params.JegyzetId || rows.insertId });    
+
     } catch (err) {
         switch (err.errno) {
             case 1045:
                 res.status(500).send({ error: "Hiba a csatlakozáskor nem megfelelő adatbázis jelszó" });
                 break;
             default:
-                res.status(500).send({ error: "Hiba a jegyzet létrehozásakor: " + err });
+                res.status(500).send({ error: "Hiba a jegyzet mentésekor: " + err });
                 break;
         }
     } finally {
@@ -111,48 +134,6 @@ export async function getNoteById(req, res) {
                 break;
             default:
                 res.status(500).send({ error: "Hiba az adatok lekérdezésekor: " + err });
-                break;
-        }
-    } finally {
-        conn.end();
-    }
-}
-
-export async function updateNoteById(req, res) {
-    const { JegyzetId } = req.params;
-    if (!res.decodedToken.UserId || req.body.length === 0 || req.params.length === 0) {
-        res.status(400).send({ error: "Hiányzó paraméterek" });
-        return;
-    }
-    const conn = await mysqlP.createConnection(dbConfig);
-    try {
-        let OldNote = await Notes.loadDataFromDB(JegyzetId);
-        if (!OldNote) {
-            res.status(404).send({ error: "A jegyzet nem található" });
-            return;
-        }
-        if (res.decodedToken.UserId != OldNote.Feltolto) {
-            res.status(401).send({ error: "Nincs jogosultága frissíteni ezt a jegyzetet." })
-            return
-        }
-        let NewNote = OldNote;
-        Object.assign(NewNote, req.body);
-        const [result] = await conn.execute(
-            'UPDATE Jegyzetek SET JegyzetNeve = ?, Lathatosag = ?, UtolsoFrissites = CURRENT_TIMESTAMP, UtolsoFrissito = ? WHERE JegyzetId = ?',
-            [NewNote.JegyzetNeve, NewNote.Lathatosag, res.decodedToken.UserId, JegyzetId]
-        );
-        if (result.affectedRows === 0) {
-            res.status(404).send({ error: "Hiba a jegyzet frissítésekor" });
-            return;
-        }
-        res.status(200).send({ success: "Jegyzet frissítve" });
-    } catch (err) {
-        switch (err.errno) {
-            case 1045:
-                res.status(500).send({ error: "Hiba a csatlakozáskor nem megfelelő adatbázis jelszó" });
-                break;
-            default:
-                res.status(500).send({ error: "Hiba a jegyzet frissítésekor: " + err });
                 break;
         }
     } finally {
