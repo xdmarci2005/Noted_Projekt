@@ -14,7 +14,7 @@ export async function getGroupsByMemberFromToken(req, res) {
     const conn = await mysql.createConnection(dbConfig);
     try 
     {
-        const [rows] = await conn.execute('SELECT * FROM Csoportok WHERE CsoportId IN (SELECT CsoportId FROM `CsoportTagok` WHERE TagId = ?) AND `Tulajdonos` != ?', [res.decodedToken.UserId, res.decodedToken.UserId]);
+        const [rows] = await conn.execute('SELECT * FROM Csoportok WHERE CsoportId IN (SELECT CsoportId FROM `CsoportTagok` WHERE TagId = ?)', [res.decodedToken.UserId]);
         if (rows.length > 0) {
             res.status(200).send({success: "Sikeres lekérdezés", data: rows});
             return;

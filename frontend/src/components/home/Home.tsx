@@ -12,25 +12,22 @@ const Home = () => {
   const [showModal, setShowModal] = useState(false);
   const [groups, setGroups] = useState([]);
   const [content, setContent] = useState<any>();
-  const [sharedContent, setSharedContent] = useState(
-    "Úgy tűnik, itt még senki nem osztott meg semmit... Kezdjétek el közösen!"
-  );
+  const [sharedContent, setSharedContent] = useState<any>();
   const [groupContent, setGroupsContent] = useState("");
   const [notes, setNotes] = useState([]);
+  const [sharedNotes, setSharedNotes] = useState([]);
   const [modalMessage, setModalMessage] = useState("");
 
   const token = localStorage.getItem("token");
   const getNotes = async () => {
     if (token) {
-      console.log(token);
-
       await fetch("http://localhost:3000/getNotes", {
         method: "GET",
         headers: new Headers({
           "Content-Type": "application/json",
           Accept: "application/json",
-          "x-access-token": token,
-        }),
+          "x-access-token": token
+        })
       })
         .then((response) => response.json())
         .then((data) => {
@@ -40,11 +37,29 @@ const Home = () => {
     }
   };
 
+  const getSharedWithNotes = async () =>{
+    if(token){
+      fetch('http://localhost:3000/sharedWithUser', {
+        method:'GET',
+        headers: new Headers({
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "x-access-token":token
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setSharedNotes(data.data)
+      });
+    }
+  }
+
   useEffect(() => {
     if (notes) {
       
       setContent(
-        notes.map((n) => {
+        notes.map((n : any) => {
           const tmpjegyzetnev = n.JegyzetNeve;
           const jegyzetnev = tmpjegyzetnev.substring(
             tmpjegyzetnev.indexOf("_") + 1
@@ -70,7 +85,36 @@ const Home = () => {
   }, [notes]);
 
   useEffect(() => {
+    if (sharedNotes) {
+      setSharedContent(
+        sharedNotes.map((n : any) => {
+          const tmpjegyzetnev = n.JegyzetNeve;
+          const jegyzetnev = tmpjegyzetnev.substring(
+            tmpjegyzetnev.indexOf("_") + 1
+          );
+          return (
+            <span
+              className="note-item"
+              key={n.JegyzetId}
+              onClick={() => navigate("/note/", { state: { id: n.JegyzetId, name: jegyzetnev } })}
+            >
+              {jegyzetnev}
+            </span>
+          );
+        })
+        
+      );
+    }
+    else {
+      setSharedContent(
+        <p className="empty-msg">{"Úgy tűnik, itt még senki nem osztott meg semmit... Kezdjétek el közösen!"}</p>
+      );
+    }
+  }, [sharedNotes]);
+
+  useEffect(() => {
     getNotes();
+    getSharedWithNotes();
   }, []);
 
   const onCreate = () => {
@@ -115,7 +159,7 @@ const Home = () => {
 
   const showGroups = () => {
     if (token)
-      fetch("http://localhost:3000/GetOwnedGroups", {
+      fetch("http://localhost:3000/getGroupsByMember", {
         method: "GET",
         headers: new Headers({
           "Content-Type": "application/json",
@@ -136,7 +180,6 @@ const Home = () => {
   useEffect(showGroups, []);
 
   const clickGroupItem = (id:any, name:any) => {
-    console.log(id);
     navigate("/group", { state: { id: id, name: name } });
   };
 
@@ -186,14 +229,14 @@ const Home = () => {
             </div>
             <div className="shared-notes-section">
               <h2>Megosztott jegyzetek.</h2>
-              <p className="empty-msg">{sharedContent}</p>
+              <div className="shares">{sharedContent}</div>
             </div>
             <div className="group-section">
               <h2>Csoportok</h2>
               <p className="empty-msg">{groupContent}</p>
               <div className="groups">
                 {groups &&
-                  groups.map((group) => (
+                  groups.map((group : any) => (
                     <div
                       key={group.CsoportId}
                       className="group-item"

@@ -2,9 +2,12 @@ import mysqlP from 'mysql2/promise';
 import { User } from '../user/user.js';
 import dbConfig from '../app/config.js';
 import {Notes} from './Notes.js';
+import { Shared } from '../Shares/Share.js';
 import dotenv from 'dotenv';
 import * as fs from "fs"
 import {uploadFile} from './upload.js';
+import { GroupMembers } from '../GroupMembers/GroupMember.js';
+import { Group } from '../groups/Group.js';
 dotenv.config();
 
 export async function getNotesFromToken(req, res) {
@@ -105,15 +108,29 @@ export async function getNoteById(req, res) {
             res.status(404).send({ error: "Jegyzet nem található." });
             return;
         }
+
         let requestingUser = await User.loadDataFromDB(res.decodedToken.UserId)
         if (requestingUser.statusz == 0) {
             res.status(401).send({ error: "Fiókja blokkolva van" })
             return
         }
-        if (res.decodedToken.UserId != Note.Feltolto && Note.Lathatosag != 1 && requestingUser.JogosultsagId < 3) {
+        let DoesUserHaveAccess = await Shared.CheckIfNoteIsSharedWithUser(JegyzetId,res.decodedToken.UserId);
+
+        let UserGroups = await GroupMembers.GetGroupsByMemberId(res.decodedToken.UserId);
+        if(UserGroups !== undefined){
+            for(const Group of UserGroups){
+                let Access = await Shared.CheckIfNoteIsSharedWithGroup(JegyzetId,Group.CsoportId);   
+                if(Access !== undefined){
+                    DoesUserHaveAccess = true;
+                }
+            }
+        }
+
+        if (res.decodedToken.UserId != Note.Feltolto && Note.Lathatosag != 1 && requestingUser.JogosultsagId < 3 && !DoesUserHaveAccess) {
             res.status(401).send({ error: "Nincs jogosultága megnézni ezt a jegyzetet." })
             return
         }
+
         if (!Note) {
             res.status(404).send({ error: "Jegyzet nem található." });
             return;
@@ -123,8 +140,6 @@ export async function getNoteById(req, res) {
         res.sendFile(filePath, (err) => {
             if (err) {
                 res.status(500).send({ error: "Hiba a fájl lekérdezésekor: " + err });
-            } else {
-                console.log("Sikeres lekérdezés: " + filePath);
             }
          })  
     } catch (err) {

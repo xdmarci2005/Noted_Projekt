@@ -17,7 +17,7 @@ export class Notes {
             return rows[0]
         }
         catch (err){
-            console.log(err)
+            console.error(err)
             return undefined
         }
         finally {

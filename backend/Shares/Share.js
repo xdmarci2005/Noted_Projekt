@@ -15,7 +15,35 @@ export class Shared{
             return rows[0]
         }
         catch (err){
-            console.log(err)
+            console.error(err)
+            return undefined
+        }
+        finally {
+            conn.end()
+        }
+    }
+    static async CheckIfNoteIsSharedWithUser(NoteId,FelhasznaloId){
+        const conn = await mysqlP.createConnection(dbConfig)
+        try {
+            const [rows] = await conn.execute('Select * from Megosztas where JegyzetId = ? AND MegosztottFelhId = ?', [NoteId, FelhasznaloId])
+            return rows[0];
+        }
+        catch (err){
+            console.error(err)
+            return undefined
+        }
+        finally {
+            conn.end()
+        }
+    }
+    static async CheckIfNoteIsSharedWithGroup(NoteId,CsoportId){
+        const conn = await mysqlP.createConnection(dbConfig)
+        try {
+            const [rows] = await conn.execute('Select * from Megosztas where JegyzetId = ? AND MegosztottCsopId = ?', [NoteId, CsoportId])
+            return rows[0]
+        }
+        catch (err){
+            console.error(err)
             return undefined
         }
         finally {

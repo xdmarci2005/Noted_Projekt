@@ -220,7 +220,6 @@ export async function DeleteGroup(req,res) {
     }
 }
 export async function getGroupMembersByGroupId(req,res){
-    console.log(req.params.GroupId)
     if(!res.decodedToken.UserId || !req.params.GroupId)
     {
         res.status(401).send({error: "Hiányzó paraméter"});

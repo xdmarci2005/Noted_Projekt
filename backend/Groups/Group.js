@@ -15,7 +15,7 @@ export class Group{
             return undefined
         }
         catch (err){
-            console.log(err)
+            console.error(err)
             return undefined
         }
         finally {

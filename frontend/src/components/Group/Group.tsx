@@ -7,6 +7,7 @@ export default function Group() {
   const token = localStorage.getItem("token");
   const [users, setUsers] = useState<any>();
   const [notes, setNotes] = useState<any>();
+  const [content, setContent] = useState<any>();
 
   const navigate = useNavigate();
 
@@ -24,7 +25,7 @@ export default function Group() {
         headers: new Headers({
           "Content-Type": "application/json",
           Accept: "application/json",
-          "x-access-token": token,
+          "x-access-token": token
         }),
       })
         .then((response) => response.json())
@@ -36,8 +37,51 @@ export default function Group() {
             setUsers("Nem találhatóak tagok.");
           }
         });
+
+      fetch(`http://localhost:3000/sharedWithGroup/${groupId}`, {
+        method: 'GET',
+        headers: new Headers({
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "x-access-token": token
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data)
+
+          setNotes(data.data)
+        });
     }
   }, [groupId]);
+
+    useEffect(() => {
+      if (notes) {
+        setContent(
+          notes.map((n : any) => {
+            const tmpjegyzetnev = n.JegyzetNeve;
+            const jegyzetnev = tmpjegyzetnev.substring(
+              tmpjegyzetnev.indexOf("_") + 1
+            );
+            return (
+              <span
+                className="note-item"
+                key={n.JegyzetId}
+                onClick={() => navigate("/note/", { state: { id: n.JegyzetId, name: jegyzetnev } })}
+              >
+                {jegyzetnev}
+              </span>
+            );
+          })
+          
+        );
+      }
+      else {
+        setContent(
+          <p className="empty-msg">{"Nincsenek jegyzetek."}</p>
+        );
+      }
+    }, [notes]);
 
   return (
     <div className="group-site">
@@ -78,12 +122,8 @@ export default function Group() {
               ))}
           </div>
           <div className="notes-section">
-            <h2>Jegyzetek.</h2>
-            <div className="notes">
-              <div className="note-item" onClick={() => {}}>
-                {"jegyzet1"}
-              </div>
-            </div>
+            <h2>Jegyzetek</h2>
+            {content}
           </div>
         </div>
       </div>

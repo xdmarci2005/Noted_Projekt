@@ -31,34 +31,6 @@ export default function Navbar({
   }
   const token = localStorage.getItem("token");
 
-  const getNote = async () => {
-    if (!token) {
-      console.error("Token not found in localStorage");
-      return;
-    }
-    try {
-      const response = await fetch(`http://localhost:3000/getNote/${noteId}`, {
-        method: "GET",
-        headers: new Headers({
-          Accept: "application/json",
-          "x-access-token": token,
-        }),
-      });
-      const data = await response.json();
-      if (data.error) {
-        console.error(data.error);
-      } else {
-         // Set the content of the editor with the fetched note
-      }
-    } catch (error) {
-      console.error("Error fetching note:", error);
-    }
-  };
-
-  useEffect(() => {
-    getNote();
-  }, [noteId]);
-
   const [docTitle, setDocTitle] = useState("Névtelen Dokumentum");
 
   useEffect(() => {

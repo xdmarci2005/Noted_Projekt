@@ -12,10 +12,28 @@ export class GroupMembers{
             const [rows] = await conn.execute('SELECT * FROM CsoportTagok WHERE CsoportId = ? AND TagId = ?', [CsoportId, TagId])
             return rows[0]
         } catch (err) {
-            console.log(err)
+            console.error(err)
             return undefined
         } finally {
             conn.end()
         }
+    }
+
+    static async GetGroupsByMemberId(TagId){
+        const conn = await mysqlP.createConnection(dbConfig)
+        try {
+            if(TagId !== undefined ){
+                const [rows] = await conn.execute('Select * from CsoportTagok where TagId = ?', [TagId])
+                return rows
+            }
+            return undefined
+        }
+        catch (err){
+            console.error(err)
+            return undefined
+        }
+        finally {
+            conn.end()
+    }
     }
 }
