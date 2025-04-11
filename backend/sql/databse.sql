@@ -19,6 +19,10 @@ CREATE TABLE Felhasznalok (
     FOREIGN KEY (JogosultsagId) REFERENCES Jogosultsagok(JogosultsagId) 
 );
 
+ALTER TABLE Felhasznalok
+ADD CONSTRAINT UserNameTooShort CHECK (LENGTH(FelhasznaloNev) >= 4),
+ADD CONSTRAINT EmailInvalid CHECK (REGEXP_LIKE(Email, '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'));
+
 -- 3. Jegyzetek tábla (Notes table)
 CREATE TABLE Jegyzetek (
     JegyzetId INT AUTO_INCREMENT PRIMARY KEY,          
@@ -30,6 +34,9 @@ CREATE TABLE Jegyzetek (
     FOREIGN KEY (Feltolto) REFERENCES Felhasznalok(FelhasznaloId) ON DELETE CASCADE,
     FOREIGN KEY (UtolsoFrissito) REFERENCES Felhasznalok(FelhasznaloId)
 );
+
+ALTER TABLE `Jegyzetek`
+ADD CONSTRAINT VisibiltyInvalid CHECK (Lathatosag = 1 OR Lathatosag = 0)
 
 -- 4. Csoportok tábla (Groups table)
 CREATE TABLE Csoportok (
