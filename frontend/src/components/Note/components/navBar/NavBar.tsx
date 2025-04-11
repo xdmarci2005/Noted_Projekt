@@ -187,6 +187,7 @@ export default function Navbar({
       <SearchOverlay
         visible={isSearchVisible}
         onClose={() => setIsSearchVisible(false)}
+        noteId={noteId}
       />
       <nav className="navbar-top">
         <div className="navbar-left">
