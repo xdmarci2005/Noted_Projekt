@@ -50,6 +50,9 @@ export async function saveNoteWithToken(req, res) {
     const conn = await mysqlP.createConnection(dbConfig);
     try {
         let rows = undefined;
+        if(req.params.JegyzetId === 'undefined') {
+            req.params.JegyzetId = undefined;
+        }
         if(req.params.JegyzetId !== undefined) {
             let OldNote = await Notes.loadDataFromDB(req.params.JegyzetId);
             if (!OldNote) {
@@ -79,8 +82,7 @@ export async function saveNoteWithToken(req, res) {
             res.status(500).send({ error: "Hiba a jegyzet mentésekor" });
             return;
         }        
-        res.status(201).send({ success: "Jegyzet sikeresn mentve", id: req.params.JegyzetId || rows.insertId });    
-
+        res.status(201).send({ success: "Jegyzet sikeresn mentve", id: req.params.JegyzetId ?? rows.insertId });    
     } catch (err) {
         switch (err.errno) {
             case 1045:

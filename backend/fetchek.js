@@ -248,7 +248,7 @@ fetch('http://localhost:3000/GetGroupsByName/Jozsi', {
   method:'GET',headers: new Headers(
       {"Content-Type": "application/json",
           "Accept": "application/json",
-          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0NDEwNjM0MiwiZXhwIjoxNzQ0MTEzNTQyfQ.23CKYevmYIzKceveT5YsHZ_wrQyMqmNAvCHY_Keg8ic"}
+          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjksImlhdCI6MTc0NDQ2NjE2NCwiZXhwIjoxNzQ0NDczMzY0fQ.FQe5vsB93XLjHzh7Bnk9e5hle46HdHuzsWbKHmBrza4"}
   )
 }).then(response => response.json())
 .then(data => console.log(data))
