@@ -1,7 +1,5 @@
 .home-site {
-
-   .note-item {
-    
+  .note-item {
     display: inline-block;
     width: 20%;
     box-sizing: border-box;
@@ -18,10 +16,7 @@
       background-color: #f1f1f1;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
-
-     
-  
-   }
+  }
 
   body {
     margin: 0;
@@ -37,43 +32,42 @@
     padding: 20px;
   }
 
-  /* Top bar */
   .top-bar {
     display: flex;
+    justify-content: space-between;
     margin-top: 20px;
 
     gap: 10px;
 
-    button {
-      
-      margin-left: 10px;
-      margin-right: 10px;
-      width: 50px;
-    }
-  }
-
-  .search-container {
-    position: relative;
-    display: inline-block;
-    width: 100%;
-
-    input {
-      width: 100%;
-      padding: 10px;
-      padding-right: 35px; /* Space for the icon */
-      border: 1px solid #ccc;
-      border-radius: 20px;
-      outline: none;
-    }
-
-    .icon {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 25px;
-      height: 25px;
+    span {
       cursor: pointer;
+      padding: 5px;
+      background-color: whitesmoke;
+      border-radius: 5px;
+      height: 35px;
+      margin-right: 10px;
+
+      &:hover {
+        transition: all 0.3s;
+        background: rgba(10, 101, 175, 0.726);
+        color: whitesmoke;
+      }
+    }
+
+    h1 {
+      font-size: 36px;
+      color: #00477d; /* Dark blue color */
+    }
+
+    .center {
+      .logo {
+        width: 50px;
+        height: 50px;
+        margin-right: 20px;
+      }
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 
@@ -97,7 +91,6 @@
     button {
       width: 50px;
       height: 50px;
-      
     }
   }
 
@@ -109,8 +102,14 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
 
+    button {
+      max-width: 40px;
+      max-height: 40px;
+
+      width: 10%;
+    }
+  }
 
   .notes-section h2,
   .shared-notes-section h2,
@@ -127,7 +126,6 @@
     margin: 10px 0;
     text-align: center;
   }
-
 
   .group-item {
     display: inline-block;
@@ -174,6 +172,3 @@
     }
   }
 }
-
-
-

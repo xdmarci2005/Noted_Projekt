@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "./group.scss";
 import { useEffect, useState } from "react";
 import { ArrowLeft, Plus } from "lucide-react";
+import SearchOverlay from "../Groups/SearchOverlay/SearchOverlay";
 
 export default function Group() {
   const token = localStorage.getItem("token");
@@ -14,6 +15,8 @@ export default function Group() {
   const [addHover, setAddHover] = useState(false);
   const [backHover, setBackHover] = useState(false);
 
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
+
   const location = useLocation();
   const groupId = location.state?.id;
   const groupName = location.state?.name;
@@ -25,7 +28,7 @@ export default function Group() {
         headers: new Headers({
           "Content-Type": "application/json",
           Accept: "application/json",
-          "x-access-token": token
+          "x-access-token": token,
         }),
       })
         .then((response) => response.json())
@@ -39,52 +42,57 @@ export default function Group() {
         });
 
       fetch(`http://localhost:3000/sharedWithGroup/${groupId}`, {
-        method: 'GET',
+        method: "GET",
         headers: new Headers({
           "Content-Type": "application/json",
-          "Accept": "application/json",
-          "x-access-token": token
-        })
+          Accept: "application/json",
+          "x-access-token": token,
+        }),
       })
-        .then(response => response.json())
-        .then(data => {
-          console.log(data)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
 
-          setNotes(data.data)
+          setNotes(data.data);
         });
     }
   }, [groupId]);
 
-    useEffect(() => {
-      if (notes) {
-        setContent(
-          notes.map((n : any) => {
-            const tmpjegyzetnev = n.JegyzetNeve;
-            const jegyzetnev = tmpjegyzetnev.substring(
-              tmpjegyzetnev.indexOf("_") + 1
-            );
-            return (
-              <span
-                className="note-item"
-                key={n.JegyzetId}
-                onClick={() => navigate("/note/", { state: { id: n.JegyzetId, name: jegyzetnev } })}
-              >
-                {jegyzetnev}
-              </span>
-            );
-          })
-          
-        );
-      }
-      else {
-        setContent(
-          <p className="empty-msg">{"Nincsenek jegyzetek."}</p>
-        );
-      }
-    }, [notes]);
+  useEffect(() => {
+    if (notes) {
+      setContent(
+        notes.map((n: any) => {
+          const tmpjegyzetnev = n.JegyzetNeve;
+          const jegyzetnev = tmpjegyzetnev.substring(
+            tmpjegyzetnev.indexOf("_") + 1
+          );
+          return (
+            <span
+              className="note-item"
+              key={n.JegyzetId}
+              onClick={() =>
+                navigate("/note/", {
+                  state: { id: n.JegyzetId, name: jegyzetnev },
+                })
+              }
+            >
+              {jegyzetnev}
+            </span>
+          );
+        })
+      );
+    } else {
+      setContent(<p className="empty-msg">{"Nincsenek jegyzetek."}</p>);
+    }
+  }, [notes]);
 
   return (
     <div className="group-site">
+      <SearchOverlay
+        visible={isSearchVisible}
+        onClose={() => setIsSearchVisible(false)}
+        groupId={groupId}
+      />
       <div className="top-bar">
         <span
           className="back"

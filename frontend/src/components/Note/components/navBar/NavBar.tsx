@@ -1,21 +1,26 @@
 import React, { useEffect, useState } from "react";
-import "./Navbar.scss"; // Import the CSS file
-import { User } from "lucide-react";
-import { Share2 } from "lucide-react";
-import logoImg from "../logo_main.png";
+import "./Navbar.scss";
+
+import {
+  User,
+  Share2,
+  Undo,
+  Redo,
+  Copy,
+  ClipboardPaste,
+  Scissors,
+  FileDown,
+  FileUp,
+  RefreshCcw,
+} from "lucide-react";
+
 import { useNavigate } from "react-router-dom";
-import { Undo } from "lucide-react";
-import { Redo } from "lucide-react";
-import { Copy } from "lucide-react";
-import { ClipboardPaste } from "lucide-react";
-import { Scissors } from "lucide-react";
-import { FileDown } from "lucide-react";
-import { FileUp } from "lucide-react";
-import { RefreshCcw } from "lucide-react";
+import logoImg from "../logo_main.png";
 
 import Mammoth from "mammoth";
 
 import SearchOverlay from "./SearchOverlay/SearchOverlay";
+import CustomModal from "../../../home/NewGroup/Modal/Modal";
 
 export default function Navbar({
   editor,
@@ -32,6 +37,10 @@ export default function Navbar({
   const token = localStorage.getItem("token");
 
   const [docTitle, setDocTitle] = useState("Névtelen Dokumentum");
+  const [docId, setDocId] = useState<any>(noteId);
+
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [saveModalMessage, setSaveModalMessage] = useState<any>();
 
   useEffect(() => {
     if (docName) {
@@ -75,7 +84,7 @@ export default function Navbar({
         return;
       }
       try {
-        const response = await fetch(`http://localhost:3000/getNote/${noteId}`, {
+        const response = await fetch(`http://localhost:3000/getNote/${docId}`, {
           method: "GET",
           headers: new Headers({
             Accept: "application/json",
@@ -94,7 +103,7 @@ export default function Navbar({
     };
 
     fetchAndLoadNote();
-  }, [noteId, token]);
+  }, [docId, token]);
 
   const saveDocx = async (filename: any) => {};
 
@@ -162,9 +171,9 @@ export default function Navbar({
         });
         formData.append("file", blob, docTitle);
 
-        await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulated fetch
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         if (token && token != null)
-          await fetch(`http://localhost:3000/saveNote/${noteId}`, {
+          await fetch(`http://localhost:3000/saveNote/${docId}`, {
             method: "POST",
             headers: new Headers({
               Accept: "application/json",
@@ -173,9 +182,14 @@ export default function Navbar({
             body: formData,
           })
             .then((response) => response.json())
-            .then((data) => console.log(data));
+            .then((data) => {
+              console.log(data);
+              setDocId(data.id);
+              setSaveModalMessage(data.success ? data.success : data.error);
+            });
       } finally {
         setLoading(false);
+        setShowSaveModal(true);
       }
     };
 
@@ -186,8 +200,17 @@ export default function Navbar({
     <>
       <SearchOverlay
         visible={isSearchVisible}
+        setVisible={setIsSearchVisible}
         onClose={() => setIsSearchVisible(false)}
-        noteId={noteId}
+        noteId={docId}
+      />
+      <CustomModal
+        show={showSaveModal}
+        title="Noted."
+        message={saveModalMessage}
+        onClose={() => {
+          setShowSaveModal(false);
+        }}
       />
       <nav className="navbar-top">
         <div className="navbar-left">

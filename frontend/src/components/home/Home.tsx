@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
-import "./home.scss";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Plus } from "lucide-react";
-import { User } from "lucide-react";
-import { Search } from "lucide-react";
+import { Plus, User } from "lucide-react";
+
+import "./home.scss";
+import logoImg from "../../assets/logo_main.png";
+
 import NewGroup from "./NewGroup/NewGroup";
 import Modal from "./NewGroup/Modal/Modal";
 
@@ -208,24 +209,27 @@ const Home = () => {
       />
       <div className="home-site">
         <div className="top-bar">
-          <button onClick={() => navigate("/note")}>
-            {" "}
-            <Plus />
-          </button>
-          <div className="search-container">
-            <input type="text" placeholder="Keresés" id="search" />
-            <Search className="icon" onClick={handleSearch} />
+          <div></div>
+          <div>
+            <span className="center">
+              <img src={logoImg} className="logo" alt="Vissza a főoldalra" />
+              <h1>Noted.</h1>
+            </span>
           </div>
-          <button onClick={checkProfile}>
+          <span onClick={checkProfile}>
             {" "}
             <User />
-          </button>
+          </span>
         </div>
         <div className="main-container">
           <div className="content">
             <div className="notes-section">
               <h2>Jegyzetek.</h2>
               <div className="notes">{content}</div>
+              <button onClick={() => navigate("/note")}>
+                {" "}
+                <Plus />
+              </button>
             </div>
             <div className="shared-notes-section">
               <h2>Megosztott jegyzetek.</h2>
@@ -236,11 +240,13 @@ const Home = () => {
               <p className="empty-msg">{groupContent}</p>
               <div className="groups">
                 {groups &&
-                  groups.map((group : any) => (
+                  groups.map((group: any) => (
                     <div
                       key={group.CsoportId}
                       className="group-item"
-                      onClick={() => clickGroupItem(group.CsoportId, group.CsoportNev)}
+                      onClick={() =>
+                        clickGroupItem(group.CsoportId, group.CsoportNev)
+                      }
                     >
                       {group.CsoportNev}
                     </div>

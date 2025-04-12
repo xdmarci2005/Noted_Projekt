@@ -2,13 +2,16 @@ import { useEffect, useState } from "react";
 import "./SearchOverlay.scss";
 import { Search } from "lucide-react";
 import { Plus } from "lucide-react";
+import CustomModal from "../../../../home/NewGroup/Modal/Modal";
 
 export default function SearchOverlay({
   visible,
+  setVisible,
   onClose,
   noteId,
 }: {
   visible: boolean;
+  setVisible: React.Dispatch<React.SetStateAction<any>>;
   onClose: () => void;
   noteId: string;
 }) {
@@ -20,6 +23,21 @@ export default function SearchOverlay({
   const [activeOption, setActiveOption] = useState(true);
   const [notFoundContent, setNotFoundContent] =
     useState<string>("Nincs találat");
+
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState<any>();
+
+
+
+
+  function handleModalClose() {
+    setShowModal(false);
+    setVisible(false);
+  }
+  function handleModalOpen({message} : {message: string}) {
+    setModalMessage(message);
+    setShowModal(true);
+  }
 
   const token = localStorage.getItem("token");
 
@@ -43,7 +61,13 @@ export default function SearchOverlay({
         }),
       })
         .then((response) => response.json())
-        .then((data) => console.log(data));
+        .then((data) => {console.log(data);
+          if (data.success) {
+            handleModalOpen({message: data.success});
+          } else {
+            handleModalOpen({message: data.error});
+          }
+        });
   };
 
   const setCsoportActive = async () => {
@@ -145,6 +169,13 @@ export default function SearchOverlay({
 
   return (
     <>
+      <CustomModal
+        show={showModal}
+        title="Noted."
+        message={modalMessage}
+        onClose={() => handleModalClose()}
+      />
+      
       <div className="overlay">
         <div className="search-box">
           <h2>Megosztás</h2>
@@ -188,7 +219,9 @@ export default function SearchOverlay({
                         <td>
                           <button
                             className="add-button"
-                            onClick={() => handleAdd({userId: result.FelhasznaloId})}
+                            onClick={() =>
+                              handleAdd({ userId: result.FelhasznaloId })
+                            }
                           >
                             <Plus />
                           </button>
