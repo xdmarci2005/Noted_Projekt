@@ -188,7 +188,7 @@ export default function SearchOverlay({
                         <td>
                           <button
                             className="add-button"
-                            onClick={() => handleAdd(result.FelhasznaloId)}
+                            onClick={() => handleAdd({userId: result.FelhasznaloId})}
                           >
                             <Plus />
                           </button>

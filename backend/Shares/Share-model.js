@@ -123,7 +123,7 @@ export async function ShareNewNoteWithToken(req, res) {
         else if(!req.body.MegosztottFelhId){
             const SharingUser = await GroupMembers.loadDataFromDB(Share.MegosztottCsopId,res.decodedToken.UserId);
             if (!SharingUser) {
-                res.status(404).send({ error: "Nem vagy tagja a csoportnak." });
+                res.status(404).send({ error: "Nem oszthatsz meg jegyzetet a csoporttal." });
                 return;
             }
             [rows] = await conn.execute('INSERT INTO `Megosztas` (`JegyzetId`,`MegosztottCsopId`,`Jogosultsag`) VALUES(?,?,?)', [Share.JegyzetId, Share.MegosztottCsopId, Share.Jogosultsag]);   
