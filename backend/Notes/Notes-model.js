@@ -68,9 +68,9 @@ export async function saveNoteWithToken(req, res) {
                 return;
             }
 
-            let Share = await Shared.CheckIfNoteIsSharedWithUser(JegyzetId, res.decodedToken.UserId);
-            if (Share !== undefined && OldNote.Feltolto != res.decodedToken.UserId) {
-                if (!Share.Jogosultsag.includes('W')) {
+            let ShareWithRequestingUser = await Shared.CheckIfNoteIsSharedWithUser(JegyzetId, res.decodedToken.UserId);
+            if (ShareWithRequestingUser !== undefined && OldNote.Feltolto != res.decodedToken.UserId) {
+                if (!ShareWithRequestingUser.Jogosultsag.includes('W')) {
                     res.status(401).send({ error: 'Nincs joga frissíteni ezt a jegyzetet.' })
                     Functions.cleanUpFile(NewNoteName);
                     return;

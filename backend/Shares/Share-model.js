@@ -108,7 +108,9 @@ export async function ShareNewNoteWithToken(req, res) {
             res.status(404).send({ error: "Nem létezik ilyen jegyzet." });
             return;
         }
-        if (sharedNote.Feltolto !== res.decodedToken.UserId) {
+
+        let ShareWithRequestingUser = await Shared.CheckIfNoteIsSharedWithUser(req.body.JegyzetId, res.decodedToken.UserId);
+        if (sharedNote.Feltolto !== res.decodedToken.UserId && (!ShareWithRequestingUser.Jogosultsag.includes('S') || !ShareWithRequestingUser)) {
             res.status(403).send({ error: "Nem oszthatja meg más jegyzetét." });
             return;
         }
