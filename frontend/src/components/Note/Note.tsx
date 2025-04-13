@@ -35,9 +35,11 @@ export default function Note() {
     ],
     editorProps: {
       attributes: {
-        class: "min-h-[156px] border rounded-md bg-slate-50 py-2 px-3",
+        class: "min-h-[156px] border rounded-md bg-slate-50 py-2 px-3 ",
+        style: "z-index: -1;", // Added negative z-index
       },
     },
+    autofocus: true,
   });
 
   return (

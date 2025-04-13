@@ -2,8 +2,7 @@ import { useAuth } from "../../AuthContext";
 import { useNavigate } from "react-router-dom";
 import Modal from "../Modal/Modal";
 import React, { useEffect, useState } from "react";
-import { Pencil } from "lucide-react";
-import { PencilOff } from "lucide-react";
+import { Pencil, ArrowLeft, PencilOff } from "lucide-react";
 
 import "./profile.scss";
 
@@ -19,6 +18,8 @@ const Profile = () => {
   const [modalMessage, setModalMessage] = useState();
 
   const [path, setPath] = useState("/");
+
+  const [backHover, setBackHover] = useState(false);
 
   const handleLogout = () => {
     event.preventDefault();
@@ -100,6 +101,21 @@ const Profile = () => {
           onClose={() => handleModalClose()}
         />
         <div className="profile-site">
+          <div className="top-bar">
+            <span
+              className="back-button"
+              onClick={() => {
+                navigate(-1);
+              }}
+              onMouseEnter={() => setBackHover(true)}
+              onMouseLeave={() => setBackHover(false)}
+            >
+              <ArrowLeft />
+              <span className={`Backtooltip ${backHover ? "onHover" : ""}`}>
+                Vissza
+              </span>
+            </span>
+          </div>
           <div className="card">
             <form onSubmit={(event) => event.preventDefault()}>
               <h2>Profil szerkeztése</h2>

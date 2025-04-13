@@ -1,8 +1,10 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import "./group.scss";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Plus } from "lucide-react";
+import { ArrowLeft, Plus, Trash2 } from "lucide-react";
+
 import SearchOverlay from "../Groups/SearchOverlay/SearchOverlay";
+import CustomModal from "../home/NewGroup/Modal/Modal";
 
 export default function Group() {
   const token = localStorage.getItem("token");
@@ -17,9 +19,46 @@ export default function Group() {
 
   const [isSearchVisible, setIsSearchVisible] = useState(false);
 
+  const [showModal, setShowModal] = useState(false);
+  const [currentModal, setCurrentModal] = useState("");
+
+  const [modalMessage, setModalMessage] = useState("");
+
+  const [user, setUser] = useState({});
+  const [note, setNote] = useState({});
+
   const location = useLocation();
   const groupId = location.state?.id;
   const groupName = location.state?.name;
+
+  function handleModalClose() {
+    if (currentModal == "note") {
+    } else if (currentModal == "user") {
+      removeUser()
+    } else {
+      console.log("Error: miafasz");
+    }
+    setShowModal(false);
+  }
+
+  async function removeUser() {
+    if (token)
+      fetch("http://localhost:3000/removeMember", {
+        method: "DELETE",
+        headers: new Headers({
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "x-access-token": token,
+        }),
+        body: JSON.stringify({ CsoportId: groupId, TagId: 1 }),
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data));
+  }
+
+  async function removeNote() {
+    
+  }
 
   useEffect(() => {
     if (token) {
@@ -67,16 +106,30 @@ export default function Group() {
             tmpjegyzetnev.indexOf("_") + 1
           );
           return (
-            <span
-              className="note-item"
-              key={n.JegyzetId}
-              onClick={() =>
-                navigate("/note/", {
-                  state: { id: n.JegyzetId, name: jegyzetnev },
-                })
-              }
-            >
-              {jegyzetnev}
+            <span className="note-item" key={n.JegyzetId}>
+              <span
+                className="name"
+                onClick={() =>
+                  navigate("/note/", {
+                    state: { id: n.JegyzetId, name: jegyzetnev },
+                  })
+                }
+              >
+                {jegyzetnev}
+              </span>
+              <span
+                className="delete"
+                onClick={() => {
+                  setNote(n);
+                  setModalMessage(
+                    `Biztosan törli a(z) ${jegyzetnev} nevű jegyzetet? `
+                  );
+                  setCurrentModal("note");
+                  setShowModal(true);
+                }}
+              >
+                <Trash2 />
+              </span>
             </span>
           );
         })
@@ -88,6 +141,12 @@ export default function Group() {
 
   return (
     <div className="group-site">
+      <CustomModal
+        show={showModal}
+        title="Noted."
+        message={modalMessage}
+        onClose={() => handleModalClose()}
+      />
       <SearchOverlay
         visible={isSearchVisible}
         onClose={() => setIsSearchVisible(false)}
@@ -125,7 +184,20 @@ export default function Group() {
             {users &&
               users.map((user: any, index: number) => (
                 <span className="member-item" key={index}>
-                  {user.FelhasznaloNev}
+                  <span className="name">{user.FelhasznaloNev}</span>
+                  <span
+                    className="delete"
+                    onClick={() => {
+                      setModalMessage(
+                        `Biztosan törli a(z) ${user.FelhasznaloNev} nevű felhasználót? `
+                      );
+                      setUser(user);
+                      setCurrentModal("user");
+                      setShowModal(true);
+                    }}
+                  >
+                    <Trash2 />
+                  </span>
                 </span>
               ))}
           </div>

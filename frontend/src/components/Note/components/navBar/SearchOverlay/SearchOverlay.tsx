@@ -27,21 +27,45 @@ export default function SearchOverlay({
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState<any>();
 
-
-
+  async function handleAddtoGroup(groupId: any) {
+    if (token)
+      await fetch("http://localhost:3000/newShare", {
+        method: "POST",
+        headers: new Headers({
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "x-access-token": token,
+        }),
+        body: JSON.stringify({
+          JegyzetId: noteId,
+          MegosztottFelhId: null,
+          MegosztottCsopId: groupId,
+          Jogosultsag: "R",
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          if (data.success) {
+            handleModalOpen({ message: data.success });
+          } else {
+            handleModalOpen({ message: data.error });
+          }
+        });
+  }
 
   function handleModalClose() {
     setShowModal(false);
     setVisible(false);
   }
-  function handleModalOpen({message} : {message: string}) {
+  function handleModalOpen({ message }: { message: string }) {
     setModalMessage(message);
     setShowModal(true);
   }
 
   const token = localStorage.getItem("token");
 
-  const handleAdd = ({ userId }: { userId: number }) => {
+  const handleAdd = ({ userId }: { userId: any }) => {
     if (!token) {
       console.error("Token not found in localStorage");
       return;
@@ -61,11 +85,12 @@ export default function SearchOverlay({
         }),
       })
         .then((response) => response.json())
-        .then((data) => {console.log(data);
+        .then((data) => {
+          console.log(data);
           if (data.success) {
-            handleModalOpen({message: data.success});
+            handleModalOpen({ message: data.success });
           } else {
-            handleModalOpen({message: data.error});
+            handleModalOpen({ message: data.error });
           }
         });
   };
@@ -175,7 +200,7 @@ export default function SearchOverlay({
         message={modalMessage}
         onClose={() => handleModalClose()}
       />
-      
+
       <div className="overlay">
         <div className="search-box">
           <h2>Megosztás</h2>
@@ -244,7 +269,7 @@ export default function SearchOverlay({
                         <td>
                           <button
                             className="add-button"
-                            onClick={() => handleAdd(result.FelhasznaloId)}
+                            onClick={() => handleAddtoGroup(result.CsoportId)}
                           >
                             <Plus />
                           </button>

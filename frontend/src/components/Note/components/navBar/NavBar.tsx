@@ -212,115 +212,121 @@ export default function Navbar({
           setShowSaveModal(false);
         }}
       />
-      <nav className="navbar-top">
-        <div className="navbar-left">
-          <span className="icon">
-            <img
-              src={logoImg}
-              alt="Noted Logo"
-              className="logo"
-              onClick={() => {
-                navigate("/home");
-              }}
+      <div className={isSearchVisible ? "navbar" : ""}>
+        <nav className="navbar-top">
+          <div className="navbar-left">
+            <span className="icon">
+              <img
+                src={logoImg}
+                alt="Noted Logo"
+                className="logo"
+                onClick={() => {
+                  navigate("/home");
+                }}
+              />
+            </span>
+          </div>
+          <div className="navbar-center">
+            <input
+              type="text"
+              className="doc-title"
+              placeholder="Dokumentum Neve"
+              value={docTitle}
+              onChange={(e) => setDocTitle(e.target.value)}
             />
-          </span>
-        </div>
-        <div className="navbar-center">
-          <input
-            type="text"
-            className="doc-title"
-            placeholder="Dokumentum Neve"
-            value={docTitle}
-            onChange={(e) => setDocTitle(e.target.value)}
-          />
-        </div>
-        <div className="navbar-right">
-          <div className="profile-btn">
-            <span onClick={handleProfile}>
-              <User />
-            </span>
           </div>
-        </div>
-      </nav>
-      <nav className="navbar-bottom">
-        <div className="navbar-center">
-          <input
-            type="file"
-            accept="application/json"
-            onChange={loadJSON}
-            style={{ display: "none" }}
-            id="fileUploadJSON"
-          />
-          <input
-            type="file"
-            accept=".docx"
-            onChange={(e) => {
-              if (e.target.files && e.target.files[0] != null) {
-                const file = e.target.files[0];
-                if (file) {
-                  loadDocx(file);
+          <div className="navbar-right">
+            <div className="profile-btn">
+              <span onClick={handleProfile}>
+                <User />
+              </span>
+            </div>
+          </div>
+        </nav>
+        <nav className="navbar-bottom">
+          <div className="navbar-center">
+            <input
+              type="file"
+              accept="application/json"
+              onChange={loadJSON}
+              style={{ display: "none" }}
+              id="fileUploadJSON"
+            />
+            <input
+              type="file"
+              accept=".docx"
+              onChange={(e) => {
+                if (e.target.files && e.target.files[0] != null) {
+                  const file = e.target.files[0];
+                  if (file) {
+                    loadDocx(file);
+                  }
                 }
-              }
-            }}
-            style={{ display: "none" }}
-            id="fileUploadDocx"
-          />
-          <span onClick={handleSave}>
-            <RefreshCcw className={loading ? "spinner" : ""} />
-          </span>
-          <div className="save-upload">
-            <FileUp />
-            <span
-              onClick={() => document.getElementById("fileUploadJSON")?.click()}
-            >
-              JSON
+              }}
+              style={{ display: "none" }}
+              id="fileUploadDocx"
+            />
+            <span onClick={handleSave}>
+              <RefreshCcw className={loading ? "spinner" : ""} />
             </span>
-            <div>/</div>
-            <span
-              onClick={() => document.getElementById("fileUploadDocx")?.click()}
-            >
-              docx
+            <div className="save-upload">
+              <FileUp />
+              <span
+                onClick={() =>
+                  document.getElementById("fileUploadJSON")?.click()
+                }
+              >
+                JSON
+              </span>
+              <div>/</div>
+              <span
+                onClick={() =>
+                  document.getElementById("fileUploadDocx")?.click()
+                }
+              >
+                docx
+              </span>
+            </div>
+            <div className="save-upload">
+              <FileDown />
+              <span
+                onClick={() => {
+                  saveJSON(docTitle);
+                }}
+              >
+                JSON
+              </span>
+              <div>/</div>
+              <span
+                onClick={() => {
+                  saveDocx(docTitle);
+                }}
+              >
+                docx
+              </span>
+            </div>
+            <span>
+              <Undo />
+            </span>
+            <span>
+              <Redo />
+            </span>
+            <span>
+              <Copy />
+            </span>
+            <span>
+              {" "}
+              <Scissors />
+            </span>
+            <span>
+              <ClipboardPaste />
+            </span>
+            <span className="icon" onClick={() => setIsSearchVisible(true)}>
+              <Share2 />
             </span>
           </div>
-          <div className="save-upload">
-            <FileDown />
-            <span
-              onClick={() => {
-                saveJSON(docTitle);
-              }}
-            >
-              JSON
-            </span>
-            <div>/</div>
-            <span
-              onClick={() => {
-                saveDocx(docTitle);
-              }}
-            >
-              docx
-            </span>
-          </div>
-          <span>
-            <Undo />
-          </span>
-          <span>
-            <Redo />
-          </span>
-          <span>
-            <Copy />
-          </span>
-          <span>
-            {" "}
-            <Scissors />
-          </span>
-          <span>
-            <ClipboardPaste />
-          </span>
-          <span className="icon" onClick={() => setIsSearchVisible(true)}>
-            <Share2 />
-          </span>
-        </div>
-      </nav>
+        </nav>
+      </div>
     </>
   );
 }
