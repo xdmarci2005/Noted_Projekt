@@ -16,8 +16,8 @@ export default function Note() {
   const noteId = location.state?.id;
   const noteName = location.state?.name;
 
-  
 
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
   
 
   const editor = useEditor({
@@ -35,8 +35,7 @@ export default function Note() {
     ],
     editorProps: {
       attributes: {
-        class: "min-h-[156px] border rounded-md bg-slate-50 py-2 px-3 ",
-        style: "z-index: -1;", // Added negative z-index
+        class: "min-h-[156px] border rounded-md bg-slate-50 py-2 px-3 ", // Added negative z-index
       },
     },
     autofocus: true,
@@ -44,9 +43,15 @@ export default function Note() {
 
   return (
     <div className="notePage">
-      <Navbar editor={editor} docName={noteName} noteId={noteId}/>
+      <Navbar
+        editor={editor}
+        docName={noteName}
+        noteId={noteId}
+        isSearchVisible={isSearchVisible} 
+        setIsSearchVisible={setIsSearchVisible}
+      />
       <MenuBar editor={editor} />
-      <div className="editor">
+      <div className={isSearchVisible ? "my-editor" : ""}>
         <EditorContent editor={editor} />
       </div>
     </div>

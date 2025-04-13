@@ -26,10 +26,14 @@ export default function Navbar({
   editor,
   docName,
   noteId,
+  isSearchVisible,
+  setIsSearchVisible,
 }: {
   editor: any;
   docName: string;
   noteId: string;
+  isSearchVisible: boolean;
+  setIsSearchVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   if (!editor) {
     return null;
@@ -50,7 +54,7 @@ export default function Navbar({
 
   const [loading, setLoading] = useState(false);
 
-  const [isSearchVisible, setIsSearchVisible] = useState(false);
+  
 
   const saveJSON = (filename: string) => {
     const jsonContent = editor.getJSON();

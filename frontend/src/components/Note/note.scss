@@ -16,3 +16,8 @@
 .input-disabled {
   pointer-events: none;
 }
+
+.my-editor {
+  position: relative;
+  z-index: -1;
+}
