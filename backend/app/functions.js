@@ -1,4 +1,15 @@
-export class Functions{
+import * as fs from "fs"
+import dotenv from 'dotenv';
+dotenv.config()
+export class Functions {
+  static cleanUpFile(JegyzetNev) {
+    fs.unlink(process.cwd() + process.env.UPLOAD_DIR_NAME + JegyzetNev, (err) => {
+      if (err) {
+        console.error(`Hiba a fájl törlésekor: ${err}`);
+        return;
+      }
+    })
+  }
 
   static checkEmail(email) {
     let message = "";
@@ -21,7 +32,7 @@ export class Functions{
     return false;
   }
 
-  static IsPasswordValid(Password){
+  static IsPasswordValid(Password) {
     let message = "";
     if (Password.length < 8) {
       message = "A jelszó túl rövid (minimun 8 karakter)!";
@@ -31,14 +42,14 @@ export class Functions{
     }
     else if (!(/[A-Z]/.test(Password))) {
       message = "A jelszónak tartalmaznia kell nagy betűt!";
-    } 
+    }
     return message;
   }
 
-  static IsUsernameValid(Username){
+  static IsUsernameValid(Username) {
     let message = "";
     if (Username.length < 5) {
-      message = "túl rövid a felhasználó név (minimun 5 karakter)!" 
+      message = "túl rövid a felhasználó név (minimun 5 karakter)!"
     }
     return message;
   }

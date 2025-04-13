@@ -1,13 +1,14 @@
 import mysqlP from 'mysql2/promise';
 import { User } from '../user/user.js';
 import dbConfig from '../app/config.js';
-import {Notes} from './Notes.js';
+import { Notes } from './Notes.js';
 import { Shared } from '../Shares/Share.js';
 import dotenv from 'dotenv';
 import * as fs from "fs"
-import {uploadFile} from './upload.js';
+import { uploadFile } from './upload.js';
 import { GroupMembers } from '../GroupMembers/GroupMember.js';
 import { Group } from '../groups/Group.js';
+import { Functions } from '../app/functions.js';
 dotenv.config();
 
 export async function getNotesFromToken(req, res) {
@@ -38,7 +39,7 @@ export async function getNotesFromToken(req, res) {
 }
 
 export async function saveNoteWithToken(req, res) {
-    await uploadFile(req, res); 
+    await uploadFile(req, res);
     const { Lathatosag } = req.body;
     const JegyzetNeve = req.file.filename;
 
@@ -48,43 +49,65 @@ export async function saveNoteWithToken(req, res) {
     }
 
     const conn = await mysqlP.createConnection(dbConfig);
-    try {
+
+    try 
+    {
         let rows = undefined;
-        if(req.params.JegyzetId === 'undefined') {
-            req.params.JegyzetId = undefined;
+        let JegyzetId = req.params.JegyzetId;
+        if (JegyzetId === 'undefined') {
+            JegyzetId = undefined;
         }
-        if(req.params.JegyzetId !== undefined) {
-            let OldNote = await Notes.loadDataFromDB(req.params.JegyzetId);
+
+        if (JegyzetId !== undefined) 
+        {
+            let NewNoteName = req.file.filename;
+            let OldNote = await Notes.loadDataFromDB(JegyzetId);
             if (!OldNote) {
                 res.status(404).send({ error: "A jegyzet nem található" });
+                Functions.cleanUpFile(NewNoteName);
                 return;
             }
-            fs.unlink(process.cwd() + process.env.UPLOAD_DIR_NAME + OldNote.JegyzetNeve, (err) => {
-                if (err) {
-                  console.error(`Hiba a fájl cseréjekor: ${err}`);
-                  return;
+
+            let Share = await Shared.CheckIfNoteIsSharedWithUser(JegyzetId, res.decodedToken.UserId);
+            if (Share !== undefined && OldNote.Feltolto != res.decodedToken.UserId) {
+                if (!Share.Jogosultsag.includes('W')) {
+                    res.status(401).send({ error: 'Nincs joga frissíteni ezt a jegyzetet.' })
+                    Functions.cleanUpFile(NewNoteName);
+                    return;
                 }
-            })
+            }
+
+            Functions.cleanUpFile(OldNote.JegyzetNeve);
             let NewNote = OldNote;
             Object.assign(NewNote, req.body);
             [rows] = await conn.execute(
                 'UPDATE Jegyzetek SET JegyzetNeve = ?, Lathatosag = ?, UtolsoFrissites = CURRENT_TIMESTAMP, UtolsoFrissito = ? WHERE JegyzetId = ?',
-                [JegyzetNeve, NewNote.Lathatosag, res.decodedToken.UserId, req.params.JegyzetId]
+                [JegyzetNeve, NewNote.Lathatosag, res.decodedToken.UserId, JegyzetId]
             );
         }
-        else{
+        else 
+        {
             [rows] = await conn.execute(
                 'INSERT INTO Jegyzetek (Feltolto, Lathatosag, JegyzetNeve, UtolsoFrissito) VALUES (?, ?, ?, ?)',
                 [res.decodedToken.UserId, Lathatosag, JegyzetNeve, res.decodedToken.UserId]
             );
         }
-        if(rows.affectedRows === 0) {
+
+        if (rows.affectedRows === 0) 
+        {
             res.status(500).send({ error: "Hiba a jegyzet mentésekor" });
             return;
-        }        
-        res.status(201).send({ success: "Jegyzet sikeresn mentve", id: req.params.JegyzetId ?? rows.insertId });    
-    } catch (err) {
-        switch (err.errno) {
+        }
+        res.status(201).send({ success: "Jegyzet sikeresn mentve", id: JegyzetId ?? rows.insertId });
+    } 
+    catch (err) 
+    {
+        if (req.file) 
+        {
+            Functions.cleanUpFile(req.file.filename);
+        }
+        switch (err.errno) 
+        {
             case 1045:
                 res.status(500).send({ error: "Hiba a csatlakozáskor nem megfelelő adatbázis jelszó" });
                 break;
@@ -92,7 +115,9 @@ export async function saveNoteWithToken(req, res) {
                 res.status(500).send({ error: "Hiba a jegyzet mentésekor: " + err });
                 break;
         }
-    } finally {
+    } 
+    finally 
+    {
         conn.end();
     }
 }
@@ -116,13 +141,13 @@ export async function getNoteById(req, res) {
             res.status(401).send({ error: "Fiókja blokkolva van" })
             return
         }
-        let DoesUserHaveAccess = await Shared.CheckIfNoteIsSharedWithUser(JegyzetId,res.decodedToken.UserId);
+        let DoesUserHaveAccess = await Shared.CheckIfNoteIsSharedWithUser(JegyzetId, res.decodedToken.UserId);
 
         let UserGroups = await GroupMembers.GetGroupsByMemberId(res.decodedToken.UserId);
-        if(UserGroups !== undefined){
-            for(const Group of UserGroups){
-                let Access = await Shared.CheckIfNoteIsSharedWithGroup(JegyzetId,Group.CsoportId);   
-                if(Access !== undefined){
+        if (UserGroups !== undefined) {
+            for (const Group of UserGroups) {
+                let Access = await Shared.CheckIfNoteIsSharedWithGroup(JegyzetId, Group.CsoportId);
+                if (Access !== undefined) {
                     DoesUserHaveAccess = true;
                 }
             }
@@ -138,12 +163,12 @@ export async function getNoteById(req, res) {
             return;
         }
         const uploadDir = process.env.UPLOAD_DIR_NAME || 'Notes/uploads/';
-        const filePath = process.cwd() +  uploadDir + Note.JegyzetNeve;
+        const filePath = process.cwd() + uploadDir + Note.JegyzetNeve;
         res.sendFile(filePath, (err) => {
             if (err) {
                 res.status(500).send({ error: "Hiba a fájl lekérdezésekor: " + err });
             }
-         })  
+        })
     } catch (err) {
         switch (err.errno) {
             case 1045:
@@ -172,8 +197,8 @@ export async function deleteNoteById(req, res) {
             res.status(404).send({ error: "A jegyzet nem található" });
             return;
         }
-        
-        if(Note.Feltolto != res.decodedToken.UserId && deletingUser.JogosultsagId < 3) {
+
+        if (Note.Feltolto != res.decodedToken.UserId && deletingUser.JogosultsagId < 3) {
             res.status(401).send({ error: "Nincs jogosultsága törölni ezt a jegyzetet." });
             return;
         }
@@ -185,8 +210,8 @@ export async function deleteNoteById(req, res) {
         }
         fs.unlink(process.cwd() + process.env.UPLOAD_DIR_NAME + Note.JegyzetNeve, (err) => {
             if (err) {
-              console.error(`Error removing file: ${err}`);
-              return;
+                console.error(`Error removing file: ${err}`);
+                return;
             }
         })
         res.status(200).send({ success: "Jegyzet törölve" });
@@ -233,11 +258,11 @@ export async function getPublicNotesByName(req, res) {
     }
     catch (err) {
         switch (err.errno) {
-            case 1045: 
+            case 1045:
                 res.status(500).send({ error: "Nem megfelelő az adatbázis jelszó." });
                 break;
-            default: 
-                res.status(500).send({ error: "Hiba az adatok lekérdezésekor: " + err }); 
+            default:
+                res.status(500).send({ error: "Hiba az adatok lekérdezésekor: " + err });
                 break;
         }
         return
