@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Plus, User } from "lucide-react";
+import { useAuth } from "../../AuthContext";
 
 import "./home.scss";
 import logoImg from "../../assets/logo_main.png";
@@ -19,7 +20,12 @@ const Home = () => {
   const [sharedNotes, setSharedNotes] = useState([]);
   const [modalMessage, setModalMessage] = useState("");
 
+  const [backHover, setBackHover] = useState(false);
+  const [profileHover, setProfileHover] = useState(false);
+
+  const { logout } = useAuth();
   const token = localStorage.getItem("token");
+
   const getNotes = async () => {
     if (token) {
       await fetch("http://localhost:3000/getNotes", {
@@ -27,8 +33,8 @@ const Home = () => {
         headers: new Headers({
           "Content-Type": "application/json",
           Accept: "application/json",
-          "x-access-token": token
-        })
+          "x-access-token": token,
+        }),
       })
         .then((response) => response.json())
         .then((data) => {
@@ -38,29 +44,34 @@ const Home = () => {
     }
   };
 
-  const getSharedWithNotes = async () =>{
-    if(token){
-      fetch('http://localhost:3000/sharedWithUser', {
-        method:'GET',
+  const getSharedWithNotes = async () => {
+    if (token) {
+      fetch("http://localhost:3000/sharedWithUser", {
+        method: "GET",
         headers: new Headers({
           "Content-Type": "application/json",
-          "Accept": "application/json",
-          "x-access-token":token
-        })
+          Accept: "application/json",
+          "x-access-token": token,
+        }),
       })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        setSharedNotes(data.data)
-      });
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          setSharedNotes(data.data);
+        });
     }
-  }
+  };
+
+  const backToMain = () => {
+    localStorage.removeItem("token");
+    logout();
+    navigate("/");
+  };
 
   useEffect(() => {
     if (notes) {
-      
       setContent(
-        notes.map((n : any) => {
+        notes.map((n: any) => {
           const tmpjegyzetnev = n.JegyzetNeve;
           const jegyzetnev = tmpjegyzetnev.substring(
             tmpjegyzetnev.indexOf("_") + 1
@@ -69,18 +80,22 @@ const Home = () => {
             <span
               className="note-item"
               key={n.JegyzetId}
-              onClick={() => navigate("/note/", { state: { id: n.JegyzetId, name: jegyzetnev } })}
+              onClick={() =>
+                navigate("/note/", {
+                  state: { id: n.JegyzetId, name: jegyzetnev },
+                })
+              }
             >
               {jegyzetnev}
             </span>
           );
         })
-        
       );
-    }
-    else {
+    } else {
       setContent(
-        <p className="empty-msg">{"Üres, mint egy új kezdet. Jegyzetelj valamit!"}</p>
+        <p className="empty-msg">
+          {"Üres, mint egy új kezdet. Jegyzetelj valamit!"}
+        </p>
       );
     }
   }, [notes]);
@@ -88,7 +103,7 @@ const Home = () => {
   useEffect(() => {
     if (sharedNotes) {
       setSharedContent(
-        sharedNotes.map((n : any) => {
+        sharedNotes.map((n: any) => {
           const tmpjegyzetnev = n.JegyzetNeve;
           const jegyzetnev = tmpjegyzetnev.substring(
             tmpjegyzetnev.indexOf("_") + 1
@@ -97,18 +112,24 @@ const Home = () => {
             <span
               className="note-item"
               key={n.JegyzetId}
-              onClick={() => navigate("/note/", { state: { id: n.JegyzetId, name: jegyzetnev } })}
+              onClick={() =>
+                navigate("/note/", {
+                  state: { id: n.JegyzetId, name: jegyzetnev },
+                })
+              }
             >
               {jegyzetnev}
             </span>
           );
         })
-        
       );
-    }
-    else {
+    } else {
       setSharedContent(
-        <p className="empty-msg">{"Úgy tűnik, itt még senki nem osztott meg semmit... Kezdjétek el közösen!"}</p>
+        <p className="empty-msg">
+          {
+            "Úgy tűnik, itt még senki nem osztott meg semmit... Kezdjétek el közösen!"
+          }
+        </p>
       );
     }
   }, [sharedNotes]);
@@ -180,7 +201,7 @@ const Home = () => {
 
   useEffect(showGroups, []);
 
-  const clickGroupItem = (id:any, name:any) => {
+  const clickGroupItem = (id: any, name: any) => {
     navigate("/group", { state: { id: id, name: name } });
   };
 
@@ -211,15 +232,35 @@ const Home = () => {
         <div className="top-bar">
           <div></div>
           <div>
-            <span className="center">
-              <img src={logoImg} className="logo" alt="Vissza a főoldalra" />
+            <div className="center">
+              <span className={`Backtooltip ${backHover ? "onHover" : ""}`}>
+                Vissza a főoldalra
+              </span>
+              <img
+                src={logoImg}
+                className="logo"
+                alt="Vissza a főoldalra"
+                onClick={backToMain}
+                onMouseEnter={() => setBackHover(true)}
+                onMouseLeave={() => setBackHover(false)}
+              />
+
               <h1>Noted.</h1>
+            </div>
+          </div>
+          <div className="profile">
+            <span className={`profil-tooltip ${profileHover ? "onHover" : ""}`}>
+              Profil szerkeztése
+            </span>
+            <span
+              onClick={checkProfile}
+              className="profile-icon"
+              onMouseEnter={() => setProfileHover(true)}
+              onMouseLeave={() => setProfileHover(false)}
+            >
+              <User />
             </span>
           </div>
-          <span onClick={checkProfile}>
-            {" "}
-            <User />
-          </span>
         </div>
         <div className="main-container">
           <div className="content">

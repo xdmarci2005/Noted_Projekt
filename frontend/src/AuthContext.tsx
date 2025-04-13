@@ -1,15 +1,19 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
-const AuthContext = createContext();
+const AuthContext = createContext({
+  user: null,
+  login: (role: string) => {},
+  logout: () => {},
+});
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children }: {children: any}) => {
   const [user, setUser] = useState(() => {
     // Load from localStorage (if exists) on page refresh
     const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
   });
 
-  const login = (role) => {
+  const login = (role:any) => {
     const userData = { isAuthenticated: true, role };
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData)); // ✅ Save to localStorage
