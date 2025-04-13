@@ -13,7 +13,7 @@ export async function getSharedWithUserNotesFromToken(req, res) {
     }
     const conn = await mysqlP.createConnection(dbConfig);
     try {
-        const [rows] = await conn.execute('Select `Jegyzetek`.`JegyzetId`,`JegyzetNeve`,`MegosztottFelhId`,`Jogosultsag` from `Jegyzetek`' +
+        const [rows] = await conn.execute('Select `MegosztasId`, `Jegyzetek`.`JegyzetId`,`JegyzetNeve`,`MegosztottFelhId`,`Jogosultsag` from `Jegyzetek`' +
             ' INNER JOIN `Megosztas` ON `Jegyzetek`.`JegyzetId` = `Megosztas`.`JegyzetId` WHERE `Megosztas`.`MegosztottFelhId` = ?', [res.decodedToken.UserId]);
         if (rows.length === 0) {
             res.status(400).send({ error: "Nincsenek jegyzetek" });
@@ -43,7 +43,7 @@ export async function getSharedWithGroupNotesFromToken(req, res) {
     }
     const conn = await mysqlP.createConnection(dbConfig);
     try {
-        const [rows] = await conn.execute('Select `Jegyzetek`.`JegyzetId`,`JegyzetNeve`,`MegosztottCsopId`,`Jogosultsag` from `Jegyzetek`' +
+        const [rows] = await conn.execute('Select `MegosztasId`, `Jegyzetek`.`JegyzetId`,`JegyzetNeve`,`MegosztottCsopId`,`Jogosultsag` from `Jegyzetek`' +
             ' INNER JOIN `Megosztas` ON `Jegyzetek`.`JegyzetId` = `Megosztas`.`JegyzetId` WHERE `MegosztottCsopId` = ?', [req.params.MegosztottCsopId]);
         if (rows.length === 0) {
             res.status(400).send({ error: "Nincsenek jegyzetek" });
