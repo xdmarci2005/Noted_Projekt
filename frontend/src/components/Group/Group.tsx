@@ -3,7 +3,7 @@ import "./group.scss";
 import { useEffect, useState } from "react";
 import { ArrowLeft, Plus, Trash2 } from "lucide-react";
 
-import SearchOverlay from "../Groups/SearchOverlay/SearchOverlay";
+import SearchOverlay from "./SearchOverlay/SearchOverlay";
 import CustomModal from "../home/NewGroup/Modal/Modal";
 
 export default function Group() {
@@ -34,7 +34,7 @@ export default function Group() {
   function handleModalClose() {
     if (currentModal == "note") {
     } else if (currentModal == "user") {
-      removeUser()
+      removeUser();
     } else {
       console.log("Error: miafasz");
     }
@@ -56,11 +56,7 @@ export default function Group() {
         .then((data) => console.log(data));
   }
 
-  async function removeNote() {
-    
-  }
-
-  useEffect(() => {
+  function getGroupMembers() {
     if (token) {
       fetch(`http://localhost:3000/GroupMembers/${groupId}`, {
         method: "GET",
@@ -95,7 +91,16 @@ export default function Group() {
           setNotes(data.data);
         });
     }
+  }
+
+  useEffect(() => {
+    getGroupMembers();
   }, [groupId]);
+
+  async function closeSearch() {
+    getGroupMembers();
+    setIsSearchVisible(false);
+  }
 
   useEffect(() => {
     if (notes) {
@@ -149,7 +154,7 @@ export default function Group() {
       />
       <SearchOverlay
         visible={isSearchVisible}
-        onClose={() => setIsSearchVisible(false)}
+        onClose={() => closeSearch()}
         groupId={groupId}
       />
       <div className="top-bar">
@@ -165,6 +170,9 @@ export default function Group() {
           className="add"
           onMouseEnter={() => setAddHover(true)}
           onMouseLeave={() => setAddHover(false)}
+          onClick={() => {
+            setIsSearchVisible(true);
+          }}
         >
           <Plus />
         </span>

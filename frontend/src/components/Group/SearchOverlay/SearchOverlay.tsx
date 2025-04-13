@@ -24,6 +24,7 @@ export default function SearchOverlay({
 
   function handleModalClose() {
     setShowModal(false);
+    
   }
   function handleModalOpen({ message }: { message: string }) {
     setModalMessage(message);
@@ -44,7 +45,7 @@ export default function SearchOverlay({
           Accept: "application/json",
           "x-access-token": token,
         }),
-        body: JSON.stringify({ CsoportId: 9, TagId: 9, JogosultsagId: 2 }),
+        body: JSON.stringify({ CsoportId: groupId, TagId: userId, JogosultsagId: 2 }),
       })
         .then((response) => response.json())
         .then((data) => {
@@ -93,9 +94,15 @@ export default function SearchOverlay({
 
   return (
     <>
+    <CustomModal
+    onClose={handleModalClose}
+    message={modalMessage}
+    title="Noted."
+    show={showModal}
+    />
       <div className="overlay">
         <div className="search-box">
-          <h2>Megosztás</h2>
+          <h3>Ember Hozzáadása</h3>
           <div className="search-container">
             <input
               type="text"
