@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, Plus, Trash2 } from "lucide-react";
 
 import SearchOverlay from "./SearchOverlay/SearchOverlay";
-import CustomModal from "../home/NewGroup/Modal/Modal";
+import CustomModal from "./DeleteModal/DeleteModal";
 
 export default function Group() {
   const token = localStorage.getItem("token");
@@ -33,6 +33,7 @@ export default function Group() {
 
   function handleModalClose() {
     if (currentModal == "note") {
+      removeNote();
     } else if (currentModal == "user") {
       removeUser();
     } else {
@@ -50,7 +51,25 @@ export default function Group() {
           Accept: "application/json",
           "x-access-token": token,
         }),
-        body: JSON.stringify({ CsoportId: groupId, TagId: 1 }),
+        body: JSON.stringify({ CsoportId: groupId, TagId: user.TagId }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          getGroupMembers();
+        });
+  }
+
+  async function removeNote() {
+    if (token)
+      fetch(`http://localhost:3000/deleteShare/${note.MegosztasId}`, {
+        method: "DELETE",
+        headers: new Headers({
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "x-access-token": token,
+        }),
+        body: JSON.stringify({}),
       })
         .then((response) => response.json())
         .then((data) => console.log(data));
@@ -150,7 +169,10 @@ export default function Group() {
         show={showModal}
         title="Noted."
         message={modalMessage}
-        onClose={() => handleModalClose()}
+        onYes={() => handleModalClose()}
+        OnNo={() => {
+          setShowModal(false);
+        }}
       />
       <SearchOverlay
         visible={isSearchVisible}

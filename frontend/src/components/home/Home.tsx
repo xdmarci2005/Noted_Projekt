@@ -7,7 +7,7 @@ import "./home.scss";
 import logoImg from "../../assets/logo_main.png";
 
 import NewGroup from "./NewGroup/NewGroup";
-import Modal from "./NewGroup/Modal/Modal";
+import Modal from "../Modal/Modal";
 
 const Home = () => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);

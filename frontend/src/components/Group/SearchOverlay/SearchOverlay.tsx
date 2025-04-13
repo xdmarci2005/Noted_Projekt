@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./SearchOverlay.scss";
 import { Search } from "lucide-react";
 import { Plus } from "lucide-react";
-import CustomModal from "../../home/NewGroup/Modal/Modal";
+import CustomModal from "../Modal/Modal";
 
 export default function SearchOverlay({
   visible,
@@ -24,7 +24,6 @@ export default function SearchOverlay({
 
   function handleModalClose() {
     setShowModal(false);
-    
   }
   function handleModalOpen({ message }: { message: string }) {
     setModalMessage(message);
@@ -45,7 +44,11 @@ export default function SearchOverlay({
           Accept: "application/json",
           "x-access-token": token,
         }),
-        body: JSON.stringify({ CsoportId: groupId, TagId: userId, JogosultsagId: 2 }),
+        body: JSON.stringify({
+          CsoportId: groupId,
+          TagId: userId,
+          JogosultsagId: 2,
+        }),
       })
         .then((response) => response.json())
         .then((data) => {
@@ -94,12 +97,12 @@ export default function SearchOverlay({
 
   return (
     <>
-    <CustomModal
-    onClose={handleModalClose}
-    message={modalMessage}
-    title="Noted."
-    show={showModal}
-    />
+      <CustomModal
+        onClose={handleModalClose}
+        message={modalMessage}
+        title="Noted."
+        show={showModal}
+      />
       <div className="overlay">
         <div className="search-box">
           <h3>Ember Hozzáadása</h3>

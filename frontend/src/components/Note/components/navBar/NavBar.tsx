@@ -20,7 +20,7 @@ import logoImg from "../logo_main.png";
 import Mammoth from "mammoth";
 
 import SearchOverlay from "./SearchOverlay/SearchOverlay";
-import CustomModal from "../../../home/NewGroup/Modal/Modal";
+import CustomModal from "../Modal/Modal";
 
 export default function Navbar({
   editor,

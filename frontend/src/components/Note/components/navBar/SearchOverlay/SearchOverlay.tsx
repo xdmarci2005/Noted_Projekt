@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./SearchOverlay.scss";
 import { Search } from "lucide-react";
 import { Plus } from "lucide-react";
-import CustomModal from "../../../../home/NewGroup/Modal/Modal";
+import CustomModal from "../../Modal/Modal";
 
 export default function SearchOverlay({
   visible,
