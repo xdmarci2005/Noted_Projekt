@@ -5,7 +5,7 @@ import { ArrowLeft, Plus, Trash2, Pen } from "lucide-react";
 
 import SearchOverlay from "./SearchOverlay/SearchOverlay";
 import CustomModal from "./DeleteModal/DeleteModal";
-import EditModal from "../Shares/Modal/Modal"
+import EditModal from "./EditModal/Modal"
 
 export default function Group() {
   
@@ -29,8 +29,8 @@ export default function Group() {
 
   const [modalMessage, setModalMessage] = useState("");
 
-  const [user, setUser] = useState({});
-  const [note, setNote] = useState({});
+  const [user, setUser] = useState<any>();
+  const [note, setNote] = useState<any>();
 
   const location = useLocation();
   const groupId = location.state?.id;
@@ -152,6 +152,7 @@ export default function Group() {
                   onClick={() => {
                     setModalMessage(`${jegyzetnev} megosztásának szerkeztése`);
                     setNote(note);
+                    setUser(null);
                     setShowEditModal(true);
                   }}
                 >
@@ -197,14 +198,12 @@ export default function Group() {
         message={modalMessage}
         onYes={() => {
           setShowEditModal(false);
-          setShowModal(true);
           setModalMessage("Sikeres Frissítés");
         }}
         onNo={() => {
           setShowEditModal(false);
         }}
         note={note}
-        user={user}
       />
       <SearchOverlay
         visible={isSearchVisible}
@@ -254,7 +253,8 @@ export default function Group() {
                         setModalMessage(
                           `${user.FelhasznaloNev} megosztásának szerkeztése`
                         );
-                        setNote(note);
+                        setUser(user);
+                        setNote(null);
                         setShowEditModal(true);
                       }}
                     >

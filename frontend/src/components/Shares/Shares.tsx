@@ -33,8 +33,7 @@ export default function Group() {
   const groupName = location.state?.name;
 
   function handleModalClose() {
-    if (modalFunction == "removeNote") removeNote();
-    if (modalFunction == "editPerm") handleEditPerm();
+    removeNote();
     setShowModal(false);
   }
 
@@ -147,7 +146,6 @@ export default function Group() {
                     `Biztosan törli a(z) ${jegyzetnev} nevű felhasználót? `
                   );
                   setNote(note);
-
                   setShowModal(true);
                 }}
               >
