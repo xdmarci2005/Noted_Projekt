@@ -204,7 +204,6 @@ export async function updateUserByIdAdmin(req, res) {
         }
         
         let user = olduser
-        
         if(req.body.Jelszo !== undefined){
             let IsPasswordValid = Functions.IsPasswordValid(req.body.Jelszo)
             if (IsPasswordValid != "") {
@@ -220,6 +219,7 @@ export async function updateUserByIdAdmin(req, res) {
                 res.status(400).send({ error: IsUsernameValid })
                 return
             }
+            user.FelhasznaloNev = req.body.FelhasznaloNev
         }
 
         if(req.body.Email !== undefined){
@@ -228,6 +228,7 @@ export async function updateUserByIdAdmin(req, res) {
                 res.status(400).send({ error: IsEmailValid })
                 return
             }
+            user.Email = req.body.Email;
         }
 
         if(user.FelhasznaloId == res.decodedToken.UserId){
@@ -240,7 +241,7 @@ export async function updateUserByIdAdmin(req, res) {
             return  
         }
 
-        Object.assign(user, req.body)
+        Object.assign(user,req.body)
         const [rows3] = await conn.execute('Update Felhasznalok set FelhasznaloNev =?,Email=?, Jelszo=?, JogosultsagId=?, Statusz=? where FelhasznaloId = ?', [user.FelhasznaloNev, user.Email, user.Jelszo, user.JogosultsagId, user.statusz, req.params.UserId])
         user.Jelszo = undefined
         if (rows3.affectedRows > 0) {

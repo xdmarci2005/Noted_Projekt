@@ -16,6 +16,10 @@ export class Functions {
     if (!(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g).test(email)) {
       message = "Nem megfelelő a email formátuma!";
     }
+    else if(email == '')
+      {
+        message = 'Adj meg egy email címet.'
+      }
     return message;
   }
 
@@ -43,6 +47,10 @@ export class Functions {
     else if (!(/[A-Z]/.test(Password))) {
       message = "A jelszónak tartalmaznia kell nagy betűt!";
     }
+    else if(Password == '')
+      {
+        message = 'Adj meg egy jelszavat.'
+      }
     return message;
   }
 
@@ -51,6 +59,10 @@ export class Functions {
     if (Username.length < 5) {
       message = "túl rövid a felhasználó név (minimun 5 karakter)!"
     }
+    else if(Username == '')
+      {
+        message = 'Adj meg egy felhasználó nevet.'
+      }
     return message;
   }
 }
