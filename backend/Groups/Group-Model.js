@@ -238,7 +238,8 @@ export async function getGroupMembersByGroupId(req,res){
             res.status(400).send({error: "Nincs engedélye ehhez a művelethez."});
             return;
         }
-        const [rows] = await conn.execute("SELECT `TagId`,`CsoportId`,`FelhasznaloNev` from `Felhasznalok` INNER JOIN `CsoportTagok` ON `FelhasznaloId` = `TagId` WHERE `CsoportId` = ? AND TagId != ?;",[req.params.GroupId,res.decodedToken.UserId]);
+        const [rows] = await conn.execute("SELECT `TagId`,`CsoportId`,CsoportTagok.`JogosultsagId`,`FelhasznaloNev` from `Felhasznalok` INNER JOIN `CsoportTagok` ON `FelhasznaloId` = `TagId` WHERE `CsoportId` = ? AND TagId != ?",[req.params.GroupId,res.decodedToken.UserId]);
+        console.log(rows)
         if(rows.length != 0){
             res.status(200).send({success: "Sikeres lekérdezés",data: [rows][0]})
             return;
