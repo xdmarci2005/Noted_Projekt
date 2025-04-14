@@ -167,7 +167,7 @@ fetch('http://localhost:3000/newShare', {
   body:JSON.stringify({"JegyzetId":1,"MegosztottFelhId":null,"MegosztottCsopId":9,"Jogosultsag":"R"})
 }).then(response => response.json()).then(data => console.log(data))
 
-fetch('http://localhost:3000/updateShare/1', {
+fetch('http://localhost:3000/updateShare/1', { 
   method:'PUT',headers: new Headers(
       {"Content-Type": "application/json",
           "Accept": "application/json",

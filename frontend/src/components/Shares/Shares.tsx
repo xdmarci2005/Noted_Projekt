@@ -1,9 +1,10 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import "./shares.scss";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Trash2 } from "lucide-react";
+import { ArrowLeft, Trash2, Pen } from "lucide-react";
 
 import CustomModal from "../Group/DeleteModal/DeleteModal";
+import EditModal from "./Modal/Modal";
 
 export default function Group() {
   const token = localStorage.getItem("token");
@@ -18,10 +19,10 @@ export default function Group() {
   const [addHover, setAddHover] = useState(false);
   const [backHover, setBackHover] = useState(false);
 
-  const [isSearchVisible, setIsSearchVisible] = useState(false);
-
   const [showModal, setShowModal] = useState(false);
-  const [currentModal, setCurrentModal] = useState("");
+  const [showEditModal, setShowEditModal] = useState(false);
+
+  const [modalFunction, setModalFunction] = useState("");
 
   const [modalMessage, setModalMessage] = useState("");
 
@@ -32,9 +33,12 @@ export default function Group() {
   const groupName = location.state?.name;
 
   function handleModalClose() {
-    removeNote();
+    if (modalFunction == "removeNote") removeNote();
+    if (modalFunction == "editPerm") handleEditPerm();
     setShowModal(false);
   }
+
+  function handleEditPerm() {}
 
   function fetchShares() {
     if (token) {
@@ -48,7 +52,11 @@ export default function Group() {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data)
+          console.log(data);
+          if (data.error) {
+            return;
+          }
+
           setSharedWithGroups(data.GroupShares);
           setSharedWithUsers(data.UserShares);
         })
@@ -67,23 +75,36 @@ export default function Group() {
           tmpjegyzetnev.indexOf("_") + 1
         );
         return (
-          <span className="member-item" key={index}>
+          <span className="note-item" key={index}>
             <span className="text">
               <span className="name">{jegyzetnev}</span>
               <span>({note.FelhasznaloNev})</span>
             </span>
-            <span
-              className="delete"
-              onClick={() => {
-                setModalMessage(
-                  `Biztosan törli a(z) ${jegyzetnev} nevű felhasználót? `
-                );
-                setNote(note);
-                setCurrentModal("user");
-                setShowModal(true);
-              }}
-            >
-              <Trash2 />
+            <span className="actions">
+              <span
+                className="edit"
+                onClick={() => {
+                  setModalMessage(`${jegyzetnev} megosztásának szerkeztése`);
+                  setNote(note);
+                  setModalFunction("editPerm");
+                  setShowEditModal(true);
+                }}
+              >
+                <Pen />
+              </span>
+              <span
+                className="delete"
+                onClick={() => {
+                  setModalMessage(
+                    `Biztosan törli a(z) ${jegyzetnev} nevű felhasználót? `
+                  );
+                  setNote(note);
+
+                  setShowModal(true);
+                }}
+              >
+                <Trash2 />
+              </span>
             </span>
           </span>
         );
@@ -102,7 +123,7 @@ export default function Group() {
           tmpjegyzetnev.indexOf("_") + 1
         );
         return (
-          <span className="member-item" key={index}>
+          <span className="note-item" key={index}>
             <span className="text">
               <span className="name">{jegyzetnev}</span>
               <span>({note.CsoportNev})</span>
@@ -111,10 +132,10 @@ export default function Group() {
               className="delete"
               onClick={() => {
                 setModalMessage(
-                  `Biztosan törli a(z) ${jegyzetnev} nevű felhasználót? `
+                  `Biztosan törli a(z) ${jegyzetnev} nevű jegyzetet? `
                 );
                 setNote(note);
-                setCurrentModal("user");
+
                 setShowModal(true);
               }}
             >
@@ -143,16 +164,12 @@ export default function Group() {
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
-          fetchShares()
+          fetchShares();
         });
   }
 
-  async function closeSearch() {
-    setIsSearchVisible(false);
-  }
-
   return (
-    <div className="group-site">
+    <div className="shares-site">
       <CustomModal
         show={showModal}
         title="Noted."
@@ -161,6 +178,20 @@ export default function Group() {
         OnNo={() => {
           setShowModal(false);
         }}
+      />
+      <EditModal
+        show={showEditModal}
+        title="Noted."
+        message={modalMessage}
+        onYes={() => {
+          setShowEditModal(false);
+          setShowModal(true);
+          setModalMessage("Sikeres Frissítés");
+        }}
+        onNo={() => {
+          setShowEditModal(false);
+        }}
+        note={note}
       />
       <div className="top-bar">
         <span

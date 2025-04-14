@@ -1,4 +1,4 @@
--- Active: 1728994525220@@127.0.0.1@3306@notesapp
+-- Active: 1744653728241@@127.0.0.1@3306@notesapp
 -- Create Database
 CREATE DATABASE NotesApp;
 

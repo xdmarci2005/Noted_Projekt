@@ -221,7 +221,7 @@ export default function Navbar({
           setShowSaveModal(false);
         }}
       />
-      <div className={isSearchVisible ? "navbar" : ""}>
+      <div className={isSearchVisible ? "hide" : ""}>
         <nav className="navbar-top">
           <div className="navbar-left">
             <span className="icon">

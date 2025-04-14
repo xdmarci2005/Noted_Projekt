@@ -17,8 +17,6 @@ export default function Note() {
   const noteName = location.state?.name;
   const permission = location.state?.permission;
 
-  console.log(permission);
-  console.log(noteId);
 
   const [isSearchVisible, setIsSearchVisible] = useState(false);
 
@@ -58,7 +56,7 @@ export default function Note() {
         editor={editor}
         styleName={`${permission == "R" ? "hide" : ""}`}
       />
-      <div className={`${permission == "R" ? "hide" : ""}`}>
+      <div className={(isSearchVisible ? "hide" : "") + (permission == "R" ? "hide" : "")}> 
         <EditorContent editor={editor} />
       </div>
     </div>
