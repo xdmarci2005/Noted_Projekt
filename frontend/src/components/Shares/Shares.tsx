@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import "./shares.scss";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Trash2 } from "lucide-react";
 
 import CustomModal from "../Group/DeleteModal/DeleteModal";
 
@@ -48,7 +48,7 @@ export default function Group() {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data.GroupShares);
+          console.log(data)
           setSharedWithGroups(data.GroupShares);
           setSharedWithUsers(data.UserShares);
         })
@@ -68,7 +68,10 @@ export default function Group() {
         );
         return (
           <span className="member-item" key={index}>
-            <span className="name">{jegyzetnev}</span>
+            <span className="text">
+              <span className="name">{jegyzetnev}</span>
+              <span>({note.FelhasznaloNev})</span>
+            </span>
             <span
               className="delete"
               onClick={() => {
@@ -100,7 +103,10 @@ export default function Group() {
         );
         return (
           <span className="member-item" key={index}>
-            <span className="name">{jegyzetnev}</span>
+            <span className="text">
+              <span className="name">{jegyzetnev}</span>
+              <span>({note.CsoportNev})</span>
+            </span>
             <span
               className="delete"
               onClick={() => {
