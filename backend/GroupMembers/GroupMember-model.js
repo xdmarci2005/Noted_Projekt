@@ -52,7 +52,7 @@ export async function addMemberToGroup(req, res) {
         if (!Moderator) {
             return res.status(404).json({ success: "Nem tagja a megadott csoportnak." });
         }
-        else if (Moderator.JogosultsagId < 2) {
+        else if (Moderator.JogosultsagId < 3) {
             return res.status(404).json({ error: "Nincs jogosultsága csoporttagokat felvenni." });
         }
         else if (2 < JogosultsagId) {
@@ -106,7 +106,7 @@ export async function updateGroupMember(req, res) {
         else if(UserToUpdate.TagId === Moderator.TagId){
             return res.status(404).json({ error: "Nem változtathatja meg a saját jogosultságait." });
         }
-        else if (Moderator.JogosultsagId < 2) {
+        else if (Moderator.JogosultsagId < 3) {
             return res.status(404).json({ error: "Nincs jogosultsága a csoporttagok adatait szerkezteni." });
         }
         else if (Moderator.JogosultsagId < UserToUpdate.JogosultsagId ){
@@ -151,7 +151,7 @@ export async function RemoveMember(req, res) {
         else if(!UserToUpdate){
             return res.status(404).json({ error: "A törlendő felhasználó nem tagja a megadott csoportnak." });
         }
-        else if (Moderator.JogosultsagId < 2) {
+        else if (Moderator.JogosultsagId < 3) {
             return res.status(404).json({ error: "Nincs jogosultsága a csoporttagot eltávolítani a csoportból." });
         }
         else if (Moderator.JogosultsagId < UserToUpdate.JogosultsagId ){
