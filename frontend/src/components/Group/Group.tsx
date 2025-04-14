@@ -1,19 +1,21 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import "./group.scss";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Pen } from "lucide-react";
 
 import SearchOverlay from "./SearchOverlay/SearchOverlay";
 import CustomModal from "./DeleteModal/DeleteModal";
+import EditModal from "../Shares/Modal/Modal"
 
 export default function Group() {
   
 
   const token = localStorage.getItem("token");
-  console.log(token);
   const [users, setUsers] = useState<any>();
   const [notes, setNotes] = useState<any>();
   const [content, setContent] = useState<any>();
+
+  const [showEditModal, setShowEditModal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -144,18 +146,30 @@ export default function Group() {
               >
                 {jegyzetnev}
               </span>
-              <span
-                className="delete"
-                onClick={() => {
-                  setNote(n);
-                  setModalMessage(
-                    `Biztosan törli a(z) ${jegyzetnev} nevű jegyzetet? `
-                  );
-                  setCurrentModal("note");
-                  setShowModal(true);
-                }}
-              >
-                <Trash2 />
+              <span className="actions">
+                <span
+                  className="edit"
+                  onClick={() => {
+                    setModalMessage(`${jegyzetnev} megosztásának szerkeztése`);
+                    setNote(note);
+                    setShowEditModal(true);
+                  }}
+                >
+                  <Pen />
+                </span>
+                <span
+                  className="delete"
+                  onClick={() => {
+                    setModalMessage(
+                      `Biztosan törli a(z) ${jegyzetnev} nevű felhasználót? `
+                    );
+                    setNote(note);
+
+                    setShowModal(true);
+                  }}
+                >
+                  <Trash2 />
+                </span>
               </span>
             </span>
           );
@@ -176,6 +190,21 @@ export default function Group() {
         OnNo={() => {
           setShowModal(false);
         }}
+      />
+      <EditModal
+        show={showEditModal}
+        title="Noted."
+        message={modalMessage}
+        onYes={() => {
+          setShowEditModal(false);
+          setShowModal(true);
+          setModalMessage("Sikeres Frissítés");
+        }}
+        onNo={() => {
+          setShowEditModal(false);
+        }}
+        note={note}
+        user={user}
       />
       <SearchOverlay
         visible={isSearchVisible}
@@ -218,18 +247,32 @@ export default function Group() {
               users.map((user: any, index: number) => (
                 <span className="member-item" key={index}>
                   <span className="name">{user.FelhasznaloNev}</span>
-                  <span
-                    className="delete"
-                    onClick={() => {
-                      setModalMessage(
-                        `Biztosan törli a(z) ${user.FelhasznaloNev} nevű felhasználót? `
-                      );
-                      setUser(user);
-                      setCurrentModal("user");
-                      setShowModal(true);
-                    }}
-                  >
-                    <Trash2 />
+                  <span className="actions">
+                    <span
+                      className="edit"
+                      onClick={() => {
+                        setModalMessage(
+                          `${user.FelhasznaloNev} megosztásának szerkeztése`
+                        );
+                        setNote(note);
+                        setShowEditModal(true);
+                      }}
+                    >
+                      <Pen />
+                    </span>
+                    <span
+                      className="delete"
+                      onClick={() => {
+                        setModalMessage(
+                          `Biztosan törli a(z) ${user.FelhasznaloNev} nevű felhasználót? `
+                        );
+                        setNote(note);
+
+                        setShowModal(true);
+                      }}
+                    >
+                      <Trash2 />
+                    </span>
                   </span>
                 </span>
               ))}
