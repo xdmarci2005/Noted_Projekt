@@ -18,14 +18,14 @@ import {
 } from "lucide-react";
 
 
-export default function MenuBar({ editor }:any) {
+export default function MenuBar({ editor, styleName }:any) {
   if (!editor) {
     return null;
   }
 
   return (
     <>
-      <div className="menuBar">
+      <div className={`menuBar ${styleName}`}>
         <button
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 1 }).run()

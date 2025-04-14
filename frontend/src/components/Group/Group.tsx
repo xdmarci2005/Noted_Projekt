@@ -7,7 +7,10 @@ import SearchOverlay from "./SearchOverlay/SearchOverlay";
 import CustomModal from "./DeleteModal/DeleteModal";
 
 export default function Group() {
+  
+
   const token = localStorage.getItem("token");
+  console.log(token);
   const [users, setUsers] = useState<any>();
   const [notes, setNotes] = useState<any>();
   const [content, setContent] = useState<any>();

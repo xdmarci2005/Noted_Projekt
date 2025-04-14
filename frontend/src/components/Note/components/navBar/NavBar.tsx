@@ -28,12 +28,16 @@ export default function Navbar({
   noteId,
   isSearchVisible,
   setIsSearchVisible,
+  permission,
+  styleName,
 }: {
   editor: any;
   docName: string;
   noteId: string;
   isSearchVisible: boolean;
   setIsSearchVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  permission: boolean;
+  styleName: any;
 }) {
   if (!editor) {
     return null;
@@ -53,8 +57,6 @@ export default function Navbar({
   }, [docName]);
 
   const [loading, setLoading] = useState(false);
-
-  
 
   const saveJSON = (filename: string) => {
     const jsonContent = editor.getJSON();
@@ -99,6 +101,7 @@ export default function Navbar({
         if (data.error) {
           console.error(data.error);
         } else {
+          console.log(data);
           loadFetchedJSONToEditor(data);
         }
       } catch (error) {
@@ -188,7 +191,9 @@ export default function Navbar({
             .then((response) => response.json())
             .then((data) => {
               console.log(data);
-              setDocId(data.id);
+              if (data.id) {
+                setDocId(data.id);
+              }
               setSaveModalMessage(data.success ? data.success : data.error);
             });
       } finally {
@@ -201,7 +206,7 @@ export default function Navbar({
   }
 
   return (
-    <>
+    <div className={styleName}>
       <SearchOverlay
         visible={isSearchVisible}
         setVisible={setIsSearchVisible}
@@ -331,6 +336,6 @@ export default function Navbar({
           </div>
         </nav>
       </div>
-    </>
+    </div>
   );
 }

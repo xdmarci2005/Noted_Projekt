@@ -148,6 +148,49 @@
 
       width: 10%;
     }
+
+    .megosztasok {
+      display: flex;
+      justify-content: space-between;
+
+      h2 {
+        margin-top: -5px;
+      }
+
+      .megosztasok {
+        span {
+          cursor: pointer;
+          padding: 5px 5px 5px 5px;
+          border-radius: 5px;
+          height: 35px;
+          margin-top: -3px;
+
+          &:hover {
+            transition: all 0.3s;
+            background: rgba(10, 101, 175, 0.726);
+            color: whitesmoke;
+          }
+        }
+      }
+      .share-tooltip {
+        visibility: hidden;
+        background-color: rgba(180, 180, 180, 0.129);
+        color: #000000;
+        opacity: 0;
+        transition: opacity 0.5s;
+        transition-delay: 0.5s;
+        margin-right: 10px;
+        padding: 5px 5px 5px 5px;
+        border-radius: 5px;
+        margin-top: -2px;
+      }
+
+
+      .share-tooltip.onHover {
+        visibility: visible;
+        opacity: 0.8;
+      }
+    }
   }
 
   .notes-section h2,

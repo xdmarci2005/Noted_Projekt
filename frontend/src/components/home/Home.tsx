@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Plus, User } from "lucide-react";
+import { Plus, User, Share2 } from "lucide-react";
 import { useAuth } from "../../AuthContext";
 
 import "./home.scss";
@@ -22,6 +22,8 @@ const Home = () => {
 
   const [backHover, setBackHover] = useState(false);
   const [profileHover, setProfileHover] = useState(false);
+    const [shareHover, setShareHover] = useState(false);
+
 
   const { logout } = useAuth();
   const token = localStorage.getItem("token");
@@ -82,7 +84,7 @@ const Home = () => {
               key={n.JegyzetId}
               onClick={() =>
                 navigate("/note/", {
-                  state: { id: n.JegyzetId, name: jegyzetnev },
+                  state: { id: n.JegyzetId, name: jegyzetnev, permission: "RWS" },
                 })
               }
             >
@@ -114,7 +116,11 @@ const Home = () => {
               key={n.JegyzetId}
               onClick={() =>
                 navigate("/note/", {
-                  state: { id: n.JegyzetId, name: jegyzetnev },
+                  state: {
+                    id: n.JegyzetId,
+                    name: jegyzetnev,
+                    permission: n.Jogosultsag,
+                  },
                 })
               }
             >
@@ -267,13 +273,39 @@ const Home = () => {
             <div className="notes-section">
               <h2>Jegyzetek.</h2>
               <div className="notes">{content}</div>
-              <button onClick={() => navigate("/note")}>
-                {" "}
+              <button
+                onClick={() =>
+                  navigate("/note", {
+                    state: { permission: "RWS" },
+                  })
+                }
+              >
                 <Plus />
               </button>
             </div>
             <div className="shared-notes-section">
-              <h2>Megosztott jegyzetek.</h2>
+              <div className="megosztasok">
+                <h2>Megosztott jegyzetek.</h2>
+
+                <div
+                  className="megosztasok"
+                  onMouseEnter={() => setShareHover(true)}
+                  onMouseLeave={() => setShareHover(false)}
+                >
+                  <div
+                    className={`share-tooltip ${shareHover ? "onHover" : ""}`}
+                  >
+                    Saját megosztások
+                  </div>
+                  <span
+                    onClick={() => {
+                      navigate("/shares");
+                    }}
+                  >
+                    <Share2 />
+                  </span>
+                </div>
+              </div>
               <div className="shares">{sharedContent}</div>
             </div>
             <div className="group-section">
