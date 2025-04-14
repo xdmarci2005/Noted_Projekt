@@ -9,6 +9,8 @@ import { uploadFile } from './upload.js';
 import { GroupMembers } from '../GroupMembers/GroupMember.js';
 import { Group } from '../groups/Group.js';
 import { Functions } from '../app/functions.js';
+import { group } from 'console';
+import { hasSubscribers } from 'diagnostics_channel';
 dotenv.config();
 
 export async function getNotesFromToken(req, res) {
@@ -57,7 +59,6 @@ export async function saveNoteWithToken(req, res) {
         if (JegyzetId === 'undefined') {
             JegyzetId = undefined;
         }
-
         if (JegyzetId !== undefined) 
         {
             let NewNoteName = req.file.filename;
@@ -67,10 +68,30 @@ export async function saveNoteWithToken(req, res) {
                 Functions.cleanUpFile(NewNoteName);
                 return;
             }
-
-            let ShareWithRequestingUser = await Shared.CheckIfNoteIsSharedWithUser(JegyzetId, res.decodedToken.UserId);
-            if (ShareWithRequestingUser !== undefined && OldNote.Feltolto != res.decodedToken.UserId) {
-                if (!ShareWithRequestingUser.Jogosultsag.includes('W')) {
+            let HasAccess = OldNote.Feltolto === res.decodedToken.UserId;
+            if(!HasAccess){
+                let ShareWithRequestingUser = await Shared.CheckIfNoteIsSharedWithUser(JegyzetId, res.decodedToken.UserId);
+                let UserGroups = await GroupMembers.GetGroupsByMemberId(res.decodedToken.UserId);
+                if (ShareWithRequestingUser !== undefined) {
+                    if (ShareWithRequestingUser.Jogosultsag.includes('W')) {
+                        HasAccess = true;
+                    }
+                }
+                else if(UserGroups !== undefined ){
+                    for(const Group of UserGroups){
+                        let Access = await Shared.CheckIfNoteIsSharedWithGroup(JegyzetId, Group.CsoportId)
+                        console.log(Group.JogosultsagId)
+                        console.log(Access);
+                        if(Access !== undefined)
+                        {
+                            if(2 <= Group.JogosultsagId  && Group.CsoportId === Access.MegosztottCsopId)
+                            {
+                                HasAccess = true;
+                            }
+                        }
+                    }
+                }
+                if(!HasAccess){
                     res.status(401).send({ error: 'Nincs joga frissíteni ezt a jegyzetet.' })
                     Functions.cleanUpFile(NewNoteName);
                     return;
@@ -98,7 +119,7 @@ export async function saveNoteWithToken(req, res) {
             res.status(500).send({ error: "Hiba a jegyzet mentésekor" });
             return;
         }
-        res.status(201).send({ success: "Jegyzet sikeresn mentve", id: JegyzetId ?? rows.insertId });
+        res.status(201).send({ success: "Jegyzet sikeresen mentve", id: JegyzetId ?? rows.insertId });
     } 
     catch (err) 
     {
