@@ -21,6 +21,7 @@ export default function SearchOverlay({
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState<any>();
   const [notFoundContent, setNotFoundContent] = useState<string>("");
+  const [activeOption, setActiveOption] = useState(true);
 
   function handleModalClose() {
     setShowModal(false);
@@ -47,7 +48,7 @@ export default function SearchOverlay({
         body: JSON.stringify({
           CsoportId: groupId,
           TagId: userId,
-          JogosultsagId: 2,
+          JogosultsagId: activeOption ? 1 : 2,
         }),
       })
         .then((response) => response.json())
@@ -106,6 +107,20 @@ export default function SearchOverlay({
       <div className="overlay">
         <div className="search-box">
           <h3>Ember Hozzáadása</h3>
+          <div className="permissions">
+            <span
+              className={activeOption ? "active-span" : "inactive-span"}
+              onClick={() => setActiveOption(true)}
+            >
+              Néző
+            </span>
+            <span
+              className={activeOption ? "inactive-span" : "active-span"}
+              onClick={() => setActiveOption(false)}
+            >
+              Szerkeztő
+            </span>
+          </div>
           <div className="search-container">
             <input
               type="text"

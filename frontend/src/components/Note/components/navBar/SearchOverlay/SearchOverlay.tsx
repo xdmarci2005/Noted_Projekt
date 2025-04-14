@@ -26,6 +26,7 @@ export default function SearchOverlay({
 
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState<any>();
+  const [permission, setPermission] = useState("R");
 
   async function handleAddtoGroup(groupId: any) {
     if (token)
@@ -40,7 +41,7 @@ export default function SearchOverlay({
           JegyzetId: noteId,
           MegosztottFelhId: null,
           MegosztottCsopId: groupId,
-          Jogosultsag: "R",
+          Jogosultsag: permission,
         }),
       })
         .then((response) => response.json())
@@ -81,7 +82,7 @@ export default function SearchOverlay({
           JegyzetId: noteId,
           MegosztottFelhId: userId,
           MegosztottCsopId: null,
-          Jogosultsag: "R",
+          Jogosultsag: permission,
         }),
       })
         .then((response) => response.json())
@@ -217,6 +218,32 @@ export default function SearchOverlay({
                 onClick={() => setCsoportActive()}
               >
                 Csoportal
+              </span>
+            </span>
+            <span className="shareOptions">
+              <span
+                className={
+                  permission == "R" ? "active-span" : "inactive-span"
+                }
+                onClick={() => setPermission("R")}
+              >
+                Olvasó
+              </span>
+              <span
+                className={
+                  permission == "RW" ? "active-span" : "inactive-span"
+                }
+                onClick={() => setPermission("RW")}
+              >
+                Szerkeztő
+              </span>
+              <span
+                className={
+                  permission == "RWS" ? "active-span" : "inactive-span"
+                }
+                onClick={() => setPermission("RWS")}
+              >
+                Moderátor
               </span>
             </span>
           </div>

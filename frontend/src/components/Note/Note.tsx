@@ -15,10 +15,12 @@ export default function Note() {
   const location = useLocation();
   const noteId = location.state?.id;
   const noteName = location.state?.name;
+  const permission = location.state?.permission;
 
+  console.log(permission);
+  console.log(noteId);
 
   const [isSearchVisible, setIsSearchVisible] = useState(false);
-  
 
   const editor = useEditor({
     extensions: [
@@ -47,11 +49,16 @@ export default function Note() {
         editor={editor}
         docName={noteName}
         noteId={noteId}
-        isSearchVisible={isSearchVisible} 
+        isSearchVisible={isSearchVisible}
         setIsSearchVisible={setIsSearchVisible}
+        permission={permission}
+        styleName={`${permission == "R" ? "hide" : ""}`}
       />
-      <MenuBar editor={editor} />
-      <div className={isSearchVisible ? "my-editor" : ""}>
+      <MenuBar
+        editor={editor}
+        styleName={`${permission == "R" ? "hide" : ""}`}
+      />
+      <div className={`${permission == "R" ? "hide" : ""}`}>
         <EditorContent editor={editor} />
       </div>
     </div>

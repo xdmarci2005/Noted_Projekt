@@ -1,3 +1,8 @@
+.hide {
+  position: relative;
+  z-index: -1;
+}
+
 .menuBar {
   border: 1px black;
   justify-items: center;

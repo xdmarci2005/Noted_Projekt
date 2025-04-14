@@ -12,6 +12,7 @@ import Note from "./components/Note/Note";
 import Search from "./components/Search/Search";
 import  Group  from "./components/Group/Group";
 import Error404 from "./components/404/Error404";
+import Shares from "./components/Shares/Shares";
 
 import { AuthProvider } from "./AuthContext";
 import ProtectedRoute from "./ProtectedRoute";
@@ -32,6 +33,7 @@ const App = () => {
             <Route path="/note" element={<Note />} />
             <Route path="/search" element={<Search />} />
             <Route path="/group" element={<Group />} />
+            <Route path="/shares" element={<Shares />} />
           </Route>
           <Route path="*" element={<Error404 />} />
         </Routes>
