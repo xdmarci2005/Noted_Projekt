@@ -154,7 +154,7 @@ fetch('http://localhost:3000/sharesBy', {
   method:'GET',headers: new Headers(
       {"Content-Type": "application/json",
           "Accept": "application/json",
-          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0MTgyMzY3MiwiZXhwIjoxNzQxODMwODcyfQ.QtDgfq6fSfpNtP-1Y6D2mtz9IqzocpfAh-XK-onjyLg"}
+          "x-access-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsImlhdCI6MTc0NDYxNzMzNSwiZXhwIjoxNzQ0NjI0NTM1fQ.OU7n2AELZcQqjsgacsICNYBOA5NhTvSXccY11s7jCCw"}
   )
 }).then(response => response.json()).then(data => console.log(data))
 

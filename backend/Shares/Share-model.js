@@ -73,13 +73,30 @@ export async function getSharedByUserNotesFromToken(req, res) {
     }
     const conn = await mysqlP.createConnection(dbConfig);
     try {
-        const [rows] = await conn.execute('Select `MegosztasId`,`Jegyzetek`.`JegyzetId`,`JegyzetNeve`,`MegosztottFelhId`,`MegosztottCsopId`,`Jogosultsag` from `Jegyzetek`' +
-            ' INNER JOIN `Megosztas` ON `Jegyzetek`.`JegyzetId` = `Megosztas`.`JegyzetId` WHERE Feltolto = ?', [res.decodedToken.UserId]);
+        const [rows] = await conn.execute(
+            'Select `MegosztasId`,`Jegyzetek`.`JegyzetId`,`MegosztottFelhId`,`MegosztottCsopId`,'+
+            '`Megosztas`.`Jogosultsag`, `CsoportNev`, `FelhasznaloNev`,`JegyzetNeve` ' +
+            'from `Megosztas`' +
+            'INNER JOIN `Jegyzetek` ON `Megosztas`.`JegyzetId` = `Jegyzetek`.`JegyzetId`'+
+            'LEFT JOIN `Felhasznalok` ON `Megosztas`.`MegosztottFelhId` = `Felhasznalok`.`FelhasznaloId`'+
+            'LEFT JOIN `Csoportok` ON `Megosztas`.`MegosztottCsopId` = `Csoportok`.`CsoportId`'+
+            'WHERE `Jegyzetek`.`Feltolto` = ?;', [res.decodedToken.UserId]);
+
         if (rows.length === 0) {
-            res.status(404).send({ error: "Nincsenek jegyzeteid." });
+            res.status(404).send({ error: "Nincsenek megosztásaid." });
             return;
         }
-        res.status(200).send({ success: "Sikeres lekérdezés", data: rows });
+        let GroupShares = [];
+        let UserShares = [];
+        for(const Share of rows){
+            if(Share.MegosztottCsopId == null){
+                UserShares.push(Share);
+            }
+            else{
+                GroupShares.push(Share);
+            }
+        }
+        res.status(200).send({ success: "Sikeres lekérdezés", GroupShares: GroupShares, UserShares: UserShares});
     } 
     catch (err) {
         switch (err.errno) {
