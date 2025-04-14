@@ -128,18 +128,31 @@ export default function Group() {
               <span className="name">{jegyzetnev}</span>
               <span>({note.CsoportNev})</span>
             </span>
-            <span
-              className="delete"
-              onClick={() => {
-                setModalMessage(
-                  `Biztosan törli a(z) ${jegyzetnev} nevű jegyzetet? `
-                );
-                setNote(note);
+            <span className="actions">
+              <span
+                className="edit"
+                onClick={() => {
+                  setModalMessage(`${jegyzetnev} megosztásának szerkeztése`);
+                  setNote(note);
+                  setModalFunction("editPerm");
+                  setShowEditModal(true);
+                }}
+              >
+                <Pen />
+              </span>
+              <span
+                className="delete"
+                onClick={() => {
+                  setModalMessage(
+                    `Biztosan törli a(z) ${jegyzetnev} nevű felhasználót? `
+                  );
+                  setNote(note);
 
-                setShowModal(true);
-              }}
-            >
-              <Trash2 />
+                  setShowModal(true);
+                }}
+              >
+                <Trash2 />
+              </span>
             </span>
           </span>
         );
