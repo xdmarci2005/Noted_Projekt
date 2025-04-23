@@ -274,6 +274,7 @@ const Home = () => {
               <h2>Jegyzetek.</h2>
               <div className="notes">{content}</div>
               <button
+                name="newNoteButton"
                 onClick={() =>
                   navigate("/note", {
                     state: { permission: "RWS" },

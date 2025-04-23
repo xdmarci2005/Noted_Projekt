@@ -82,6 +82,7 @@ const RegisterScreen = () => {
                 />
               </div>
               <button
+                name="registersubmitbtn"
                 type="submit"
                 className="btn"
                 onClick={(event) => {

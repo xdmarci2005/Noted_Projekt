@@ -75,6 +75,7 @@ const LoginScreen = () => {
               </div>
               <button
                 type="submit"
+                name="loginSubmit"
                 className="btn"
                 onClick={(event) => {
                   event.preventDefault();

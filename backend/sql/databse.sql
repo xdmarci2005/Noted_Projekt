@@ -140,3 +140,33 @@ SELECT `JegyzetId`, `JegyzetNeve` from `Jegyzetek` WHERE `JegyzetNeve` LIKE '%le
 SELECT * FROM Csoportok WHERE CsoportId IN (SELECT CsoportId FROM `CsoportTagok` WHERE TagId = 7) AND `Tulajdonos` != 7
 
 SELECT * FROM Csoportok WHERE `CsoportNev` LIKE '%Jozsi%' AND `Tulajdonos` = 8
+
+-- INSERTS:
+INSERT INTO Jegyzetek (Feltolto, JegyzetNeve, Lathatosag, UtolsoFrissites, UtolsoFrissito) VALUES
+(8, '1744667652108_file', 1, '2025-04-14 21:54:12', 8),
+(8, '1744622176063_NickMegintAtirta', 1, '2025-04-14 09:16:16', 9),
+(8, '1744484580577_nem nevtelen dokumentum', 1, '2025-04-12 19:03:00', 9),
+(9, '1744468706421_Nevtelen Dokumentum', 1, '2025-04-12 14:38:26', 9),
+(9, '1744468912994_UjDokNeve', 1, '2025-04-12 14:41:53', 9),
+(9, '1744468944678_UjabbDok', 1, '2025-04-12 14:42:24', 9),
+(9, '1744469012145_LegUjabbJegyzet', 1, '2025-04-12 14:43:32', 9),
+(8, '1744667643644_uj jegyzetNev', 1, '2025-04-14 21:54:03', 8),
+(8, '1744658124781_SzabadAtIrni', 1, '2025-04-14 19:15:24', 8);
+
+-- Jelszo: Titkos11
+INSERT INTO Felhasznalok (FelhasznaloNev, Jelszo, Email, Statusz, JogosultsagId) VALUES
+('JhonDoe', 'cb4195fb096c22e34e8fae3e5ca67663de7d73b89f7f97f869dc4a6a1d978a01', 'john.doe@example.com', 2, 1),
+('Alex Johnson', 'cb4195fb096c22e34e8fae3e5ca67663de7d73b89f7f97f869dc4a6a1d978a01', 'alex.johnson@example.com', 1, 1),
+('Jane Smith', 'cb4195fb096c22e34e8fae3e5ca67663de7d73b89f7f97f869dc4a6a1d978a01', 'jane.smith@example.com', 1, 1),
+('Jozsefalfred', 'cb4195fb096c22e34e8fae3e5ca67663de7d73b89f7f97f869dc4a6a1d978a01', 'jozsi@example.com', 3, 1),
+('Nick', 'cb4195fb096c22e34e8fae3e5ca67663de7d73b89f7f97f869dc4a6a1d978a01', 'nick@example.com', 2, 1),
+('Nicolas', 'cb4195fb096c22e34e8fae3e5ca67663de7d73b89f7f97f869dc4a6a1d978a01', 'nicolas@example.com', 1, 1),
+('nemtom', 'cb4195fb096c22e34e8fae3e5ca67663de7d73b89f7f97f869dc4a6a1d978a01', 'nemtom@nemtom.gov', 1, 1),
+('nemtom12', 'cb4195fb096c22e34e8fae3e5ca67663de7d73b89f7f97f869dc4a6a1d978a01', 'nemtom@nemtom.com', 1, 1),
+('jozsisteiner', 'cb4195fb096c22e34e8fae3e5ca67663de7d73b89f7f97f869dc4a6a1d978a01', 'jozsef@hotmail.com', 3, 1),
+('akarki', 'cb4195fb096c22e34e8fae3e5ca67663de7d73b89f7f97f869dc4a6a1d978a01', 'akarmi@gmail.coma', 1, 1),
+('Tatuki', 'cb4195fb096c22e34e8fae3e5ca67663de7d73b89f7f97f869dc4a6a1d978a01', 'tatuki@gmail.com', 3, 1),
+('ValamiFelhNev', 'cb4195fb096c22e34e8fae3e5ca67663de7d73b89f7f97f869dc4a6a1d978a01', 'egyemailcim@gmail.com', 1, 1),
+('Albert', 'cb4195fb096c22e34e8fae3e5ca67663de7d73b89f7f97f869dc4a6a1d978a01', 'albert@gmail.moc', 1, 1),
+('KissPéter', 'cb4195fb096c22e34e8fae3e5ca67663de7d73b89f7f97f869dc4a6a1d978a01', 'kisspeter@gmail.moc', 1, 1),
+('teszt', '74c7947f3cc19f9305f8ddea8e115614cc3483b82eb018ba02e22cfe7eadaca7', 'tesztemail@gmail.com', 1, 1);
