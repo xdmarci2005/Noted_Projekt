@@ -2,6 +2,7 @@
   .note-item {
     display: flex;
     width: 20%;
+    min-width: 150px;
     box-sizing: border-box;
     margin: 10px 1.5%;
     background-color: #f9f9f9;
@@ -10,6 +11,29 @@
     transition: background-color 0.3s, box-shadow 0.3s;
     text-align: center;
     cursor: pointer;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 10px;
+
+    @media screen and (max-width: 768px) {
+      width: 45%;
+      min-width: 250px;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      
+      .name {
+        margin-bottom: 10px;
+        margin-left: 5px;
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        width: 100%;
+      }
+    }
 
     &:hover {
       background-color: #f1f1f1;
@@ -118,7 +142,6 @@
 
   .Addtooltip {
     visibility: hidden;
-    background-color: rgba(180, 180, 180, 0.129);
     color: #00477d;
     text-align: center;
     border-radius: 5px;
@@ -131,7 +154,6 @@
     transition-delay: 0.5s;
     top: 20px;
     height: 35px;
-    font-weight: bold;
   }
 
   .Addtooltip.onHover {
@@ -141,7 +163,6 @@
 
   .Backtooltip {
     visibility: hidden;
-    background-color: rgba(180, 180, 180, 0.129);
     color: #00477d;
     text-align: center;
     border-radius: 5px;
@@ -154,7 +175,6 @@
     transition-delay: 0.5s;
     top: 20px;
     height: 35px;
-    font-weight: bold;
   }
 
   .Backtooltip.onHover {
@@ -174,6 +194,7 @@
     display: flex;
     justify-content: space-between;
     width: 20%;
+    min-width: 150px;
     box-sizing: border-box;
     margin: 10px 1.5%;
     background-color: #f9f9f9;
@@ -189,6 +210,7 @@
 
     .name {
       width: 100%;
+      margin-left: 5px;
     }
 
     .delete {

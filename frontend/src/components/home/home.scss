@@ -2,6 +2,7 @@
   .note-item {
     display: inline-block;
     width: 20%;
+    min-width: 150px;
     box-sizing: border-box;
     margin: 10px 1.5%;
     background-color: #f9f9f9;
@@ -35,17 +36,28 @@
   .top-bar {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-top: 20px;
-
     gap: 10px;
+
+    @media screen and (max-width: 768px) {
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+
+      .profile {
+        margin-top: 0;
+      }
+    }
 
     span {
       cursor: pointer;
       padding: 5px 5px 5px 5px;
-      background-color: whitesmoke;
       border-radius: 5px;
       height: 35px;
       margin-right: 10px;
+      min-width: 50px;
 
       &:hover {
         transition: all 0.3s;
@@ -63,7 +75,6 @@
       margin-top: 8px;
       .profil-tooltip {
         visibility: hidden;
-        background-color: rgba(180, 180, 180, 0.129);
         color: #00477d;
         opacity: 0;
         transition: opacity 0.5s;
@@ -76,13 +87,17 @@
       }
     }
     .center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
       .Backtooltip {
         visibility: hidden;
-        background-color: rgba(180, 180, 180, 0.129);
         color: #00477d;
         opacity: 0;
         transition: opacity 0.5s;
         transition-delay: 0.5s;
+        
       }
 
       .Backtooltip.onHover {
@@ -117,6 +132,7 @@
     border-radius: 10px;
     font-size: 1em;
     cursor: pointer;
+    width: 40px;
   }
   button:hover {
     transition: all 0.3s;
@@ -142,12 +158,6 @@
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-    button {
-      max-width: 40px;
-      max-height: 40px;
-
-      width: 10%;
-    }
 
     .megosztasok {
       display: flex;
@@ -174,7 +184,6 @@
       }
       .share-tooltip {
         visibility: hidden;
-        background-color: rgba(180, 180, 180, 0.129);
         color: #000000;
         opacity: 0;
         transition: opacity 0.5s;
@@ -212,6 +221,7 @@
   .group-item {
     display: inline-block;
     width: 20%;
+    min-width: 150px;
     box-sizing: border-box;
     margin: 10px 1.5%;
     background-color: #f9f9f9;
@@ -231,6 +241,7 @@
       font-size: 16px;
       font-weight: bold;
       color: #333;
+      
     }
 
     .group-actions {

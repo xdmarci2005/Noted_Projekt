@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import "./Navbar.scss";
 
 import {
@@ -12,6 +12,8 @@ import {
   FileDown,
   FileUp,
   RefreshCcw,
+  Menu,
+  X
 } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
@@ -57,6 +59,11 @@ export default function Navbar({
   }, [docName]);
 
   const [loading, setLoading] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = useCallback(() => {
+    setIsMenuOpen(!isMenuOpen);
+  }, [isMenuOpen]);
 
   const saveJSON = (filename: string) => {
     const jsonContent = editor.getJSON();
@@ -206,7 +213,7 @@ export default function Navbar({
   }
 
   return (
-    <div className={styleName}>
+    <div className={`navbar-container ${styleName} ${isMenuOpen ? 'menu-open' : ''}`}>
       <SearchOverlay
         visible={isSearchVisible}
         setVisible={setIsSearchVisible}
@@ -223,7 +230,10 @@ export default function Navbar({
       />
       <div className={isSearchVisible ? "hide" : ""}>
         <nav className="navbar-top">
-          <div className="navbar-left">
+          <button className="hamburger-menu" onClick={toggleMenu}>
+        {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+      </button>
+      <div className="navbar-left">
             <span className="icon">
               <img
                 src={logoImg}
