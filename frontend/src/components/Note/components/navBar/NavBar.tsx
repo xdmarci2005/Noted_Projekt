@@ -68,7 +68,7 @@ export default function Navbar({
   const saveJSON = (filename: string) => {
     const jsonContent = editor.getJSON();
 
-    // JSON fájlba mentés
+  
     const blob = new Blob([JSON.stringify(jsonContent, null, 2)], {
       type: "application/json",
     });
@@ -145,15 +145,15 @@ export default function Navbar({
 
     reader.onload = async (event) => {
       try {
-        const arrayBuffer = event.target?.result; // Correctly get the arrayBuffer
+        const arrayBuffer = event.target?.result;
 
         if (arrayBuffer instanceof ArrayBuffer) {
-          // Convert the arrayBuffer to HTML using Mammoth
+         
           const result = await Mammoth.convertToHtml({ arrayBuffer });
 
-          const htmlContent = result.value; // This will contain the HTML content
+          const htmlContent = result.value; 
 
-          // Now, set the HTML content into Tiptap
+       
           editor.commands.setContent(htmlContent);
         }
       } catch (err) {

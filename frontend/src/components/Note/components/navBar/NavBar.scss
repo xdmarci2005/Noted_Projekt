@@ -112,7 +112,7 @@
   font-weight: 500;
 }
 
-/* Középső menü */
+
 .navbar-center {
   display: flex;
   gap: 16px;
@@ -151,6 +151,7 @@
   cursor: pointer;
   padding: 5px;
   background-color: whitesmoke;
+  border-radius: 5px;
 }
 
 .navbar-center span:hover {
@@ -160,7 +161,7 @@
   color: whitesmoke;
 }
 
-/* Jobb oldali rész */
+
 .navbar-right {
   display: flex;
   align-items: center;

@@ -8,7 +8,7 @@ const AuthContext = createContext({
 
 export const AuthProvider = ({ children }: {children: any}) => {
   const [user, setUser] = useState(() => {
-    // Load from localStorage (if exists) on page refresh
+
     const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
   });
@@ -16,12 +16,12 @@ export const AuthProvider = ({ children }: {children: any}) => {
   const login = (role:any) => {
     const userData = { isAuthenticated: true, role };
     setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData)); // ✅ Save to localStorage
+    localStorage.setItem("user", JSON.stringify(userData));
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("user"); // ✅ Clear localStorage on logout
+    localStorage.removeItem("user"); 
   };
 
   return (

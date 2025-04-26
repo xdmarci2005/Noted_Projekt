@@ -1,5 +1,5 @@
 import React from "react";
-import "./modal.scss"; // Import the CSS file
+import "./modal.scss"; 
 
 const CustomModal = ({
   show,
@@ -14,7 +14,7 @@ const CustomModal = ({
   onYes: () => void;
   OnNo: any;
 }) => {
-  if (!show) return null; // Don't render the modal if `show` is false
+  if (!show) return null; 
 
   return (
     <div className="modal-overlay">

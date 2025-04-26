@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import "./modal.scss"; // Import the CSS file
+import "./modal.scss"; 
 
 const CustomModal = ({ show, title, message, onYes, onNo, note, user }: any) => {
-  if (!show) return null; // Don't render the modal if `show` is false
+  if (!show) return null; 
   const [permission, setPermission] = useState<any>("R");
   const token = localStorage.getItem("token");
   return (

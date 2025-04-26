@@ -8,11 +8,13 @@
   justify-items: center;
   display: flex;
   align-items: center;
-  margin: 10px auto;
-  padding: 5px;
+  margin: 0;
+  padding: 10px;
   position: relative;
   background: white;
   z-index: 1;
+  width: 100%;
+  box-sizing: border-box;
 
   @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
     background: rgba(255, 255, 255, 0.9);
@@ -29,7 +31,7 @@
     white-space: nowrap;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
-    padding: 15px 10px;
+    padding: 15px;
     margin: 0;
     
     > * {
@@ -48,10 +50,11 @@
     right: 0;
     background: white;
     margin: 0;
-    padding: 10px;
+    padding: 15px;
     box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
     white-space: nowrap;
     z-index: 1000;
+    width: 100%;
   }
 
   button {
