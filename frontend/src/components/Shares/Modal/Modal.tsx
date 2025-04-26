@@ -50,10 +50,10 @@ const CustomModal = ({ show, title, message, onYes, onNo, note }: any) => {
               onYes();
             }}
           >
-            Igen
+            Mentés
           </span>
           <span className="modal-no-btn" onClick={onNo}>
-            Nem
+            Mégse
           </span>
         </div>
       </div>

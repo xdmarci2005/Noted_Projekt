@@ -26,7 +26,7 @@ const CustomModal = ({
             Igen
           </span>
           <span className="modal-no-btn" onClick={OnNo}>
-            Nem
+            Mégse
           </span>
         </div>
       </div>

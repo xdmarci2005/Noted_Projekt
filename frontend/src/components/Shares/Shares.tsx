@@ -5,6 +5,7 @@ import { ArrowLeft, Trash2, Pen } from "lucide-react";
 
 import CustomModal from "../Group/DeleteModal/DeleteModal";
 import EditModal from "./Modal/Modal";
+import Modal from "../Modal/Modal";
 
 export default function Group() {
   const token = localStorage.getItem("token");
@@ -21,6 +22,7 @@ export default function Group() {
 
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showCustomModal, setShowCustomModal] = useState(false);
 
   const [modalFunction, setModalFunction] = useState("");
 
@@ -33,8 +35,18 @@ export default function Group() {
   const groupName = location.state?.name;
 
   function handleModalClose() {
-    removeNote();
+    if (modalFunction === "delete") {
+      removeNote(); 
+      refreshGroupContent();
+      refreshUserContent();
+    }
+    if (modalFunction === "editPerm") {
+      handleEditPerm();
+      refreshGroupContent();
+      refreshUserContent();
+    }
     setShowModal(false);
+    setShowCustomModal(false);
   }
 
   function handleEditPerm() {}
@@ -67,6 +79,7 @@ export default function Group() {
   }, [token]);
 
   function refreshUserContent() {
+    setUserContent(null);
     setUserContent(
       sharedWithUsers.map((note: any, index: number) => {
         const tmpjegyzetnev = note.JegyzetNeve;
@@ -98,8 +111,8 @@ export default function Group() {
                     `Biztosan törli a(z) ${jegyzetnev} nevű felhasználót? `
                   );
                   setNote(note);
-
-                  setShowModal(true);
+                  setModalFunction("delete");
+                  setShowCustomModal(true);
                 }}
               >
                 <Trash2 />
@@ -115,6 +128,7 @@ export default function Group() {
   }, [sharedWithUsers]);
 
   function refreshGroupContent() {
+    setGroupcontent(null);
     setGroupcontent(
       sharedWithGroups.map((note: any, index: number) => {
         const tmpjegyzetnev = note.JegyzetNeve;
@@ -128,7 +142,7 @@ export default function Group() {
               <span>({note.CsoportNev})</span>
             </span>
             <span className="actions">
-              <span
+            <span
                 className="edit"
                 onClick={() => {
                   setModalMessage(`${jegyzetnev} megosztásának szerkeztése`);
@@ -146,7 +160,8 @@ export default function Group() {
                     `Biztosan törli a(z) ${jegyzetnev} nevű felhasználót? `
                   );
                   setNote(note);
-                  setShowModal(true);
+                  setModalFunction("delete");
+                  setShowCustomModal(true);
                 }}
               >
                 <Trash2 />
@@ -181,13 +196,19 @@ export default function Group() {
 
   return (
     <div className="shares-site">
-      <CustomModal
+      <Modal
         show={showModal}
+        title="Noted."
+        message={modalMessage}
+        onClose={() => setShowModal(false)}
+      />
+      <CustomModal
+        show={showCustomModal}
         title="Noted."
         message={modalMessage}
         onYes={() => handleModalClose()}
         OnNo={() => {
-          setShowModal(false);
+          setShowCustomModal(false);
         }}
       />
       <EditModal
