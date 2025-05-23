@@ -171,7 +171,7 @@ export default function SearchOverlay({
         console.error("Token not found in localStorage");
         return;
       } else
-        fetch(`http://localhost:3000/getGroupByName/${searchTerm}`, {
+        fetch(`http://localhost:3000/getGroupsByName/${searchTerm}`, {
           method: "GET",
           headers: new Headers({
             "Content-Type": "application/json",

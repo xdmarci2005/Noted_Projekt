@@ -280,9 +280,9 @@ export async function getGroupsByName(req, res) {
         }
 
         let CsoportNev = '%' + req.params.Name + '%'
-        const [rows] = await conn.execute("SELECT `Csoportok`.`CsoportId`, `CsoportNev`, TagId, from `Csoportok`" +
+        const [rows] = await conn.execute("SELECT `Csoportok`.`CsoportId`, `CsoportNev`, TagId from `Csoportok`" +
             "INNER JOIN `CsoportTagok` ON `Csoportok`.`CsoportId` = `CsoportTagok`.`CsoportId` WHERE `Csoportnev`" +
-            " LIKE ? AND 1 < `JogosultsagId` AND TagId = ?", [CsoportNev, res.decodedToken.UserId]);
+            " LIKE ? AND 2 < `JogosultsagId` AND TagId = ?", [CsoportNev, res.decodedToken.UserId]);
 
         let Groups = rows
         if(Groups.length === 0) {
