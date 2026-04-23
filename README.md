@@ -11,7 +11,7 @@ Ez egy Online Jegyzetelő-, és kezelő WebApplikáció
 
 ## Dokumentáció
 
-[Dokumentáció](https://github.com/xdmarci2005/Noted_Projekt/blob/main/Dokument%C3%A1ci%C3%B3)
+[Dokumentáció](https://github.com/xdmarci2005/Noted_Projekt/raw/refs/heads/main/Dokument%C3%A1ci%C3%B3)
 
 
 ## Funkciók
