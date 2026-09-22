@@ -45,11 +45,17 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: white;
+  background: var(--surface-color);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
   padding: 8px 16px;
-  margin-bottom: 5px;
+  margin-bottom: 15px;
   width: 100%;
   position: relative;
+  box-sizing: border-box;
 
   .hamburger-menu {
     display: none;
@@ -65,22 +71,31 @@
   }
 
   input {
-    border: 1px;
+    border: none;
+    background: transparent;
     text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--primary-blue-dark);
+    outline: none;
   }
 
   .profile-btn {
     span {
       cursor: pointer;
-      padding: 5px;
-      background-color: whitesmoke;
-      border-radius: 5px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: transparent;
+      border-radius: 50%;
+      transition: var(--transition-smooth);
     }
 
     span:hover {
-      transition: all 0.3s;
-      background: rgba(10, 101, 175, 0.726);
-      color: whitesmoke;
+      background: rgba(0, 86, 179, 0.15);
+      color: var(--primary-blue-dark);
     }
   }
 }
@@ -88,11 +103,24 @@
 .navbar-bottom {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background: white;
+  justify-content: center; /* Center naturally since it's the only child */
+  background: var(--surface-color);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
   padding: 8px 16px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   width: 100%;
+  box-sizing: border-box;
+
+  .navbar-center {
+    position: static;
+    transform: none;
+    width: auto;
+    flex-wrap: wrap; /* allow wrapping if screen is small */
+  }
 }
 
 
@@ -140,25 +168,26 @@
     display: flex;
     gap: 5px;
     align-items: center;
-    background-color: whitesmoke;
-    border-radius: 5px;
-    padding-left: 5px;
-    padding-right: 5px;
+    background-color: transparent;
+    border: 1px solid rgba(0, 86, 179, 0.15);
+    border-radius: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: var(--text-muted);
   }
 }
 
 .navbar-center span {
   cursor: pointer;
-  padding: 5px;
-  background-color: whitesmoke;
-  border-radius: 5px;
+  padding: 5px 10px;
+  background-color: transparent;
+  border-radius: 8px;
+  transition: var(--transition-smooth);
 }
 
 .navbar-center span:hover {
-  transition: all 0.3s;
-  background: rgba(10, 101, 175, 0.726);
-  border-radius: 4px;
-  color: whitesmoke;
+  background: rgba(0, 86, 179, 0.15);
+  color: var(--primary-blue-dark);
 }
 
 
@@ -177,13 +206,21 @@
 }
 
 .share-btn {
-  background: #1a73e8;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
   color: white;
   border: none;
-  padding: 6px 12px;
-  border-radius: 5px;
-  font-weight: bold;
+  padding: 6px 16px;
+  border-radius: 8px;
+  font-weight: 500;
   cursor: pointer;
+  transition: var(--transition-smooth);
+  box-shadow: 0 4px 15px rgba(0, 86, 179, 0.2);
+
+  &:hover {
+    background: linear-gradient(135deg, var(--primary-blue-light) 0%, var(--primary-blue) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 86, 179, 0.3);
+  }
 }
 
 .profile-img {

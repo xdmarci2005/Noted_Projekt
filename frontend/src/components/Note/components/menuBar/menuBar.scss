@@ -4,23 +4,21 @@
 }
 
 .menuBar {
-  border: 1px black;
   justify-items: center;
   display: flex;
   align-items: center;
-  margin: 0;
-  padding: 10px;
+  margin: 0 0 20px 0;
+  padding: 15px;
   position: relative;
-  background: white;
   z-index: 1;
   width: 100%;
   box-sizing: border-box;
-
-  @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
+  background: var(--surface-color);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-soft);
 
   @media screen and (max-width: 768px) {
     overflow-x: auto;
@@ -58,15 +56,16 @@
   }
 
   button {
-    background-color: whitesmoke;
-    color: black;
+    background-color: transparent;
+    color: var(--text-main);
     border: none;
-    border-radius: 5px;
-    padding: 8px;
+    border-radius: 8px;
+    padding: 8px 12px;
     font-size: 15px;
     cursor: pointer;
     margin: 0 5px;
     flex-shrink: 0;
+    transition: var(--transition-smooth);
     
     @media screen and (max-width: 768px) {
       display: inline-flex;
@@ -78,12 +77,14 @@
   }
 
   button:hover {
-    transition: all 0.3s;
-    background-color: rgba(215, 215, 215, 0.514);
+    background-color: rgba(0, 86, 179, 0.15);
+    color: var(--primary-blue-dark);
   }
 
   .is-active {
-    background-color: rgb(215, 215, 215);
+    background-color: rgba(0, 86, 179, 0.25);
+    color: var(--primary-blue-dark);
+    font-weight: 600;
   }
   input {
     background-color: whitesmoke;

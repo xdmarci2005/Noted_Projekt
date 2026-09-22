@@ -2,27 +2,40 @@
     width: 95%;
     margin: auto;
     margin-top: 20px;
-
-    
+    padding-bottom: 50px;
 }
 
- p.is-editor-empty:first-child::before {
-    color: var(--gray-4);
-    content: attr(data-placeholder);
-    float: left;
-    height: 0;
-    pointer-events: none;
-  }
+.editor-container {
+  background: var(--surface-color);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-soft);
+  padding: 30px;
+  min-height: 500px;
+  transition: var(--transition-smooth);
+}
+
+p.is-editor-empty:first-child::before {
+  color: var(--text-muted);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
 .input-disabled {
   pointer-events: none;
 }
 
 .my-editor {
   position: relative;
-  z-index: -1;
+  z-index: 1; /* Was -1, but that might hide it under the background */
 }
 
 .hide {
   position: relative;
   z-index: -1;
+  display: none;
 }

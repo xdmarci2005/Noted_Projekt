@@ -65,6 +65,7 @@ const RegisterScreen = () => {
                 id="email"
                 className="input-field"
                 readOnly
+                autoComplete="username"
                 onFocus={(e) => e.target.removeAttribute("readonly")}
               />
               <div className="password-field">
@@ -73,6 +74,7 @@ const RegisterScreen = () => {
                   placeholder="jelszó"
                   id="password"
                   readOnly
+                  autoComplete="new-password"
                   onFocus={(e) => e.target.removeAttribute("readonly")}
                 />
                 <img

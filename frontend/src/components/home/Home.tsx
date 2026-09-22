@@ -285,11 +285,11 @@ const Home = () => {
               </button>
             </div>
             <div className="shared-notes-section">
-              <div className="megosztasok">
+              <div className="section-header">
                 <h2>Megosztott jegyzetek.</h2>
 
                 <div
-                  className="megosztasok"
+                  className="share-action"
                   onMouseEnter={() => setShareHover(true)}
                   onMouseLeave={() => setShareHover(false)}
                 >
@@ -298,13 +298,13 @@ const Home = () => {
                   >
                     Saját megosztások
                   </div>
-                  <span
+                  <button
                     onClick={() => {
                       navigate("/shares");
                     }}
                   >
                     <Share2 />
-                  </span>
+                  </button>
                 </div>
               </div>
               <div className="shares">{sharedContent}</div>

@@ -35,7 +35,7 @@ export default function Note() {
     ],
     editorProps: {
       attributes: {
-        class: "min-h-[156px] border rounded-md bg-slate-50 py-2 px-3 ", 
+        class: "min-h-[500px] border-none outline-none py-2 px-3 ", 
       },
     },
     autofocus: true,
@@ -56,7 +56,7 @@ export default function Note() {
         editor={editor}
         styleName={`${permission == "R" ? "hide" : ""}`}
       />
-      <div className={(isSearchVisible ? "hide" : "") + (permission == "R" ? "hide" : "")}> 
+      <div className={`editor-container ${isSearchVisible ? "hide" : ""} ${permission == "R" ? "hide" : ""}`}> 
         <EditorContent editor={editor} />
       </div>
     </div>

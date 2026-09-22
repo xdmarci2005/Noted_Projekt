@@ -1,4 +1,51 @@
-html {
-  font-family: "Poppins", sans-serif;
+:root {
+  --primary-blue: #0056b3;
+  --primary-blue-hover: #004494;
+  --primary-blue-light: #007bff;
+  --primary-blue-dark: #00477d;
+  --bg-gradient-start: #ebebeb;
+  --bg-gradient-end: #d3d3d3;
+  --surface-color: rgba(255, 255, 255, 0.85);
+  --surface-border: rgba(255, 255, 255, 0.4);
+  --text-main: #333;
+  --text-muted: #555;
+  --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 12px 48px rgba(0, 0, 0, 0.15);
+  --border-radius: 12px;
+  --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
+html {
+  font-family: "Poppins", system-ui, -apple-system, sans-serif;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #eef2f6;
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(0, 123, 255, 0.08), transparent 50%),
+    radial-gradient(circle at 85% 30%, rgba(0, 86, 179, 0.08), transparent 50%),
+    radial-gradient(circle at 90% 80%, rgba(0, 123, 255, 0.06), transparent 50%),
+    radial-gradient(circle at 20% 90%, rgba(0, 71, 125, 0.07), transparent 50%);
+  background-attachment: fixed;
+  background-size: cover;
+  color: var(--text-main);
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Base button styles to make updating easier globally */
+button {
+  font-family: "Poppins", sans-serif;
+  transition: var(--transition-smooth);
+}
+
+input, textarea {
+  font-family: "Poppins", sans-serif;
+  transition: var(--transition-smooth);
+}
